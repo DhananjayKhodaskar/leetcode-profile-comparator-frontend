@@ -40,7 +40,7 @@ const Dashboard = () => {
   }, [userData]);
 
   return (
-    <div style={{ width: "100vw", height: "80vh" }}>
+    <div style={{ width: "80vw" }}>
       <ApexChart chartData={userData} />
     </div>
   );
