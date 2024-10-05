@@ -3,11 +3,12 @@ import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<h1>Home</h1>} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="*" element={<h1>Invalid Path</h1>} />
-    </Routes>
+    <div className="prose">
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="*" element={<h1>Invalid Path</h1>} />
+      </Routes>
+    </div>
   );
 }
 
