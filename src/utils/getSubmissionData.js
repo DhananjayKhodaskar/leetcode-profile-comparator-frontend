@@ -1,3 +1,5 @@
+import { FOR_THE } from "./common";
+
 export const getLast24hSubmission = (submissions) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
 
@@ -77,10 +79,12 @@ export const calculateStreaks = (data) => {
   return { longestStreak, currentStreak, dateData };
 };
 
-export const getLast365Days = (forTooltip = false) => {
-  const dates = [];
-  const today = new Date();
-
+export const getLastDaysByMonth = (
+  forThe = "",
+  startDate = new Date(), // Optional start date (defaults to today)
+  daysToRetrieve = 365 // Optional number of days to retrieve (defaults to 365)
+) => {
+  const months = []; // Array to hold arrays for each month
   const monthNames = [
     "Jan",
     "Feb",
@@ -96,22 +100,62 @@ export const getLast365Days = (forTooltip = false) => {
     "Dec",
   ];
 
-  for (let i = 0; i < 365; i++) {
-    const currentDate = new Date();
-    currentDate.setDate(today.getDate() - i);
+  let currentDate = new Date(startDate);
+  let totalDaysCounted = 0; // Keep track of total days processed
 
-    if (forTooltip) {
-      const day = currentDate.getDate();
-      const month = monthNames[currentDate.getMonth()];
-      const year = currentDate.getFullYear();
-      dates.push(`${month} ${day}, ${year}`);
+  // Helper function to push formatted dates into the appropriate array
+  const formatAndPushDate = (date, arr) => {
+    if (forThe === FOR_THE.TOOLTIP) {
+      const day = date.getDate();
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      arr.push(`${month} ${day}, ${year}`);
+    } else if (!forThe) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      arr.push(`${year}-${month}-${day}`);
+    }
+  };
+
+  // Continue adding dates until the specified number of days are processed
+  while (totalDaysCounted < daysToRetrieve) {
+    const monthArray = [];
+    const currentMonth = currentDate.getMonth();
+    const daysInCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentMonth + 1,
+      0
+    ).getDate();
+
+    let daysToProcess = Math.min(
+      daysInCurrentMonth,
+      daysToRetrieve - totalDaysCounted // Limit to remaining days if partial month
+    );
+
+    // Adjust for the first month if it’s the start month (it might be partial)
+    if (months.length === 0) {
+      daysToProcess = Math.min(currentDate.getDate(), daysToProcess);
+    }
+
+    // Collect dates for the current month
+    for (
+      let day = daysToProcess;
+      day > 0 && totalDaysCounted < daysToRetrieve;
+      day--
+    ) {
+      formatAndPushDate(currentDate, monthArray);
+      currentDate.setDate(currentDate.getDate() - 1);
+      totalDaysCounted++;
+    }
+
+    // Push the month name once for FOR_THE.MONTH_DISPLAY
+    if (forThe === FOR_THE.MONTH_DISPLAY) {
+      months.push(monthNames[currentMonth]);
     } else {
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const day = String(currentDate.getDate()).padStart(2, "0");
-      dates.push(`${year}-${month}-${day}`);
+      months.push(monthArray); // Add the month array to the result
     }
   }
 
-  return dates.reverse();
+  return months;
 };

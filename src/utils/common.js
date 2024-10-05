@@ -1,0 +1,4 @@
+export const FOR_THE = {
+  TOOLTIP: "TOOLTIP",
+  MONTH_DISPLAY: "MONTH_DISPLAY",
+}

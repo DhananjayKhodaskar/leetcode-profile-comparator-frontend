@@ -7,10 +7,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { getLast365Days } from "@/utils/getSubmissionData";
+import { getLastDaysByMonth } from "@/utils/getSubmissionData";
+import { FOR_THE } from "@/utils/common";
 
-const Streak = ({ calenderData, username, last365DaysArray }) => {
-  const tooltip365DaysArray = getLast365Days(true);
+const Streak = ({ calenderData, username, last365DaysArray, streakMonth }) => {
+  const tooltip365DaysArray = getLastDaysByMonth(FOR_THE.TOOLTIP);
   return (
     <div className="flex flex-row gap-0 w-screen">
       {last365DaysArray.map((calData, index) => {
@@ -30,7 +31,7 @@ const Streak = ({ calenderData, username, last365DaysArray }) => {
                   />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{tooltip365DaysArray[index]}</p>{" "}
+                  <p>{tooltip365DaysArray[streakMonth][index]}</p>
                   {/* Customize tooltip text as needed */}
                 </TooltipContent>
               </Tooltip>
