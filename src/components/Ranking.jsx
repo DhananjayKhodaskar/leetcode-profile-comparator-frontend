@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Trophy } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { v4 as uuidv4 } from 'uuid';
 
 const Ranking = ({
   colorArray = [
@@ -30,7 +31,7 @@ const Ranking = ({
 
           return (
             <div
-              key={user.key}
+              key={uuidv4()}
               className={`${bgColor} h-12 flex justify-between items-center`}
             >
               {/* Rank and User Name */}
