@@ -12,6 +12,7 @@ const StreakCalender = ({ streakData }) => {
   console.log(last12Months);
   return (
     <div className="w-screen overflow-x-auto  no-scrollbar flex flex-col gap-3 bg-slate-600">
+      <h3>{last12Months[streakMonth]}</h3>
       {streakData.map((calData) => (
         <div key={uuidv4()}>
           <Streak
@@ -35,7 +36,6 @@ const StreakCalender = ({ streakData }) => {
       >
         Next
       </Button>
-      <h3>{last12Months[streakMonth]}</h3>
     </div>
   );
 };

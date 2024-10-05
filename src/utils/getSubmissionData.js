@@ -149,6 +149,9 @@ export const getLastDaysByMonth = (
       totalDaysCounted++;
     }
 
+    // Reverse the month array to push dates from earliest to latest
+    monthArray.reverse();
+
     // Push the month name once for FOR_THE.MONTH_DISPLAY
     if (forThe === FOR_THE.MONTH_DISPLAY) {
       months.push(monthNames[currentMonth]);
