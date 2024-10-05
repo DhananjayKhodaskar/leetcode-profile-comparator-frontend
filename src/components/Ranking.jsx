@@ -11,7 +11,7 @@ const Ranking = ({
     "bg-orange-500", // Rank 4
     "bg-orange-600", // Rank 5
   ],
-  submission24h,
+  rankingData,
   title,
 }) => {
   return (
@@ -24,9 +24,9 @@ const Ranking = ({
         </div>
 
         {/* Ranking List */}
-        {submission24h.map((user, index) => {
+        {rankingData.slice(0, 5).map((user, index) => {
           const rank = index + 1;
-          const bgColor = colorArray[index] || "bg-orange-100"; 
+          const bgColor = colorArray[index] || "bg-orange-100";
 
           return (
             <div

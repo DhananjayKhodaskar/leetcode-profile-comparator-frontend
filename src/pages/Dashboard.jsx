@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { transformData } from "../utils/formatChartData";
 import ApexChart from "../components/ApexChart";
-import { getLast24hSubmission } from "@/utils/getSubmissionData";
+import {
+  calculateStreaks,
+  getLast24hSubmission,
+} from "@/utils/getSubmissionData";
 import Ranking from "@/components/Ranking";
 
 const Dashboard = () => {
@@ -15,6 +18,7 @@ const Dashboard = () => {
     "prem__",
     "tejas702",
     "Yawn_Sean",
+    "ya695678",
   ];
 
   useEffect(() => {
@@ -25,7 +29,7 @@ const Dashboard = () => {
             const response = await axios.get(
               `http://localhost:3000/${username}/contest`
             );
-            return response.data; 
+            return response.data;
           })
         );
         console.log("results:", results);
@@ -93,12 +97,35 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Loop through the usernames and fetch data for each
+        const results = await Promise.all(
+          leetcodeUsernames.map(async (username) => {
+            const response = await axios.get(
+              `http://localhost:3000/${username}/calendar`
+            );
+            const streakData = calculateStreaks(response.data);
+            return { ...streakData, username: username };
+          })
+        );
+        // const streakData = calculateStreaks(results)
+        console.log("thi is the result", results);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div style={{ width: "80vw" }}>
       <div className="flex flex-row gap-2 justify-around">
-        <Ranking submission24h={submission24h} title="Top Solvers - Last 24H" />
+        <Ranking rankingData={submission24h} title="Top Solvers - Last 24H" />
         <Ranking
-          submission24h={userSolvedData.map((data) => {
+          rankingData={userSolvedData.map((data) => {
             return {
               username: data.username,
               score: data.solvedProblem,
