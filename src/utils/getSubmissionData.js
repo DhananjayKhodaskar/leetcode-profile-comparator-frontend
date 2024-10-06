@@ -19,7 +19,6 @@ export const getRecentSubmission = (submissions, days = 7) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const daysInSeconds = 24 * 60 * 60 * days;
 
-  // Flatten, filter, and map submissions first
   const recentSubmissions = submissions.flatMap((user) =>
     user.submission
       .map((submission) => ({
@@ -38,8 +37,8 @@ export const getRecentSubmission = (submissions, days = 7) => {
 
   // Sort and slice the final collection
   return recentSubmissions
-    .sort((a, b) => b.timestamp - a.timestamp) // Sort descending
-    .slice(0, 40); // Take the latest 40 submissions
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, 40);
 };
 
 export const calculateStreaks = (data) => {
@@ -54,21 +53,19 @@ export const calculateStreaks = (data) => {
   let longestStreak = 0;
   let currentStreak = 0;
   let previousDate = null;
-  const dateData = {}; // Initialize an object to hold the submission status
+  const dateData = {};
 
-  // Populate the dateData with submission status
   dates.forEach((date) => {
-    dateData[date] = true; // Mark the date as true for submission
+    dateData[date] = true;
   });
 
-  // Fill in the dateData for all dates, including those without submissions
   const startDate = new Date(dates[0]);
   const endDate = new Date();
 
   for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
     const dateString = d.toISOString().split("T")[0];
     if (!dateData[dateString]) {
-      dateData[dateString] = false; // Mark the date as false if no submission
+      dateData[dateString] = false;
     }
   }
 
@@ -108,10 +105,10 @@ export const calculateStreaks = (data) => {
 
 export const getLastDaysByMonth = (
   forThe = "",
-  startDate = new Date(), // Optional start date (defaults to today)
-  daysToRetrieve = 365 // Optional number of days to retrieve (defaults to 365)
+  startDate = new Date(),
+  daysToRetrieve = 365
 ) => {
-  const months = []; // Array to hold arrays for each month
+  const months = [];
   const monthNames = [
     "Jan",
     "Feb",
@@ -128,9 +125,8 @@ export const getLastDaysByMonth = (
   ];
 
   let currentDate = new Date(startDate);
-  let totalDaysCounted = 0; // Keep track of total days processed
+  let totalDaysCounted = 0;
 
-  // Helper function to push formatted dates into the appropriate array
   const formatAndPushDate = (date, arr) => {
     if (forThe === FOR_THE.TOOLTIP) {
       const day = date.getDate();
@@ -157,10 +153,9 @@ export const getLastDaysByMonth = (
 
     let daysToProcess = Math.min(
       daysInCurrentMonth,
-      daysToRetrieve - totalDaysCounted // Limit to remaining days if partial month
+      daysToRetrieve - totalDaysCounted
     );
 
-    // Adjust for the first month if it’s the start month (it might be partial)
     if (months.length === 0) {
       daysToProcess = Math.min(currentDate.getDate(), daysToProcess);
     }
@@ -191,8 +186,8 @@ export const getLastDaysByMonth = (
 };
 export const getProblemNameFromSlug = (input) =>
   input
-    .split("-") // Split the string by hyphens
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
 export const formatTimestamp = (timestamp) => {

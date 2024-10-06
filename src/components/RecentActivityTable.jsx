@@ -30,7 +30,7 @@ export function RecentActivityTable({ recentTableData }) {
     indexOfLastItem
   );
 
-  // Calculate the total number of pages
+
   const totalPages = Math.ceil(recentTableData?.length / itemsPerPage);
 
   const handleNextPage = () => {

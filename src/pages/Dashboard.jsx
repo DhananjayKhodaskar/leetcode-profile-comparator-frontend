@@ -53,7 +53,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Loop through the usernames and fetch data for each
+
         const results = await Promise.all(
           leetcodeUsernames.map(async (username) => {
             const response = await axios.get(
@@ -87,7 +87,6 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Loop through the usernames and fetch data for each
         const results = await Promise.all(
           leetcodeUsernames.map(async (username) => {
             const response = await axios.get(
