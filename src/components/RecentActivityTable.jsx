@@ -18,18 +18,15 @@ import { Button } from "./ui/button";
 
 export function RecentActivityTable({ recentTableData }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
-
+  const itemsPerPage = 10;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
 
   const currentItems = recentTableData?.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
-
 
   const totalPages = Math.ceil(recentTableData?.length / itemsPerPage);
 
@@ -47,7 +44,7 @@ export function RecentActivityTable({ recentTableData }) {
 
   return (
     <div>
-      <Table>
+      <Table className={"border rounded-md"}>
         <TableCaption>A list of recent activity in your group.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -60,11 +57,19 @@ export function RecentActivityTable({ recentTableData }) {
         <TableBody>
           {currentItems?.map((recentData) => (
             <TableRow key={uuidv4()}>
-              <TableCell>{recentData.username}</TableCell>
+              <TableCell>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://leetcode.com/u/${recentData.username}`}
+                >
+                  {recentData.username}
+                </a>
+              </TableCell>
               <TableCell className="font-medium">
                 <a
                   target="_blank"
-                  rel="noopener noreferrer" 
+                  rel="noopener noreferrer"
                   href={`https://leetcode.com/problems/${recentData.titleSlug}/description/`}
                 >
                   {getProblemNameFromSlug(recentData.titleSlug)}
