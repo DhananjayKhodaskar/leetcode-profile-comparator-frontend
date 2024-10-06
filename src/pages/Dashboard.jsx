@@ -3,18 +3,21 @@ import axios from "axios";
 import {
   calculateStreaks,
   getLast24hSubmission,
+  getRecentSubmission,
 } from "@/utils/getSubmissionData";
 import StreakCalender from "@/components/StreakCalender";
 import { v4 as uuidv4 } from "uuid";
 import Ranking from "@/components/Ranking";
 import ApexLineChart from "@/components/ApexLineChart";
 import { transformData } from "@/utils/formatChartData";
+import { RecentActivityTable } from "@/components/RecentActivityTable";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState([]);
   const [submission24h, setSubmission24h] = useState([]);
   const [userSolvedData, setUserSolvedData] = useState([]);
   const [streakData, setStreakData] = useState([]);
+  const [recentTableData, setRecentTableData] = useState([]);
   const leetcodeUsernames = [
     "rahulb_001",
     "mayur92828",
@@ -36,7 +39,6 @@ const Dashboard = () => {
             return response.data;
           })
         );
-        console.log("results:", results);
         setUserData(
           transformData({ contests: results, usernames: leetcodeUsernames })
         ); // Store the fetched data in state
@@ -57,10 +59,12 @@ const Dashboard = () => {
             const response = await axios.get(
               `http://localhost:3000/${username}/acSubmission`
             );
-            return getLast24hSubmission({ ...response.data, username });
+
+            return { ...response.data, username };
           })
         );
         const tranformedData = results
+          .map((result) => getLast24hSubmission(result))
           .map((user) => {
             return {
               score: user.submissions.length,
@@ -69,9 +73,9 @@ const Dashboard = () => {
             };
           })
           .sort((a, b) => b.score - a.score);
+        console.log("result: ", results);
+        setRecentTableData(getRecentSubmission(results));
         setSubmission24h(tranformedData);
-
-        console.log("results::>>>>", results);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -125,7 +129,7 @@ const Dashboard = () => {
   return (
     <div style={{ width: "80vw" }}>
       <ApexLineChart chartData={userData} />
-
+      <RecentActivityTable recentTableData={recentTableData} />
       <div className="flex flex-row  gap-2 justify-around">
         <Ranking rankingData={submission24h} title="Top Solvers - Last 24H" />
         <Ranking

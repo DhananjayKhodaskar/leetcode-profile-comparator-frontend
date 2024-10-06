@@ -9,7 +9,6 @@ const StreakCalender = ({ streakData }) => {
   const [streakMonth, setStreakMonth] = useState(0);
   const last365DaysArray = getLastDaysByMonth();
   const last12Months = getLastDaysByMonth(FOR_THE.MONTH_DISPLAY);
-  console.log(last12Months);
   return (
     <div className="w-screen overflow-x-auto  no-scrollbar flex flex-col gap-3 bg-slate-600">
       <h3>{last12Months[streakMonth]}</h3>

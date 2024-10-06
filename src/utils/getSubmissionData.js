@@ -15,6 +15,33 @@ export const getLast24hSubmission = (submissions) => {
   };
 };
 
+export const getRecentSubmission = (submissions, days = 7) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const daysInSeconds = 24 * 60 * 60 * days;
+
+  // Flatten, filter, and map submissions first
+  const recentSubmissions = submissions.flatMap((user) =>
+    user.submission
+      .map((submission) => ({
+        title: submission.title,
+        titleSlug: submission.titleSlug,
+        timestamp: submission.timestamp,
+        statusDisplay: submission.statusDisplay,
+        lang: submission.lang,
+        username: user.username,
+      }))
+      .filter((submission) => {
+        const submissionTimestamp = parseInt(submission.timestamp);
+        return currentTimestamp - submissionTimestamp <= daysInSeconds;
+      })
+  );
+
+  // Sort and slice the final collection
+  return recentSubmissions
+    .sort((a, b) => b.timestamp - a.timestamp) // Sort descending
+    .slice(0, 40); // Take the latest 40 submissions
+};
+
 export const calculateStreaks = (data) => {
   const submissionCalendar = JSON.parse(data.submissionCalendar);
 
@@ -161,4 +188,39 @@ export const getLastDaysByMonth = (
   }
 
   return months;
+};
+export const getProblemNameFromSlug = (input) =>
+  input
+    .split("-") // Split the string by hyphens
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .join(" ");
+
+export const formatTimestamp = (timestamp) => {
+  const now = Date.now();
+  const date = new Date(timestamp * 1000);
+  const diff = now - date.getTime();
+
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (seconds < 60) {
+    return `${seconds} sec${seconds !== 1 ? "s" : ""} ago`;
+  } else if (minutes < 60) {
+    return `${minutes} min${minutes !== 1 ? "s" : ""} ago`;
+  } else if (hours < 24) {
+    return `${hours} hr${hours !== 1 ? "s" : ""} ago`;
+  } else if (days === 1) {
+    return `Yesterday`;
+  } else if (days < 7) {
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
+  } else if (date.toDateString() === new Date().toDateString()) {
+    return `Today at ${date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+  } else {
+    return date.toLocaleDateString();
+  }
 };
