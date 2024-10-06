@@ -1,7 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-const ApexChart = ({ chartData }) => {
+const ApexLineChart = ({ chartData }) => {
   const allStartTimes = chartData.flatMap((charData) =>
     charData.data.map((c) => c.contest.startTime)
   );
@@ -82,4 +82,4 @@ const ApexChart = ({ chartData }) => {
   );
 };
 
-export default ApexChart;
+export default ApexLineChart;
