@@ -32,7 +32,7 @@ const Dashboard = () => {
     const rankingChartData = [];
     for (let i = 0; i < data.length; i++) {
       const userObject = data[i];
-      const name = userObject.username;
+      const name = userObject?.profile?.realName || userObject?.username;
       const userContestHistory = userObject.userContestRankingHistory;
       rankingChartData.push({ name, data: userContestHistory });
     }
