@@ -17,27 +17,9 @@ const ApexLineChart = ({ chartData }) => {
       };
     });
 
-    const firstDataPoint = plottingData[0];
-    const lastDataPoint = plottingData[plottingData.length - 1];
-
-    if (firstDataPoint && firstDataPoint.x.getTime() > minStartTime) {
-      plottingData.unshift({
-        x: new Date(minStartTime),
-        y: 0,
-      });
-    }
-
-    if (lastDataPoint && lastDataPoint.x.getTime() < maxStartTime) {
-      plottingData.push({
-        x: new Date(maxStartTime),
-        y: lastDataPoint.y,
-      });
-    }
-
     return {
       data: plottingData,
       name: charData.name,
-      extend_to_end: true,
     };
   });
 

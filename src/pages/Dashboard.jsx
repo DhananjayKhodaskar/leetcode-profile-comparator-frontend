@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [userSolvedData, setUserSolvedData] = useState([]);
   const [streakData, setStreakData] = useState([]);
   const [recentTableData, setRecentTableData] = useState([]);
-  const leetcodeUsernames = [
+  const usernames = [
     "rahulb_001",
     "mayur92828",
     "prem__",
@@ -28,108 +28,123 @@ const Dashboard = () => {
     "dnialh",
   ];
 
+  const processData = (data) => {
+    const rankingChartData = [];
+    for (let i = 0; i < data.length; i++) {
+      const userObject = data[i];
+      const name = userObject.username;
+      const userContestHistory = userObject.userContestRankingHistory;
+      rankingChartData.push({ name, data: userContestHistory });
+    }
+    setUserData(rankingChartData);
+    console.log("rankingChartData", rankingChartData);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const results = await Promise.all(
-          leetcodeUsernames.map(async (username) => {
-            const response = await axios.get(
-              `http://localhost:3000/${username}/contest`
-            );
-            return response.data;
-          })
+        const response = await axios.post(
+          `http://localhost:4000/api/app/get-users-data`,
+          {
+            usernames,
+          }
         );
-        setUserData(
-          transformData({ contests: results, usernames: leetcodeUsernames })
-        ); // Store the fetched data in state
+        const data = response.data;
+        localStorage.setItem("data", JSON.stringify(data));
+        processData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
-    fetchData();
+    if (localStorage.getItem("data")) {
+      const storedData = JSON.parse(localStorage.getItem("data"));
+      processData(storedData);
+    } else {
+      fetchData();
+    }
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
 
-        const results = await Promise.all(
-          leetcodeUsernames.map(async (username) => {
-            const response = await axios.get(
-              `http://localhost:3000/${username}/acSubmission`
-            );
+  //       const results = await Promise.all(
+  //         leetcodeUsernames.map(async (username) => {
+  //           const response = await axios.get(
+  //             `http://localhost:3000/${username}/acSubmission`
+  //           );
 
-            return { ...response.data, username };
-          })
-        );
-        const tranformedData = results
-          .map((result) => getLast24hSubmission(result))
-          .map((user) => {
-            return {
-              score: user.submissions.length,
-              username: user.username,
-              key: uuidv4(),
-            };
-          })
-          .sort((a, b) => b.score - a.score);
-        console.log("result: ", results);
-        setRecentTableData(getRecentSubmission(results));
-        setSubmission24h(tranformedData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  //           return { ...response.data, username };
+  //         })
+  //       );
+  //       const tranformedData = results
+  //         .map((result) => getLast24hSubmission(result))
+  //         .map((user) => {
+  //           return {
+  //             score: user.submissions.length,
+  //             username: user.username,
+  //             key: uuidv4(),
+  //           };
+  //         })
+  //         .sort((a, b) => b.score - a.score);
+  //       console.log("result: ", results);
+  //       setRecentTableData(getRecentSubmission(results));
+  //       setSubmission24h(tranformedData);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const results = await Promise.all(
-          leetcodeUsernames.map(async (username) => {
-            const response = await axios.get(
-              `http://localhost:3000/${username}/solved`
-            );
-            return { ...response.data, username: username };
-          })
-        );
-        setUserSolvedData(results);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const results = await Promise.all(
+  //         leetcodeUsernames.map(async (username) => {
+  //           const response = await axios.get(
+  //             `http://localhost:3000/${username}/solved`
+  //           );
+  //           return { ...response.data, username: username };
+  //         })
+  //       );
+  //       setUserSolvedData(results);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const results = await Promise.all(
-          leetcodeUsernames.map(async (username) => {
-            const response = await axios.get(
-              `http://localhost:3000/${username}/calendar`
-            );
-            const streakData = calculateStreaks(response.data);
-            return { ...streakData, username: username };
-          })
-        );
-        setStreakData(results);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const results = await Promise.all(
+  //         leetcodeUsernames.map(async (username) => {
+  //           const response = await axios.get(
+  //             `http://localhost:3000/${username}/calendar`
+  //           );
+  //           const streakData = calculateStreaks(response.data);
+  //           return { ...streakData, username: username };
+  //         })
+  //       );
+  //       setStreakData(results);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div style={{ width: "80vw" }}>
       <ApexLineChart chartData={userData} />
-      <RecentActivityTable recentTableData={recentTableData} />
-      <div className="flex flex-row  gap-2 justify-around">
+      {/* <RecentActivityTable recentTableData={recentTableData} /> */}
+      {/* <div className="flex flex-row  gap-2 justify-around">
         <Ranking rankingData={submission24h} title="Top Solvers - Last 24H" />
         <Ranking
           rankingData={userSolvedData.map((data) => {
@@ -148,8 +163,8 @@ const Dashboard = () => {
           ]}
           title="Total Problems Solved"
         />
-      </div>
-      <StreakCalender streakData={streakData} />
+      </div> */}
+      {/* <StreakCalender streakData={streakData} /> */}
     </div>
   );
 };
