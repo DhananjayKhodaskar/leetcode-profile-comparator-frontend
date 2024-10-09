@@ -63,9 +63,9 @@ export function RecentActivityTable({ recentTableData }) {
                   rel="noopener noreferrer"
                   href={`https://leetcode.com/u/${recentData.username}`}
                 >
-                  {recentData?.username
-                  ? recentData.username.charAt(0).toUpperCase() +
-                    recentData.username.slice(1)
+                  {recentData?.realName
+                  ? recentData.realName.charAt(0).toUpperCase() +
+                    recentData.realName.slice(1)
                   : "N/A"}
                 </a>
               </TableCell>

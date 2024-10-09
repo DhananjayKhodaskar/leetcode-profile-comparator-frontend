@@ -13,7 +13,7 @@ import { transformData } from "@/utils/formatChartData";
 import { RecentActivityTable } from "@/components/RecentActivityTable";
 
 const Dashboard = () => {
-  const [userData, setUserData] = useState([]);
+  const [rankingChartData, setRankingChartData] = useState([]);
   const [submission24h, setSubmission24h] = useState([]);
   const [userSolvedData, setUserSolvedData] = useState([]);
   const [streakData, setStreakData] = useState([]);
@@ -36,7 +36,7 @@ const Dashboard = () => {
       const userContestHistory = userObject.userContestRankingHistory;
       rankingChartData.push({ name, data: userContestHistory });
     }
-    setUserData(rankingChartData);
+    setRankingChartData(rankingChartData);
     console.log("rankingChartData", rankingChartData);
   };
 
@@ -51,14 +51,16 @@ const Dashboard = () => {
         );
         const data = response.data;
         localStorage.setItem("data", JSON.stringify(data));
-        processData(data);
+        processData(data.usersData);
+        setRecentTableData(data.recentActivity)
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
+    const dataInLocalStorage = localStorage.getItem("data");
 
-    if (localStorage.getItem("data")) {
-      const storedData = JSON.parse(localStorage.getItem("data"));
+    if (dataInLocalStorage) {
+      const storedData = JSON.parse(dataInLocalStorage);
       processData(storedData);
     } else {
       fetchData();
@@ -142,8 +144,8 @@ const Dashboard = () => {
 
   return (
     <div style={{ width: "80vw" }}>
-      <ApexLineChart chartData={userData} />
-      {/* <RecentActivityTable recentTableData={recentTableData} /> */}
+      <ApexLineChart chartData={rankingChartData} />
+      <RecentActivityTable recentTableData={recentTableData} />
       {/* <div className="flex flex-row  gap-2 justify-around">
         <Ranking rankingData={submission24h} title="Top Solvers - Last 24H" />
         <Ranking
