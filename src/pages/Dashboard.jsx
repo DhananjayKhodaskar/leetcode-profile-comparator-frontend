@@ -11,6 +11,7 @@ import Ranking from "@/components/Ranking";
 import ApexLineChart from "@/components/ApexLineChart";
 import { transformData } from "@/utils/formatChartData";
 import { RecentActivityTable } from "@/components/RecentActivityTable";
+import StreakComparison from "@/components/StreakComparison";
 
 const Dashboard = () => {
   const [rankingChartData, setRankingChartData] = useState([]);
@@ -28,78 +29,58 @@ const Dashboard = () => {
     "dnialh",
   ];
 
-  const processData = (data) => {
-    const rankingChartData = [];
-    for (let i = 0; i < data.length; i++) {
-      const userObject = data[i];
-      const name = userObject?.profile?.realName || userObject?.username;
-      const userContestHistory = userObject.userContestRankingHistory;
-      rankingChartData.push({ name, data: userContestHistory });
-    }
+  const processData = (usersData) => {
+    const rankingChartData = usersData.map((userObject) => ({
+      name: userObject?.profile?.realName || userObject?.username,
+      data: userObject.userContestRankingHistory,
+    }));
+
     setRankingChartData(rankingChartData);
-    console.log("rankingChartData", rankingChartData);
+  };
+
+  const fetchAndStoreUserData = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/app/get-users-data`,
+        {
+          usernames,
+        }
+      );
+      const {
+        usersData,
+        recentActivity,
+        streakData: resStreakData,
+      } = response.data;
+      setStreakData(resStreakData);
+      localStorage.setItem("data", JSON.stringify(response.data));
+      processData(usersData);
+      setRecentTableData(recentActivity);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  const getDataFromLocalStorage = () => {
+    const storedData = localStorage.getItem("data");
+    if (storedData) {
+      const {
+        usersData,
+        recentActivity,
+        streakData: resStreakData,
+      } = JSON.parse(storedData);
+      processData(usersData);
+      setStreakData(resStreakData);
+      setRecentTableData(recentActivity);
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          `http://localhost:4000/api/app/get-users-data`,
-          {
-            usernames,
-          }
-        );
-        const data = response.data;
-        localStorage.setItem("data", JSON.stringify(data));
-        processData(data.usersData);
-        setRecentTableData(data.recentActivity)
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    const dataInLocalStorage = localStorage.getItem("data");
-
-    if (dataInLocalStorage) {
-      const storedData = JSON.parse(dataInLocalStorage);
-      processData(storedData);
-    } else {
-      fetchData();
+    if (!getDataFromLocalStorage()) {
+      fetchAndStoreUserData();
     }
   }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-
-  //       const results = await Promise.all(
-  //         leetcodeUsernames.map(async (username) => {
-  //           const response = await axios.get(
-  //             `http://localhost:3000/${username}/acSubmission`
-  //           );
-
-  //           return { ...response.data, username };
-  //         })
-  //       );
-  //       const tranformedData = results
-  //         .map((result) => getLast24hSubmission(result))
-  //         .map((user) => {
-  //           return {
-  //             score: user.submissions.length,
-  //             username: user.username,
-  //             key: uuidv4(),
-  //           };
-  //         })
-  //         .sort((a, b) => b.score - a.score);
-  //       console.log("result: ", results);
-  //       setRecentTableData(getRecentSubmission(results));
-  //       setSubmission24h(tranformedData);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -145,6 +126,7 @@ const Dashboard = () => {
   return (
     <div style={{ width: "80vw" }}>
       <ApexLineChart chartData={rankingChartData} />
+      <StreakComparison streakData={streakData} />
       <RecentActivityTable recentTableData={recentTableData} />
       {/* <div className="flex flex-row  gap-2 justify-around">
         <Ranking rankingData={submission24h} title="Top Solvers - Last 24H" />
