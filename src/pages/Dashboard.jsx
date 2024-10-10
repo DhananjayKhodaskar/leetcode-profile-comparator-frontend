@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import StreakCalender from "@/components/StreakCalender";
-import { v4 as uuidv4 } from "uuid";
-import Ranking from "@/components/Ranking";
 import ApexLineChart from "@/components/ApexLineChart";
-import { transformData } from "@/utils/formatChartData";
 import { RecentActivityTable } from "@/components/RecentActivityTable";
 import StreakComparison from "@/components/StreakComparison";
 import LeaderboardCard from "@/components/LeaderCard";
@@ -47,12 +43,14 @@ const Dashboard = () => {
         recentActivity,
         streakData: resStreakData,
         last24HoursSubmissions,
+        solvedProblemData,
       } = response.data;
       setStreakData(resStreakData);
       localStorage.setItem("data", JSON.stringify(response.data));
       processData(usersData);
       setRecentTableData(recentActivity);
       setSubmission24h(last24HoursSubmissions);
+      setUserSolvedData(solvedProblemData);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -66,11 +64,13 @@ const Dashboard = () => {
         recentActivity,
         streakData: resStreakData,
         last24HoursSubmissions,
+        solvedProblemData,
       } = JSON.parse(storedData);
       processData(usersData);
       setStreakData(resStreakData);
       setRecentTableData(recentActivity);
       setSubmission24h(last24HoursSubmissions);
+      setUserSolvedData(solvedProblemData);
       return true;
     }
     return false;
@@ -90,6 +90,7 @@ const Dashboard = () => {
         submissions={submission24h}
         title={"Last 24H Submissions"}
       />
+      <LeaderboardCard submissions={userSolvedData} title={"Problem Solved"} />
       <RecentActivityTable recentTableData={recentTableData} />
     </div>
   );

@@ -1,8 +1,6 @@
 import React from "react";
 export default function LeaderboardCard({ title, submissions }) {
-  const sortedSubmissions = [...submissions].sort(
-    (a, b) => b.submissions - a.submissions
-  );
+  const sortedSubmissions = [...submissions].sort((a, b) => b.count - a.count);
   return (
     <div className="w-[300px] card">
       <div className="card-header">
@@ -26,9 +24,7 @@ export default function LeaderboardCard({ title, submissions }) {
                   {user.username}
                 </p>
               </div>
-              <span className="text-sm font-medium">
-                {user.submissions || 0}
-              </span>
+              <span className="text-sm font-medium">{user.count || "-"}</span>
             </li>
           ))}
         </ul>
