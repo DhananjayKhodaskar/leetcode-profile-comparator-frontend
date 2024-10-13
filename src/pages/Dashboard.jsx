@@ -4,6 +4,7 @@ import ApexLineChart from "@/components/ApexLineChart";
 import { RecentActivityTable } from "@/components/RecentActivityTable";
 import StreakComparison from "@/components/StreakComparison";
 import LeaderboardCard from "@/components/LeaderCard";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Dashboard = () => {
   const [rankingChartData, setRankingChartData] = useState([]);
@@ -84,6 +85,7 @@ const Dashboard = () => {
 
   return (
     <div style={{ width: "80vw" }}>
+      <ModeToggle />
       <ApexLineChart chartData={rankingChartData} />
       <StreakComparison streakData={streakData} />
       <LeaderboardCard
