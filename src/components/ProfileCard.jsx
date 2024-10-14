@@ -14,13 +14,7 @@ const ProfileCard = ({ data }) => {
     company,
     school,
     aboutMe,
-    
   } = data;
-
-//   const totalSubmissions = acSubmissionNum.reduce(
-//     (acc, curr) => acc + curr.submissions,
-//     0
-//   );
 
   const avatarFallbackText = username ? username.charAt(0).toUpperCase() : "-";
 
