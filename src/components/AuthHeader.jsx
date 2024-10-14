@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const AuthHeader = ({ title, subtitle, linkText, linkHref }) => {
   return (
@@ -15,19 +14,6 @@ const AuthHeader = ({ title, subtitle, linkText, linkHref }) => {
       </span>
     </div>
   );
-};
-
-AuthHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string,
-  linkText: PropTypes.string,
-  linkHref: PropTypes.string,
-};
-
-AuthHeader.defaultProps = {
-  subtitle: "",
-  linkText: "",
-  linkHref: "",
 };
 
 export default AuthHeader;
