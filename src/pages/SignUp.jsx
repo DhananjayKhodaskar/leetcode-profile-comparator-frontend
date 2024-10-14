@@ -15,8 +15,7 @@ import { signUpFormSchema } from "@/validation/signUpSchema";
 import { Eye, EyeOff } from "lucide-react";
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [visiblePasswordField, setVisiblePasswordField] = useState(null); // null, 'password', or 'confirmPassword'
 
   const form = useForm({
     resolver: zodResolver(signUpFormSchema),
@@ -28,14 +27,8 @@ const SignUp = () => {
     },
   });
 
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
-    setShowConfirmPassword(false); 
-  };
-
-  const handleToggleConfirmPassword = () => {
-    setShowConfirmPassword((prev) => !prev);
-    setShowPassword(false); 
+  const handleToggleVisibility = (field) => {
+    setVisiblePasswordField((prevField) => (prevField === field ? null : field));
   };
 
   function onSubmit(values) {
@@ -81,15 +74,15 @@ const SignUp = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={visiblePasswordField === "password" ? "text" : "password"}
                         placeholder="Enter your password"
                         {...field}
                       />
                       <span
                         className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                        onClick={handleTogglePassword}
+                        onClick={() => handleToggleVisibility("password")}
                       >
-                        {showPassword ? (
+                        {visiblePasswordField === "password" ? (
                           <Eye className="h-5 w-5 text-gray-500" />
                         ) : (
                           <EyeOff className="h-5 w-5 text-gray-500" />
@@ -110,15 +103,15 @@ const SignUp = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showConfirmPassword ? "text" : "password"}
+                        type={visiblePasswordField === "confirmPassword" ? "text" : "password"}
                         placeholder="Confirm your password"
                         {...field}
                       />
                       <span
                         className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                        onClick={handleToggleConfirmPassword}
+                        onClick={() => handleToggleVisibility("confirmPassword")}
                       >
-                        {showConfirmPassword ? (
+                        {visiblePasswordField === "confirmPassword" ? (
                           <Eye className="h-5 w-5 text-gray-500" />
                         ) : (
                           <EyeOff className="h-5 w-5 text-gray-500" />
