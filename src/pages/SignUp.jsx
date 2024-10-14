@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { signUpFormSchema } from "@/validation/signUpSchema";
 import { Eye, EyeOff } from "lucide-react";
+import AuthHeader from "@/components/AuthHeader";
 
 const SignUp = () => {
   const [visiblePasswordField, setVisiblePasswordField] = useState(null); // null, 'password', or 'confirmPassword'
@@ -28,7 +29,9 @@ const SignUp = () => {
   });
 
   const handleToggleVisibility = (field) => {
-    setVisiblePasswordField((prevField) => (prevField === field ? null : field));
+    setVisiblePasswordField((prevField) =>
+      prevField === field ? null : field
+    );
   };
 
   function onSubmit(values) {
@@ -38,15 +41,11 @@ const SignUp = () => {
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold">Create an account</h1>
-          <span className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <a href="login" className="underline">
-              Sign In
-            </a>
-          </span>
-        </div>
+        <AuthHeader
+          title="Create an account"
+          subtitle="Already have an account?"
+          linkText="Sign In"
+        />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -74,7 +73,11 @@ const SignUp = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={visiblePasswordField === "password" ? "text" : "password"}
+                        type={
+                          visiblePasswordField === "password"
+                            ? "text"
+                            : "password"
+                        }
                         placeholder="Enter your password"
                         {...field}
                       />
@@ -103,13 +106,19 @@ const SignUp = () => {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={visiblePasswordField === "confirmPassword" ? "text" : "password"}
+                        type={
+                          visiblePasswordField === "confirmPassword"
+                            ? "text"
+                            : "password"
+                        }
                         placeholder="Confirm your password"
                         {...field}
                       />
                       <span
                         className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                        onClick={() => handleToggleVisibility("confirmPassword")}
+                        onClick={() =>
+                          handleToggleVisibility("confirmPassword")
+                        }
                       >
                         {visiblePasswordField === "confirmPassword" ? (
                           <Eye className="h-5 w-5 text-gray-500" />
