@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,8 +12,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { signUpFormSchema } from "@/validation/signUpSchema";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -25,73 +28,127 @@ const SignUp = () => {
     },
   });
 
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+    setShowConfirmPassword(false); 
+  };
+
+  const handleToggleConfirmPassword = () => {
+    setShowConfirmPassword((prev) => !prev);
+    setShowPassword(false); 
+  };
+
   function onSubmit(values) {
     console.log(values);
   }
 
   return (
-    <div className="flex flex-col w-full justify-center items-center  prose">
-      <Form {...form}>
-        <h1>Create an account</h1>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                {/* <FormDescription>
-                  This is your public display email.
-                </FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="leetcodeId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Leetcode Id</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+    <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold">Create an account</h1>
+          <span className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <a href="login" className="underline">
+              Sign In
+            </a>
+          </span>
+        </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-5 w-80"
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        {...field}
+                      />
+                      <span
+                        className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        onClick={handleTogglePassword}
+                      >
+                        {showPassword ? (
+                          <Eye className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <EyeOff className="h-5 w-5 text-gray-500" />
+                        )}
+                      </span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        {...field}
+                      />
+                      <span
+                        className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        onClick={handleToggleConfirmPassword}
+                      >
+                        {showConfirmPassword ? (
+                          <Eye className="h-5 w-5 text-gray-500" />
+                        ) : (
+                          <EyeOff className="h-5 w-5 text-gray-500" />
+                        )}
+                      </span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="leetcodeId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Leetcode ID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your Leetcode ID" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full">
+              Submit
+            </Button>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 };
