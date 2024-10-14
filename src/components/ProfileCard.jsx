@@ -19,7 +19,7 @@ const ProfileCard = ({ data }) => {
   const avatarFallbackText = username ? username.charAt(0).toUpperCase() : "-";
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 max-h-[60vh] overflow-auto">
       <AuthHeader
         title="Confirm Your Leetcode Profile"
         subtitle="Not your profile? "

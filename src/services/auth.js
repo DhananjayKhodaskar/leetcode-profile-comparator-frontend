@@ -12,9 +12,15 @@ export const authApi = createApi({
         body: values,
       }),
     }),
+    signUp: builder.mutation({
+      query: () => ({
+        url: "/auth/signUp",
+        method: "POST",
+      }),
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useFetchLeetCodeDataMutation } = authApi;
+export const { useFetchLeetCodeDataMutation, useSignUpMutation } = authApi;
