@@ -90,7 +90,7 @@ const SignUp = () => {
           />
           <LeetCodeForm onSubmit={onLeetCodeIdSubmit} />
         </div>
-      ) : leetcodeUserLoading ? (
+      ) : leetcodeUserLoading || leetcodeSignUpLoading ? (
         <ProfileCardSkeleton />
       ) : (
         <div className="flex flex-col gap-3">
