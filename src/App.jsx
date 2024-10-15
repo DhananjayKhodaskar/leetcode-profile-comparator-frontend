@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import AuthSideImage from "./components/AuthSideImage";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-
+import { Toaster } from "@/components/ui/toaster";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -16,6 +16,7 @@ function App() {
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />
       </Routes>
+      <Toaster />
     </ThemeProvider>
   );
 }
