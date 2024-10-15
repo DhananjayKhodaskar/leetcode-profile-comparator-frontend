@@ -12,11 +12,17 @@ const SignUp = () => {
   const [
     fetchLeetCodeData,
     {
-      data: leetcodeUserData,
+      data: fetchLeetCodeResponse,
       error: leetcodeUserError,
       isLoading: leetcodeUserLoading,
     },
   ] = useFetchLeetCodeDataMutation();
+
+  const {
+    success: leetcodeUserSuccess,
+    message: leetcodeUserMessage,
+    data: leetcodeUserData,
+  } = fetchLeetCodeResponse || {};
 
   const [
     signUp,
