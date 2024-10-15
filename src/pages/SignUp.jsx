@@ -86,7 +86,8 @@ const SignUp = () => {
           <AuthHeader
             title="Create an account"
             subtitle="Already have an account?"
-            linkText="Sign In"
+            linkText="Login"
+            linkHref={"/auth/login"}
           />
           <LeetCodeForm onSubmit={onLeetCodeIdSubmit} />
         </div>
