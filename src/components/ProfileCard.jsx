@@ -65,9 +65,10 @@ const ProfileCard = ({ data, onSubmit }) => {
       <div className="flex flex-col space-y-2 pb-20">
         <Form {...form}>
           <form
-            id="signUpForm" 
-            onSubmit={form.handleSubmit(onSubmit)} 
+            id="signUpForm"
+            onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-5 w-full mt-4"
+            method="POST"
           >
             <FormField
               control={form.control}

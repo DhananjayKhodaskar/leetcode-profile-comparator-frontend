@@ -23,7 +23,11 @@ const LeetCodeForm = ({ onSubmit }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-80">
+      <form
+        method="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 w-80"
+      >
         <FormField
           control={form.control}
           name="leetcodeUsername"

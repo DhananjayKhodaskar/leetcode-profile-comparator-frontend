@@ -8,9 +8,11 @@ import {
 } from "@/services/auth";
 import ProfileCardSkeleton from "@/components/skeletons/ProfileCardSkeleton";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [
     fetchLeetCodeData,
     {
@@ -35,6 +37,12 @@ const SignUp = () => {
     },
   ] = useSignUpMutation();
 
+  const {
+    success: signUpSuccess,
+    message: signUpMessage,
+    data: signUpData,
+  } = leetcodeSignUpData || {};
+
   const onLeetCodeIdSubmit = async (formValues) => {
     const { confirmPassword, ...values } = formValues;
     try {
@@ -54,6 +62,16 @@ const SignUp = () => {
   };
 
   useEffect(() => {
+    if (signUpSuccess) {
+      toast({
+        title: "Success!",
+        description: signUpMessage || "User data fetched successfully.",
+      });
+      navigate("/auth/login");
+    }
+  }, [signUpMessage, signUpSuccess, toast]);
+
+  useEffect(() => {
     if (leetcodeUserSuccess) {
       toast({
         title: "Success!",
@@ -61,7 +79,6 @@ const SignUp = () => {
       });
     }
   }, [leetcodeUserSuccess, leetcodeUserMessage, toast]);
-
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       {!leetcodeUserData && !leetcodeUserLoading ? (
