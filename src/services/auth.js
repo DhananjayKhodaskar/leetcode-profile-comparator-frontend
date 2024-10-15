@@ -18,7 +18,7 @@ export const authApi = createApi({
         body: values,
       }),
     }),
-    verifyEmail: builder.mutation({
+    verifyEmail: builder.query({
       query: (token) => ({
         url: `/auth/verify-email?token=${token}`,
         method: "POST",
@@ -30,5 +30,5 @@ export const authApi = createApi({
 export const {
   useFetchLeetCodeDataMutation,
   useSignUpMutation,
-  useVerifyEmailMutation,
+  useVerifyEmailQuery,
 } = authApi;
