@@ -54,6 +54,7 @@ const ProfileCard = ({ data, onSubmit }) => {
         title="Confirm Your Leetcode Profile"
         subtitle="Not your profile? "
         linkText="Go back"
+        linkHref={'/auth/login'}
       />
       <div className="flex items-center justify-center">
         <Avatar>
