@@ -24,6 +24,13 @@ export const authApi = createApi({
         method: "POST",
       }),
     }),
+    login: builder.mutation({
+      query: (values) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: values,
+      }),
+    }),
   }),
 });
 
@@ -31,4 +38,5 @@ export const {
   useFetchLeetCodeDataMutation,
   useSignUpMutation,
   useVerifyEmailQuery,
+  useLoginMutation
 } = authApi;
