@@ -1,3 +1,4 @@
+import { setUser } from "@/slices/userSlice";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
@@ -30,6 +31,14 @@ export const authApi = createApi({
         method: "POST",
         body: values,
       }),
+      async onQueryStarted(values, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data?.data));
+        } catch (error) {
+          console.error("Login failed:", error);
+        }
+      },
     }),
   }),
 });
@@ -38,5 +47,5 @@ export const {
   useFetchLeetCodeDataMutation,
   useSignUpMutation,
   useVerifyEmailQuery,
-  useLoginMutation
+  useLoginMutation,
 } = authApi;
