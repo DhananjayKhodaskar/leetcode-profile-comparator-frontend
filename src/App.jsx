@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/auth/Dashboard";
+import Dashboard from "./pages/app/Dashboard";
 import { ThemeProvider } from "@/components/theme-provider";
 import AuthSideImage from "./components/AuthSideImage";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import VerifyEmail from "./pages/auth/VerifyEmail"; // Import the new page
 import { Toaster } from "@/components/ui/toaster";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="verify-email/:token" element={<VerifyEmail />} />{" "}
+        </Route>
+        <Route path="/app" element={<Layout />}>
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />
       </Routes>
