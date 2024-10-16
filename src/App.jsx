@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/auth/Dashboard";
 import { ThemeProvider } from "@/components/theme-provider";
 import AuthSideImage from "./components/AuthSideImage";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import VerifyEmail from "./pages/VerifyEmail"; // Import the new page
+import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/SignUp";
+import VerifyEmail from "./pages/auth/VerifyEmail"; // Import the new page
 import { Toaster } from "@/components/ui/toaster";
 
 function App() {
