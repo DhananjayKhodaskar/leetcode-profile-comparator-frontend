@@ -47,14 +47,12 @@ const SignUp = () => {
     const { confirmPassword, ...values } = formValues;
     try {
       const response = await fetchLeetCodeData(values).unwrap();
-      console.log("Fetched Data:", response);
     } catch (err) {
       console.error("Error fetching data:", err);
     }
   };
 
   const onCredentialSubmit = async (formValues) => {
-    console.log("onCredentialSubmit", formValues);
     const token = leetcodeUserData?.token || "";
     delete formValues.confirmPassword;
 

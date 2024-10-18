@@ -51,7 +51,6 @@ const CreateGroup = () => {
   };
 
   const onSubmit = (values) => {
-    console.log("Form submitted with data:", values);
     createGroup(values)
       .unwrap()
       .then(() => refetch())

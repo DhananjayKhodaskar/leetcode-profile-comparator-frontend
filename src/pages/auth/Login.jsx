@@ -32,7 +32,6 @@ const Login = () => {
   const { success, message, data } = leetcodeLoginData || {};
 
   const onSubmit = (data) => {
-    console.log("onSubmit", data);
     login(data)
       .unwrap()
       .then(() => {

@@ -1,7 +1,6 @@
 import React from "react";
 
 const StreakComparison = ({ streakData }) => {
-  console.log(streakData, "streakData");
   // Dummy data for testing
   const currentUser = streakData.length ? streakData[4] : {};
 
