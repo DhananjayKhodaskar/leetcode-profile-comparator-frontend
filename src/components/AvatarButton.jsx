@@ -8,18 +8,27 @@ import {
 } from "@/components/ui/tooltip";
 import { Plus } from "lucide-react";
 
-const CreateGroupAvatar = ({ groupName }) => {
+const AvatarButton = ({
+  buttonName,
+  ButtonIconComponent,
+  iconBackgrounColor = "bg-gray-700",
+  iconColor = "",
+  handleOnClick = () => "",
+}) => {
   return (
-    <div className="cursor-pointer">
+    <div className="cursor-pointer" onClick={handleOnClick}>
       <TooltipProvider>
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
             <Avatar>
-              <Plus size={40} className="bg-gray-700 rounded-full w-12 h-12 p-3" />
+              <ButtonIconComponent
+                size={40}
+                className={`${iconBackgrounColor} ${iconColor} rounded-full w-12 h-12 p-3`}
+              />
             </Avatar>
           </TooltipTrigger>
           <TooltipContent side="right">
-            <p className="font-extrabold">{groupName}</p>
+            <p className="font-extrabold">{buttonName}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -27,4 +36,4 @@ const CreateGroupAvatar = ({ groupName }) => {
   );
 };
 
-export default CreateGroupAvatar;
+export default AvatarButton;

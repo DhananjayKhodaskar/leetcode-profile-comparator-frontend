@@ -1,12 +1,14 @@
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { useFetchJoinedGroupsQuery } from "@/services/group";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GroupAvatar from "./GroupAvatar";
-import { CirclePlus } from "lucide-react";
-import CreateGroupAvatar from "./CreateGroupAvatar";
+import { CirclePlus, LogOut } from "lucide-react";
+import AvatarButton from "./AvatarButton";
+import { clearUser } from "@/slices/userSlice";
 
 export function Sidebar() {
+  const dispatch = useDispatch();
   const {
     data: groupData,
     error,
@@ -14,13 +16,12 @@ export function Sidebar() {
     isLoading,
   } = useFetchJoinedGroupsQuery();
   const { joinedGroups } = useSelector((state) => state.group);
-
   return (
     <div className={cn("pb-12")}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2 w-[72px]">
           <div className="space-y-3">
-            {joinedGroups?.length &&
+            {joinedGroups.length > 0 &&
               joinedGroups.map((group) => (
                 <GroupAvatar
                   key={group.groupId}
@@ -28,9 +29,18 @@ export function Sidebar() {
                   groupAvatar={group.groupAvatar}
                 />
               ))}
-            <CreateGroupAvatar
+            <AvatarButton
               groupName={"Add Squad"}
-              groupAvatar={<CirclePlus color="red" />}
+              ButtonIconComponent={CirclePlus}
+              buttonName="Create Squad"
+              handleOnClick={() => console.log("create button clicked")}
+            />
+            <AvatarButton
+              groupName={"Add Squad"}
+              ButtonIconComponent={LogOut}
+              iconColor="text-red-600"
+              buttonName="Log Out"
+              handleOnClick={() => dispatch(clearUser())}
             />
           </div>
         </div>
