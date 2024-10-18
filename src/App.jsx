@@ -7,6 +7,7 @@ import SignUp from "./pages/auth/SignUp";
 import VerifyEmail from "./pages/auth/VerifyEmail"; // Import the new page
 import { Toaster } from "@/components/ui/toaster";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
           <Route path="verify-email/:token" element={<VerifyEmail />} />{" "}
         </Route>
         <Route path="/app" element={<Layout />}>
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<Dashboard />} />
+          </Route>
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />
       </Routes>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { loginSchema } from "@/validation/loginSchema";
 import AuthHeader from "@/components/AuthHeader";
 import { useLoginMutation } from "@/services/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const form = useForm({
@@ -24,6 +25,7 @@ const Login = () => {
     },
   });
 
+  const navigate = useNavigate();
   const [login, { data: leetcodeLoginData, error, isLoading }] =
     useLoginMutation();
 
@@ -31,7 +33,14 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log("onSubmit", data);
-    login(data);
+    login(data)
+      .unwrap()
+      .then(() => {
+        navigate("/app");
+      })
+      .catch((err) => {
+        console.error("Login failed:", err);
+      });
   };
 
   return (
