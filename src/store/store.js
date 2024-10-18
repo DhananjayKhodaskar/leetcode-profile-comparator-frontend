@@ -2,9 +2,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/slices/authSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistStore, persistReducer } from "redux-persist";
-import { authApi } from "@/services/auth";
 import storage from "redux-persist/lib/storage";
 import userReducer from "@/slices/userSlice";
+import groupReducer from "@/slices/groupSlice";
+import { authApi } from "@/services/auth";
+import { groupApi } from "@/services/group";
 
 const persistConfig = {
   key: "root",
@@ -18,7 +20,9 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     [authApi.reducerPath]: authApi.reducer,
+    [groupApi.reducerPath]: groupApi.reducer, 
     user: persistedUserReducer,
+    group: groupReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -32,7 +36,7 @@ const store = configureStore({
           "persist/FLUSH",
         ],
       },
-    }).concat(authApi.middleware),
+    }).concat(authApi.middleware, groupApi.middleware), // Add groupApi middleware here
 });
 
 setupListeners(store.dispatch);
