@@ -6,6 +6,7 @@ import GroupAvatar from "./GroupAvatar";
 import { CirclePlus, LogOut } from "lucide-react";
 import AvatarButton from "./AvatarButton";
 import { clearUser } from "@/slices/userSlice";
+import CreateGroup from "./CreateGroup";
 
 export function Sidebar() {
   const dispatch = useDispatch();
@@ -29,12 +30,7 @@ export function Sidebar() {
                   groupAvatar={group.groupAvatar}
                 />
               ))}
-            <AvatarButton
-              groupName={"Add Squad"}
-              ButtonIconComponent={CirclePlus}
-              buttonName="Create Squad"
-              handleOnClick={() => console.log("create button clicked")}
-            />
+            <CreateGroup />
             <AvatarButton
               groupName={"Add Squad"}
               ButtonIconComponent={LogOut}
