@@ -9,10 +9,11 @@ import { Toaster } from "@/components/ui/toaster";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GroupInfo from "./pages/app/GroupInfo";
+import GroupChat from "./components/GroupChat";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/auth" element={<AuthSideImage />}>
@@ -24,6 +25,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route index element={<Dashboard />} />
             <Route path="group/:groupId/info" element={<GroupInfo />} />
+            <Route path="group/:groupId/chat" element={<GroupChat />} />
           </Route>
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />

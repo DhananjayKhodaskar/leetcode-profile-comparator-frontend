@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 const AvatarButton = ({
   buttonName,
   ButtonIconComponent,
-  iconBackgrounColor = "bg-gray-700",
+  iconBackgrounColor = "bg-slate-100",
   iconColor = "",
   handleOnClick = () => "",
 }) => {

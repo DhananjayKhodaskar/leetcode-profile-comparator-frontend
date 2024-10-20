@@ -15,10 +15,10 @@ const SubSidebar = () => {
             variant="outline"
             className="w-full flex-row gap-2 "
             onClick={() => {
-              navigate(`group/${selectedGroup?.groupId}/info`);
+              navigate(`group/${selectedGroup?.groupId}/chat`);
             }}
           >
-            <Mail /> Group Details
+            <Mail /> Chat
           </Button>
         </div>
       </div>

@@ -7,17 +7,18 @@ import SubSidebar from "./SubSidebar";
 const Layout = () => {
   return (
     <div className="flex min-h-screen">
-      {" "}
-      {/* Ensure full height */}
+      {/* Sidebar and SubSidebar components */}
       <Sidebar className="bg-slate-800" />
       <SubSidebar className="bg-slate-800" />
+
       <div className="flex flex-col flex-1">
-        {" "}
-        {/* Wrap Navbar and Outlet in a flex column */}
+        {/* Navbar component */}
         <Navbar />
-        <div className="flex-1">
+
+        {/* Container for the Outlet */}
+        <div className="flex-1 overflow-auto">
           {" "}
-          {/* Outlet Container */}
+          {/* Ensure this section is scrollable if needed */}
           <Outlet />
         </div>
       </div>
