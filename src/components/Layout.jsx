@@ -6,7 +6,7 @@ import SubSidebar from "./SubSidebar";
 
 const Layout = () => {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen">
       {/* Sidebar and SubSidebar components */}
       <Sidebar className="bg-slate-800" />
       <SubSidebar className="bg-slate-800" />

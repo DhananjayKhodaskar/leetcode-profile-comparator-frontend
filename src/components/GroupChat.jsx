@@ -31,7 +31,6 @@ const GroupChat = () => {
       </ScrollArea>
       <ChatInput
         placeholder="Type your message here..."
-        className="rounded-full flex flex-row justify-center items-center"
       />
     </div>
   );
