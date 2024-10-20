@@ -8,6 +8,7 @@ import VerifyEmail from "./pages/auth/VerifyEmail"; // Import the new page
 import { Toaster } from "@/components/ui/toaster";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GroupInfo from "./pages/app/GroupInfo";
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
         <Route path="/auth" element={<AuthSideImage />}>
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="verify-email/:token" element={<VerifyEmail />} />{" "}
+          <Route path="verify-email/:token" element={<VerifyEmail />} />
         </Route>
         <Route path="/app" element={<Layout />}>
           <Route element={<ProtectedRoute />}>
             <Route index element={<Dashboard />} />
+            <Route path="group/:groupId/info" element={<GroupInfo />} />
           </Route>
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />

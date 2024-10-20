@@ -15,7 +15,7 @@ const Layout = () => {
         {" "}
         {/* Wrap Navbar and Outlet in a flex column */}
         <Navbar />
-        <div className="flex-1 bg-gray-100 p-4">
+        <div className="flex-1">
           {" "}
           {/* Outlet Container */}
           <Outlet />

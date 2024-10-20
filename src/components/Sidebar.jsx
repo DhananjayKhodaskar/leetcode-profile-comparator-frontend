@@ -7,16 +7,24 @@ import { CirclePlus, LogOut } from "lucide-react";
 import AvatarButton from "./AvatarButton";
 import { clearUser } from "@/slices/userSlice";
 import CreateGroup from "./CreateGroup";
+import { setSelectedGroup } from "@/slices/groupSlice";
+import { useEffect } from "react";
 
 export function Sidebar() {
   const dispatch = useDispatch();
+  const { joinedGroups } = useSelector((state) => state.group);
   const {
     data: groupData,
     error,
     isSuccess,
     isLoading,
   } = useFetchJoinedGroupsQuery();
-  const { joinedGroups } = useSelector((state) => state.group);
+
+  useEffect(() => {
+    if (joinedGroups.length > 0) {
+      dispatch(setSelectedGroup(joinedGroups[0]));
+    }
+  }, [joinedGroups]);
   return (
     <div className={cn("pb-12")}>
       <div className="space-y-4 py-4">
@@ -24,11 +32,7 @@ export function Sidebar() {
           <div className="space-y-3">
             {joinedGroups.length > 0 &&
               joinedGroups.map((group) => (
-                <GroupAvatar
-                  key={group.groupId}
-                  groupName={group.groupName}
-                  groupAvatar={group.groupAvatar}
-                />
+                <GroupAvatar key={group.groupId} group={group} />
               ))}
             <CreateGroup />
             <AvatarButton

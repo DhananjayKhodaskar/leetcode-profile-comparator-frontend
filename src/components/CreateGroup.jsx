@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import AvatarButton from "./AvatarButton";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Loader2 } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import {
   Form,
@@ -116,6 +116,7 @@ const CreateGroup = () => {
             />
             <DialogFooter>
               <Button type="submit" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {isLoading ? "Creating Squad" : "Create Squad"}
               </Button>
             </DialogFooter>

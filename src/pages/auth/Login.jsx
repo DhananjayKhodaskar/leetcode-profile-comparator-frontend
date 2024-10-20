@@ -15,6 +15,7 @@ import { loginSchema } from "@/validation/loginSchema";
 import AuthHeader from "@/components/AuthHeader";
 import { useLoginMutation } from "@/services/auth";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const Login = () => {
   const form = useForm({
@@ -94,6 +95,7 @@ const Login = () => {
             />
 
             <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? "Logging In" : "Login"}
             </Button>
           </form>

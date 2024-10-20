@@ -13,6 +13,12 @@ export const groupApi = createApi({
         body: groupDetails,
       }),
     }),
+    getGroupInfo: builder.query({
+      query: ({ groupId }) => ({
+        url: `/app/groups/${groupId}`,
+        method: "GET",
+      }),
+    }),
     addMemberToGroup: builder.mutation({
       query: ({ groupId, userId }) => ({
         url: `/groups/${groupId}/add-member`,
@@ -40,6 +46,7 @@ export const groupApi = createApi({
 // Export hooks for using the API slice in components
 export const {
   useCreateGroupMutation,
+  useGetGroupInfoQuery,
   useAddMemberToGroupMutation,
   useFetchJoinedGroupsQuery,
 } = groupApi;
