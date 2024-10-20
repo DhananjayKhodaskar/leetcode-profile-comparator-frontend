@@ -73,7 +73,7 @@ const AddMemberModal = ({ groupId, refetchGroupInfo }) => {
 
   const handleAddMember = () => {
     addMemberToGroup({ userId: selectedUser._id, groupId }).then((res) => {
-      if (res.code === 200) {
+      if (res.data.success) {
         refetchGroupInfo();
         handleDialogClose();
       }
