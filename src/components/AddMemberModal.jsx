@@ -23,7 +23,9 @@ const AddMemberModal = ({ groupId, refetchGroupInfo }) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const [searchUser] = useSearchUserMutation();
-  const [addMemberToGroup, { isLoading }] = useAddMemberToGroupMutation();
+  const [addMemberToGroup, { isLoading, error, reset }] =
+    useAddMemberToGroupMutation();
+  const errorMessage = error?.data?.message || "";
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,6 +62,7 @@ const AddMemberModal = ({ groupId, refetchGroupInfo }) => {
     setSelectedUser(null);
     setSearchResults([]);
     setIsDialogOpen(false);
+    reset();
   };
 
   const handleRemoveUser = () => {
@@ -69,11 +72,12 @@ const AddMemberModal = ({ groupId, refetchGroupInfo }) => {
   };
 
   const handleAddMember = () => {
-    addMemberToGroup({ userId: selectedUser._id, groupId })
-      .then(() => {
+    addMemberToGroup({ userId: selectedUser._id, groupId }).then((res) => {
+      if (res.code === 200) {
         refetchGroupInfo();
-      })
-      .finally(() => handleDialogClose());
+        handleDialogClose();
+      }
+    });
   };
 
   return (
@@ -140,6 +144,7 @@ const AddMemberModal = ({ groupId, refetchGroupInfo }) => {
             <CircleX className="cursor-pointer" onClick={handleRemoveUser} />
           </UserCard>
         )}
+        <p className="text-red-600">{errorMessage}</p>
         {selectedUser && (
           <DialogFooter>
             <Button onClick={handleAddMember}>
