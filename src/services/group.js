@@ -21,7 +21,7 @@ export const groupApi = createApi({
     }),
     addMemberToGroup: builder.mutation({
       query: ({ groupId, userId }) => ({
-        url: `/groups/${groupId}/add-member`,
+        url: `/app/groups/${groupId}/add-member`,
         method: "POST",
         body: { userId },
       }),

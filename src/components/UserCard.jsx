@@ -8,11 +8,13 @@ const UserCard = ({
   username,
   groupRole,
   children,
-  handleClick = () => "",
+  handleClick,
 }) => {
   return (
     <div
-      className="flex flex-row justify-between items-center"
+      className={`flex flex-row justify-between items-center ${
+        handleClick ? "cursor-pointer" : ""
+      }`}
       onClick={handleClick}
     >
       <div className="flex flex-row gap-2 items-center">

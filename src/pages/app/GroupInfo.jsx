@@ -17,6 +17,7 @@ const GroupInfo = () => {
     data: groupInfo,
     error,
     isLoading,
+    refetch: refetchGroupInfo,
   } = useGetGroupInfoQuery({ groupId });
   const { data, success, message } = groupInfo || {};
   if (isLoading) {
@@ -69,7 +70,10 @@ const GroupInfo = () => {
         <p className="leading-7 text-slate-500">{`${totalMembers}  members`}</p>
 
         <div className="w-full flex flex-col gap-2 min-h-80">
-          <AddMemberModal />
+          <AddMemberModal
+            groupId={groupId}
+            refetchGroupInfo={refetchGroupInfo}
+          />
           {joinedMember?.map((member) => {
             const { _id, username, email, realName, userAvatar, groupRole } =
               member;
