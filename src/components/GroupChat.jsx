@@ -11,6 +11,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const GroupChat = () => {
   return (
     <div className="flex flex-col h-full">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <h1 className="text-2xl font-semibold">Group Chat</h1>
+      </div>
       <ScrollArea className="flex-1 rounded-md border overflow-auto">
         <ChatMessageList>
           <ChatBubble variant="sent">
@@ -26,12 +29,9 @@ const GroupChat = () => {
               today?
             </ChatBubbleMessage>
           </ChatBubble>
-          {/* More ChatBubbles */}
         </ChatMessageList>
       </ScrollArea>
-      <ChatInput
-        placeholder="Type your message here..."
-      />
+      <ChatInput placeholder="Type your message here..." />
     </div>
   );
 };
