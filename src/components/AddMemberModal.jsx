@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,33 +11,16 @@ import {
 import { Input } from "@/components/ui/input";
 import AvatarButton from "./AvatarButton";
 import { UserRoundPlus } from "lucide-react";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { addMemberSchema } from "@/validation/addMemberSchema";
-import { useAddMemberToGroupMutation } from "@/services/group";
 import { useSearchUserMutation } from "@/services/user";
+import UserCard from "./UserCard";
+import { Badge } from "./ui/badge";
 
 const AddMemberModal = () => {
-  const [createGroup, { isLoading: isAddMemberLoading }] =
-    useAddMemberToGroupMutation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [searchUser] = useSearchUserMutation(); // Initialize the searchUser mutation
-  console.log("searchResults", searchResults);
-  const form = useForm({
-    resolver: zodResolver(addMemberSchema),
-    defaultValues: {
-      email: "",
-    },
-  });
+  const [searchUser] = useSearchUserMutation();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -49,9 +30,8 @@ const AddMemberModal = () => {
       }
 
       try {
-        const result = await searchUser(searchQuery).unwrap(); // Use the searchUser mutation
-        console.log("Search result:", result); // Log the search result for debugging purposes
-        setSearchResults(result); // Update searchResults with the response data
+        const result = await searchUser(searchQuery).unwrap();
+        setSearchResults(result);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -69,13 +49,9 @@ const AddMemberModal = () => {
   };
 
   const handleDialogClose = () => {
-    form.reset();
+    setSearchQuery("");
+    setSearchResults([]);
     setIsDialogOpen(false);
-  };
-
-  const onSubmit = (values) => {
-    console.log("Member email:", values.email);
-    handleDialogClose();
   };
 
   return (
@@ -90,59 +66,45 @@ const AddMemberModal = () => {
         <DialogHeader>
           <DialogTitle>Add a New Member</DialogTitle>
           <DialogDescription>
-            Enter the email of the member you want to add.
+            Enter the user email, leetcode id or name
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid gap-4 py-4"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="email"
-                      placeholder="Enter member's email"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        setSearchQuery(e.target.value); // Update search query state
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button type="submit">Add Member</Button>
-            </DialogFooter>
-          </form>
-        </Form>
+        <Input
+          id="email"
+          placeholder="e.g. John Doe"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         {searchResults.length > 0 && (
           <div className="mt-4">
             <h4>Search Results:</h4>
             <ul>
-              {searchResults.map((user) => (
-                <li key={user._id} className="py-2 border-b border-gray-200">
-                  <img
-                    src={user.userAvatar}
-                    alt={`${user.realName}'s avatar`}
-                    className="w-8 h-8 inline-block mr-2 rounded-full"
-                  />
-                  <span>
-                    {user.realName} ({user.username}) - {user.email}
-                  </span>
-                </li>
-              ))}
+              {searchResults.map((user) => {
+                const { userAvatar, realName, _id, username } = user;
+                return (
+                  <UserCard
+                    key={_id}
+                    userAvatar={userAvatar}
+                    realName={realName}
+                    username={username}
+                  >
+                    <Badge variant="secondary" className="h-5 rounded-full">
+                      <a
+                        href={`https://leetcode.com/u/${username}`}
+                        target="_blank"
+                      >
+                        View Profile
+                      </a>
+                    </Badge>
+                  </UserCard>
+                );
+              })}
             </ul>
           </div>
         )}
+        <DialogFooter>
+          <Button onClick={handleDialogClose}>Close</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
