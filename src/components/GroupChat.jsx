@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChatMessageList } from "./ui/chat/chat-message-list";
 import {
   ChatBubble,
@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const socket = io("http://localhost:4000");
+
 const GroupChat = () => {
   const { user } = useSelector((state) => state.user.user);
   const { selectedGroup } = useSelector((state) => state.group);
@@ -20,6 +21,7 @@ const GroupChat = () => {
   const [inputValue, setInputValue] = useState("");
   const [newMessageId, setNewMessageId] = useState(null);
   const [animating, setAnimating] = useState(false);
+  const messagesEndRef = useRef(null); // Create a ref for the messages end
 
   const userLookup = {};
   joinedMember?.forEach((user) => {
@@ -28,40 +30,42 @@ const GroupChat = () => {
 
   // Initialize Socket.IO connection
   useEffect(() => {
-    // Listen for incoming messages
-    socket.emit("join-room", selectedGroup?._id);
+    if (selectedGroup?._id) {
+      socket.emit("join-room", selectedGroup._id);
+    }
 
-    // Listen for incoming messages
     socket.on("message-received", (message) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { ...message, type: "received" },
-      ]);
-      setNewMessageId(message.id);
+      console.log("message-received", message);
+      setMessages((prevMessages) => [...prevMessages, { ...message }]);
+      setNewMessageId(message._id);
       setAnimating(true);
     });
 
-    // Cleanup function to remove the listener when the component unmounts
     return () => {
       socket.off("message-received");
     };
-  }, [socket, messages, selectedGroup]);
+  }, [selectedGroup]);
+
+  // Effect to auto-scroll when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
       const newMessage = {
-        id: messages.length + 1, // Assign a new ID
         userId: user?._id,
-        avatar: "US",
         text: inputValue,
         groupId: selectedGroup._id,
+        timeStamp: new Date(),
+        _id: Date.now().toString(), // Temporary ID until the server response
       };
-      console.log("newMessage", newMessage);
-      // Emit the new message to the server
+
       socket.emit("send-message", newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInputValue("");
-      setNewMessageId(newMessage.id);
+      setNewMessageId(newMessage._id);
       setAnimating(true);
     }
   };
@@ -72,7 +76,7 @@ const GroupChat = () => {
       const timer = setTimeout(() => {
         setNewMessageId(null);
         setAnimating(false);
-      }, 500); // Duration of the animation
+      }, 500);
 
       return () => clearTimeout(timer);
     }
@@ -81,29 +85,31 @@ const GroupChat = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <h1 className="text-2xl font-semibold">Group Chat</h1>
+        <h1 className="text-2xl font-semibold">{selectedGroup?.name}</h1>
       </div>
       <ScrollArea className="flex-1 rounded-md border overflow-auto">
         <ChatMessageList>
           {messages.map((message) => (
             <ChatBubble
-              key={message.id}
+              key={message._id}
               variant={message?.userId === user?._id ? "sent" : "received"}
               className={`transition-transform duration-500 ease-in-out ${
-                newMessageId === message.id && animating
-                  ? "translate-y-10 opacity-0" // Start below and fade out
-                  : "translate-y-0 opacity-100" // Final position
+                newMessageId === message._id && animating
+                  ? "translate-y-10 opacity-0"
+                  : "translate-y-0 opacity-100"
               }`}
             >
               <ChatBubbleAvatar
-                src={userLookup[message.userId].userAvatar}
-                fallback={userLookup[message.userId].realName}
+                src={userLookup[message.userId]?.userAvatar}
+                fallback={userLookup[message.userId]?.realName}
               />
               <ChatBubbleMessage variant={message.type}>
                 {message.text}
               </ChatBubbleMessage>
             </ChatBubble>
           ))}
+          {/* Reference element for auto-scrolling */}
+          <div ref={messagesEndRef} />
         </ChatMessageList>
       </ScrollArea>
       <div className="flex p-4">
