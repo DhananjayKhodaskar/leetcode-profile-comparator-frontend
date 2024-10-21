@@ -18,14 +18,6 @@ export const groupApi = createApi({
         url: `/app/groups/${groupId}`,
         method: "GET",
       }),
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setSelectedGroup(data?.data || {}));
-        } catch (error) {
-          console.error("Failed to fetch joined groups:", error);
-        }
-      },
     }),
     addMemberToGroup: builder.mutation({
       query: ({ groupId, userId }) => ({

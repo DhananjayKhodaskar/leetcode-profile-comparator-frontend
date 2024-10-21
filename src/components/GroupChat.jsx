@@ -9,21 +9,27 @@ import { ChatInput } from "./ui/chat/chat-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { io } from "socket.io-client"; // Import Socket.IO client
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const socket = io("http://localhost:4000");
 const GroupChat = () => {
-  
-  const { groupId } = useParams();
+  const { user } = useSelector((state) => state.user.user);
+  const { selectedGroup } = useSelector((state) => state.group);
+  const { joinedMember } = selectedGroup || {};
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [newMessageId, setNewMessageId] = useState(null);
   const [animating, setAnimating] = useState(false);
 
-  // Initialize Socket.IO connection
+  const userLookup = {};
+  joinedMember?.forEach((user) => {
+    userLookup[user._id] = user;
+  });
 
+  // Initialize Socket.IO connection
   useEffect(() => {
     // Listen for incoming messages
-    socket.emit("join-room", groupId);
+    socket.emit("join-room", selectedGroup?._id);
 
     // Listen for incoming messages
     socket.on("message-received", (message) => {
@@ -39,18 +45,18 @@ const GroupChat = () => {
     return () => {
       socket.off("message-received");
     };
-  }, [socket]);
+  }, [socket, messages, selectedGroup]);
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
       const newMessage = {
         id: messages.length + 1, // Assign a new ID
-        type: "sent",
+        userId: user?._id,
         avatar: "US",
         text: inputValue,
-        groupId,
+        groupId: selectedGroup._id,
       };
-
+      console.log("newMessage", newMessage);
       // Emit the new message to the server
       socket.emit("send-message", newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -82,14 +88,17 @@ const GroupChat = () => {
           {messages.map((message) => (
             <ChatBubble
               key={message.id}
-              variant={message.type}
+              variant={message?.userId === user?._id ? "sent" : "received"}
               className={`transition-transform duration-500 ease-in-out ${
                 newMessageId === message.id && animating
                   ? "translate-y-10 opacity-0" // Start below and fade out
                   : "translate-y-0 opacity-100" // Final position
               }`}
             >
-              <ChatBubbleAvatar fallback={message.avatar} />
+              <ChatBubbleAvatar
+                src={userLookup[message.userId].userAvatar}
+                fallback={userLookup[message.userId].realName}
+              />
               <ChatBubbleMessage variant={message.type}>
                 {message.text}
               </ChatBubbleMessage>

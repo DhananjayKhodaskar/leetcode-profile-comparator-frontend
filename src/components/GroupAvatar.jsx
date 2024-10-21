@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
   Tooltip,
@@ -6,22 +6,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useGetGroupInfoQuery } from "@/services/group";
 
 const GroupAvatar = ({ group }) => {
-  const { groupId } = useParams();
+  
+  const location = useLocation();
   const { groupName, groupAvatar } = group;
   const fallbackInitial = groupName ? groupName.charAt(0).toUpperCase() : "";
-  useGetGroupInfoQuery({ groupId }, { skip: group?.groupId !== groupId });
+ 
+  const isActive = location.pathname.startsWith(`/app/group/${group?.groupId}`);
 
   return (
     <NavLink
-      className={({ isActive, isPending }) =>
-        `flex flex-col ${
-          isPending ? "bg-yellow-500" : isActive ? "bg-red-700" : ""
-        }`
-      }
+      className={`flex flex-col ${isActive && "bg-red-700"}`}
       to={`group/${group?.groupId}/info`}
     >
       <TooltipProvider>

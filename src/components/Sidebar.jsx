@@ -1,24 +1,41 @@
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { useFetchJoinedGroupsQuery } from "@/services/group";
+import {
+  useFetchJoinedGroupsQuery,
+  useGetGroupInfoQuery,
+} from "@/services/group";
 import { useDispatch, useSelector } from "react-redux";
 import GroupAvatar from "./GroupAvatar";
 import { CirclePlus, LogOut } from "lucide-react";
 import AvatarButton from "./AvatarButton";
 import { clearUser } from "@/slices/userSlice";
 import CreateGroup from "./CreateGroup";
+import { useParams } from "react-router-dom";
 import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 
 export function Sidebar() {
   const dispatch = useDispatch();
+  const { groupId } = useParams();
+  const { selectedGroup } = useSelector((state) => state.group);
   const { joinedGroups } = useSelector((state) => state.group);
-  const {
-    data: groupData,
-    error,
-    isSuccess,
-    isLoading,
-  } = useFetchJoinedGroupsQuery();
+  const { data: resData } = useGetGroupInfoQuery(
+    { groupId },
+    { skip: !groupId }
+  );
+
+  useFetchJoinedGroupsQuery();
+
+  useEffect(() => {
+    console.log(selectedGroup?.name, "name");
+  }, [selectedGroup]);
+
+  useEffect(() => {
+    if (resData?.data) {
+      dispatch(setSelectedGroup(resData.data));
+    }
+  }, [resData]);
+
   return (
     <div className={cn("pb-12")}>
       <div className="space-y-4 py-4">
