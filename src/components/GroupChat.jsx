@@ -7,38 +7,56 @@ import {
 } from "./ui/chat/chat-bubble";
 import { ChatInput } from "./ui/chat/chat-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { io } from "socket.io-client"; // Import Socket.IO client
+import { useParams } from "react-router-dom";
 
+const socket = io("http://localhost:4000");
 const GroupChat = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: "sent",
-      avatar: "US",
-      text: "Hello, how has your day been? I hope you are doing well.",
-    },
-    {
-      id: 2,
-      type: "received",
-      avatar: "AI",
-      text: "Hi, I am doing well, thank you for asking. How can I help you today?",
-    },
-  ]);
+  
+  const { groupId } = useParams();
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [newMessageId, setNewMessageId] = useState(null); // Track the ID of the last sent message
-  const [animating, setAnimating] = useState(false); // Track animation state
+  const [newMessageId, setNewMessageId] = useState(null);
+  const [animating, setAnimating] = useState(false);
+
+  // Initialize Socket.IO connection
+
+  useEffect(() => {
+    // Listen for incoming messages
+    socket.emit("join-room", groupId);
+
+    // Listen for incoming messages
+    socket.on("message-received", (message) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { ...message, type: "received" },
+      ]);
+      setNewMessageId(message.id);
+      setAnimating(true);
+    });
+
+    // Cleanup function to remove the listener when the component unmounts
+    return () => {
+      socket.off("message-received");
+    };
+  }, [socket]);
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
       const newMessage = {
-        id: messages.length + 1,
+        id: messages.length + 1, // Assign a new ID
         type: "sent",
         avatar: "US",
         text: inputValue,
+        groupId,
       };
+
+      // Emit the new message to the server
+      socket.emit("send-message", newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      setInputValue(""); // Clear input field
-      setNewMessageId(newMessage.id); // Set the ID of the new message
-      setAnimating(true); // Start animation
+      setInputValue("");
+      setNewMessageId(newMessage.id);
+      setAnimating(true);
     }
   };
 
@@ -46,8 +64,8 @@ const GroupChat = () => {
   useEffect(() => {
     if (newMessageId) {
       const timer = setTimeout(() => {
-        setNewMessageId(null); // Reset after animation
-        setAnimating(false); // End animation
+        setNewMessageId(null);
+        setAnimating(false);
       }, 500); // Duration of the animation
 
       return () => clearTimeout(timer);
