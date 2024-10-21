@@ -4,17 +4,21 @@ import {
   ChatBubble,
   ChatBubbleAvatar,
   ChatBubbleMessage,
+  ChatBubbleTimestamp,
 } from "./ui/chat/chat-bubble";
 import { ChatInput } from "./ui/chat/chat-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { io } from "socket.io-client"; // Import Socket.IO client
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useGetGroupMessagesQuery } from "@/services/group";
+import { ChatBubbleTimestampCalculation } from "@/lib/utils";
 
 const socket = io("http://localhost:4000");
 
 const GroupChat = () => {
   const { user } = useSelector((state) => state.user.user);
+  const { groupId } = useParams();
   const { selectedGroup } = useSelector((state) => state.group);
   const { joinedMember } = selectedGroup || {};
   const [messages, setMessages] = useState([]);
@@ -22,6 +26,8 @@ const GroupChat = () => {
   const [newMessageId, setNewMessageId] = useState(null);
   const [animating, setAnimating] = useState(false);
   const messagesEndRef = useRef(null); // Create a ref for the messages end
+  const { data: messageHistory, isLoading } =
+    useGetGroupMessagesQuery({ groupId }).data || {};
 
   const userLookup = {};
   joinedMember?.forEach((user) => {
@@ -53,13 +59,18 @@ const GroupChat = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    console.log("messageHistory", messageHistory);
+    if (messageHistory) setMessages(messageHistory);
+  }, [messageHistory]);
+
   const handleSendMessage = () => {
     if (inputValue.trim()) {
       const newMessage = {
-        userId: user?._id,
-        text: inputValue,
+        from: user?._id,
+        message: inputValue,
         groupId: selectedGroup._id,
-        timeStamp: new Date(),
+        timestamp: new Date().toISOString(),
         _id: Date.now().toString(), // Temporary ID until the server response
       };
 
@@ -92,7 +103,7 @@ const GroupChat = () => {
           {messages.map((message) => (
             <ChatBubble
               key={message._id}
-              variant={message?.userId === user?._id ? "sent" : "received"}
+              variant={message?.from === user?._id ? "sent" : "received"}
               className={`transition-transform duration-500 ease-in-out ${
                 newMessageId === message._id && animating
                   ? "translate-y-10 opacity-0"
@@ -100,11 +111,18 @@ const GroupChat = () => {
               }`}
             >
               <ChatBubbleAvatar
-                src={userLookup[message.userId]?.userAvatar}
-                fallback={userLookup[message.userId]?.realName}
+                src={userLookup[message?.from]?.userAvatar}
+                fallback={userLookup[message?.from]?.realName}
               />
-              <ChatBubbleMessage variant={message.type}>
-                {message.text}
+              <ChatBubbleMessage variant={message?.type}>
+                {message?.message}
+                <ChatBubbleTimestamp
+                  timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
+                />
+                {console.log(
+                  ChatBubbleTimestampCalculation(message?.timestamp),
+                  message?.timestamp
+                )}
               </ChatBubbleMessage>
             </ChatBubble>
           ))}

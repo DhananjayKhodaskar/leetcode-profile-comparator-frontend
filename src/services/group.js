@@ -19,6 +19,12 @@ export const groupApi = createApi({
         method: "GET",
       }),
     }),
+    getGroupMessages: builder.query({
+      query: ({ groupId }) => ({
+        url: `/app/groups/${groupId}/messages`,
+        method: "GET",
+      }),
+    }),
     addMemberToGroup: builder.mutation({
       query: ({ groupId, userId }) => ({
         url: `/app/groups/${groupId}/add-member`,
@@ -47,6 +53,7 @@ export const groupApi = createApi({
 export const {
   useCreateGroupMutation,
   useGetGroupInfoQuery,
+  useGetGroupMessagesQuery,
   useAddMemberToGroupMutation,
   useFetchJoinedGroupsQuery,
 } = groupApi;
