@@ -6,26 +6,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useDispatch, useSelector } from "react-redux";
-import { setSelectedGroup } from "@/slices/groupSlice";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
+import { useGetGroupInfoQuery } from "@/services/group";
 
 const GroupAvatar = ({ group }) => {
-  const { selectedGroup } = useSelector((state) => state.group);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { groupId } = useParams();
   const { groupName, groupAvatar } = group;
   const fallbackInitial = groupName ? groupName.charAt(0).toUpperCase() : "";
+  useGetGroupInfoQuery({ groupId }, { skip: group?.groupId !== groupId });
 
   return (
-    <div
-      className={`cursor-pointer ${
-        selectedGroup?.groupId === group?.groupId && "bg-red-700"
-      }`}
-      onClick={() => {
-        dispatch(setSelectedGroup(group));
-        navigate(`group/${group?.groupId}/info`);
-      }}
+    <NavLink
+      className={({ isActive, isPending }) =>
+        `flex flex-col ${
+          isPending ? "bg-yellow-500" : isActive ? "bg-red-700" : ""
+        }`
+      }
+      to={`group/${group?.groupId}/info`}
     >
       <TooltipProvider>
         <Tooltip delayDuration={0}>
@@ -52,7 +49,7 @@ const GroupAvatar = ({ group }) => {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    </div>
+    </NavLink>
   );
 };
 

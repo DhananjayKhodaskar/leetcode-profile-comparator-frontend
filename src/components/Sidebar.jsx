@@ -19,12 +19,6 @@ export function Sidebar() {
     isSuccess,
     isLoading,
   } = useFetchJoinedGroupsQuery();
-
-  useEffect(() => {
-    if (joinedGroups.length > 0) {
-      dispatch(setSelectedGroup(joinedGroups[0]));
-    }
-  }, [joinedGroups]);
   return (
     <div className={cn("pb-12")}>
       <div className="space-y-4 py-4">
