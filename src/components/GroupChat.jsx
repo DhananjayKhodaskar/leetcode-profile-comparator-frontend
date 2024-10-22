@@ -24,6 +24,7 @@ const GroupChat = () => {
   const { groupId } = useParams();
   const { selectedGroup } = useSelector((state) => state.group);
   const { joinedMember } = selectedGroup || {};
+  const emojiPickerRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [newMessageId, setNewMessageId] = useState(null);
@@ -45,7 +46,6 @@ const GroupChat = () => {
     }
 
     socket.on("message-received", (message) => {
-      console.log("message-received", message);
       setMessages((prevMessages) => [...prevMessages, { ...message }]);
       setNewMessageId(message._id);
       setAnimating(true);
@@ -64,7 +64,6 @@ const GroupChat = () => {
   }, [messages]);
 
   useEffect(() => {
-    console.log("messageHistory", messageHistory);
     if (messageHistory) setMessages(messageHistory);
   }, [messageHistory]);
 
@@ -98,12 +97,34 @@ const GroupChat = () => {
     }
   }, [newMessageId]);
 
+  // Handle clicks outside the emoji picker
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
+        setShowEmoji(false);
+      }
+    }
+
+    // Add event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [emojiPickerRef]);
+
   const onEmojiClick = (event) => {
     setInputValue((prevInput) => prevInput + event.emoji); // Append the emoji to inputValue
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
+      {" "}
+      {/* Added relative to the parent */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <h1 className="text-2xl font-semibold">{selectedGroup?.name}</h1>
       </div>
@@ -140,7 +161,9 @@ const GroupChat = () => {
           <div ref={messagesEndRef} />
         </ChatMessageList>
       </ScrollArea>
-      <div className="flex justify-center items-center gap-3 p-3">
+      <div className="flex justify-center items-center gap-3 p-3 relative">
+        {" "}
+        {/* Added relative */}
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -149,8 +172,10 @@ const GroupChat = () => {
         />
         <Smile onClick={() => setShowEmoji((prev) => !prev)} />
         {showEmoji && (
-          <div className="absolute bottom-20 right-4">
-            <EmojiPicker onEmojiClick={onEmojiClick} skinTonesDisabled={true}/>
+          <div ref={emojiPickerRef} className="absolute bottom-20 right-4">
+            {" "}
+            {/* Add ref here */}
+            <EmojiPicker onEmojiClick={onEmojiClick} skinTonesDisabled={true} />
           </div>
         )}
         <Button
