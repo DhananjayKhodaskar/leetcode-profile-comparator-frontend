@@ -16,6 +16,7 @@ import { Button } from "./ui/button";
 import { Send, Smile } from "lucide-react";
 import { Input } from "./ui/input";
 import EmojiPicker from "emoji-picker-react"; // Import the emoji picker
+import GroupHeader from "./GroupHeader";
 
 const socket = io("http://localhost:4000");
 
@@ -125,9 +126,7 @@ const GroupChat = () => {
     <div className="flex flex-col h-full relative">
       {" "}
       {/* Added relative to the parent */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <h1 className="text-2xl font-semibold">{selectedGroup?.name}</h1>
-      </div>
+      <GroupHeader selectedGroup={selectedGroup} />
       <ScrollArea className="flex-1 rounded-md border overflow-auto">
         <ChatMessageList>
           {messages.map((message) => (
