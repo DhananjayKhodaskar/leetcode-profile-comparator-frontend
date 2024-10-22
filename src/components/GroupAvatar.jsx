@@ -18,7 +18,7 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
   return (
     <NavLink
       className={`flex flex-col ${isActive && "    "}`}
-      to={`group/${group?.groupId}/info`}
+      to={`group/${group?.groupId}/chat`}
     >
       <TooltipProvider>
         <Tooltip delayDuration={0}>

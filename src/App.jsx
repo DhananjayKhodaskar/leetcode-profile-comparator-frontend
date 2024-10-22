@@ -24,7 +24,7 @@ function App() {
         <Route path="/app" element={<Layout />}>
           <Route element={<ProtectedRoute />}>
             <Route index element={<Dashboard />} />
-            <Route path="group/:groupId/info" element={<GroupInfo />} />
+            <Route path="group/:groupId/manage" element={<GroupInfo />} />
             <Route path="group/:groupId/chat" element={<GroupChat />} />
           </Route>
         </Route>

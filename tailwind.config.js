@@ -10,8 +10,8 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        "smoky-black": "#0D0D0D",
-        "vampire-black": "#060606",
+        "smoky-black": "#151515",
+        "vampire-black": "#0e0e0e",
         "dark-liver":"#4F4F4F",
         "black-russian":"#1E1E1F",
         background: "hsl(var(--background))",
