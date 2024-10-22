@@ -6,13 +6,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import GroupAvatar from "./GroupAvatar";
 import CreateGroup from "./CreateGroup";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 import { pastelBgColor } from "@/utils/config";
 import leetcodeLogo from "../assets/leetcodeLogo.png";
 export function Sidebar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { groupId } = useParams();
   const { selectedGroup } = useSelector((state) => state.group);
   const { joinedGroups } = useSelector((state) => state.group);
@@ -24,8 +25,10 @@ export function Sidebar() {
   useFetchJoinedGroupsQuery();
 
   useEffect(() => {
-    console.log(selectedGroup?.name, "name");
-  }, [selectedGroup]);
+    if (!selectedGroup && joinedGroups?.length > 0) {
+      navigate(`group/${joinedGroups[0]?.groupId}/chat`);
+    }
+  }, [selectedGroup, joinedGroups]);
 
   useEffect(() => {
     if (resData?.data) {
