@@ -27,7 +27,7 @@ const AvatarButton = ({
               />
             </Avatar>
           </TooltipTrigger>
-          <TooltipContent side="right">
+          <TooltipContent side="right" className="bg-black-russian">
             <p className="font-extrabold">{buttonName}</p>
           </TooltipContent>
         </Tooltip>

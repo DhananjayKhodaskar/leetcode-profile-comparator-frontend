@@ -28,13 +28,19 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
                 <AvatarImage
                   src={groupAvatar}
                   alt={groupName}
-                  className="rounded-lg w-12 h-12 "
+                  className={[
+                    "w-12 h-12 rounded-lg",
+                    isActive ? "border-4 border-slate-200" : "",
+                  ].join(" ")}
                 />
               ) : (
                 <AvatarFallback
-                  className={`rounded-lg w-12 h-12 flex justify-center items-center ${
-                    avatarBgColor ? avatarBgColor : "bg-slate-50"
-                  }`}
+                  className={[
+                    "rounded-lg",
+                    isActive ? "border-4 border-slate-200" : "",
+                    "w-12 h-12 flex justify-center items-center",
+                    avatarBgColor || "bg-slate-50",
+                  ].join(" ")}
                 >
                   <h3 className=" text-2xl rounded-full text-slate-950">
                     {" "}
@@ -44,7 +50,7 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
               )}
             </Avatar>
           </TooltipTrigger>
-          <TooltipContent side="right">
+          <TooltipContent side="right" className=" bg-black-russian">
             <p className="font-extrabold">{groupName}</p>
           </TooltipContent>
         </Tooltip>
