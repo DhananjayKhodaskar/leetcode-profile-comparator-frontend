@@ -10,16 +10,15 @@ import { NavLink, useLocation, useParams } from "react-router-dom";
 import { useGetGroupInfoQuery } from "@/services/group";
 
 const GroupAvatar = ({ group }) => {
-  
   const location = useLocation();
   const { groupName, groupAvatar } = group;
   const fallbackInitial = groupName ? groupName.charAt(0).toUpperCase() : "";
- 
+
   const isActive = location.pathname.startsWith(`/app/group/${group?.groupId}`);
 
   return (
     <NavLink
-      className={`flex flex-col ${isActive && "bg-red-700"}`}
+      className={`flex flex-col ${isActive && "    "}`}
       to={`group/${group?.groupId}/info`}
     >
       <TooltipProvider>
@@ -30,11 +29,11 @@ const GroupAvatar = ({ group }) => {
                 <AvatarImage
                   src={groupAvatar}
                   alt={groupName}
-                  className="rounded-full w-12 h-12 "
+                  className="rounded-lg w-12 h-12 "
                 />
               ) : (
-                <AvatarFallback className="rounded-full w-12 h-12 flex justify-center items-center bg-slate-50">
-                  <h3 className=" text-3xl font-bold rounded-full text-slate-950">
+                <AvatarFallback className="rounded-lg w-12 h-12 flex justify-center items-center bg-slate-50">
+                  <h3 className=" text-2xl rounded-full text-slate-950">
                     {" "}
                     {fallbackInitial}
                   </h3>

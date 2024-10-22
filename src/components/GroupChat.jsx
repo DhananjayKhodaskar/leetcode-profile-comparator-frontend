@@ -118,11 +118,8 @@ const GroupChat = () => {
                 {message?.message}
                 <ChatBubbleTimestamp
                   timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
+                  className={message?.from !== user?._id ? "text-gray-500" : "text-gray-400"}
                 />
-                {console.log(
-                  ChatBubbleTimestampCalculation(message?.timestamp),
-                  message?.timestamp
-                )}
               </ChatBubbleMessage>
             </ChatBubble>
           ))}

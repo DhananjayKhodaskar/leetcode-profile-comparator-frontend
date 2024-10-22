@@ -37,7 +37,7 @@ export function Sidebar() {
   }, [resData]);
 
   return (
-    <div className={cn("pb-12")}>
+    <div className={cn("pb-12 bg-smoky-black w-20")}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2 w-[72px]">
           <div className="space-y-3">
@@ -46,13 +46,13 @@ export function Sidebar() {
                 <GroupAvatar key={group.groupId} group={group} />
               ))}
             <CreateGroup />
-            <AvatarButton
+            {/* <AvatarButton
               groupName={"Add Squad"}
               ButtonIconComponent={LogOut}
               iconColor="text-red-600"
               buttonName="Log Out"
               handleOnClick={() => dispatch(clearUser())}
-            />
+            /> */}
           </div>
         </div>
       </div>

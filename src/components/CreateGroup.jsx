@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import AvatarButton from "./AvatarButton";
-import { CirclePlus, Loader2 } from "lucide-react";
+import {Loader2, Plus } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import {
   Form,
@@ -64,9 +64,11 @@ const CreateGroup = () => {
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <AvatarButton
         groupName={"Add Squad"}
-        ButtonIconComponent={CirclePlus}
+        ButtonIconComponent={Plus}
         buttonName="Create Squad"
         handleOnClick={handleDialogOpen}
+        iconBackgrounColor="bg-dark-liver"
+
       />
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
