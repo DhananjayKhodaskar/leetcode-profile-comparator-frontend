@@ -6,13 +6,16 @@ import {
   ChatBubbleMessage,
   ChatBubbleTimestamp,
 } from "./ui/chat/chat-bubble";
-import { ChatInput } from "./ui/chat/chat-input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { io } from "socket.io-client"; // Import Socket.IO client
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetGroupMessagesQuery } from "@/services/group";
 import { ChatBubbleTimestampCalculation } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { Send, Smile } from "lucide-react";
+import { Input } from "./ui/input";
+import EmojiPicker from "emoji-picker-react"; // Import the emoji picker
 
 const socket = io("http://localhost:4000");
 
@@ -24,6 +27,7 @@ const GroupChat = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [newMessageId, setNewMessageId] = useState(null);
+  const [showEmoji, setShowEmoji] = useState(false); // State to show/hide emoji picker
   const [animating, setAnimating] = useState(false);
   const messagesEndRef = useRef(null); // Create a ref for the messages end
   const { data: messageHistory, isLoading } =
@@ -76,6 +80,7 @@ const GroupChat = () => {
 
       socket.emit("send-message", newMessage);
       setInputValue("");
+      setShowEmoji(false);
       setNewMessageId(newMessage._id);
       setAnimating(true);
     }
@@ -92,6 +97,10 @@ const GroupChat = () => {
       return () => clearTimeout(timer);
     }
   }, [newMessageId]);
+
+  const onEmojiClick = (event) => {
+    setInputValue((prevInput) => prevInput + event.emoji); // Append the emoji to inputValue
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -118,7 +127,11 @@ const GroupChat = () => {
                 {message?.message}
                 <ChatBubbleTimestamp
                   timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
-                  className={message?.from !== user?._id ? "text-gray-500" : "text-gray-400"}
+                  className={
+                    message?.from !== user?._id
+                      ? "text-gray-500"
+                      : "text-gray-400"
+                  }
                 />
               </ChatBubbleMessage>
             </ChatBubble>
@@ -127,19 +140,27 @@ const GroupChat = () => {
           <div ref={messagesEndRef} />
         </ChatMessageList>
       </ScrollArea>
-      <div className="flex p-4">
-        <ChatInput
+      <div className="flex justify-center items-center gap-3 p-3">
+        <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Type your message here..."
-          className="flex-grow"
+          className="rounded-lg"
         />
-        <button
+        <Smile onClick={() => setShowEmoji((prev) => !prev)} />
+        {showEmoji && (
+          <div className="absolute bottom-20 right-4">
+            <EmojiPicker onEmojiClick={onEmojiClick} skinTonesDisabled={true}/>
+          </div>
+        )}
+        <Button
+          size="icon"
+          disabled={!inputValue}
           onClick={handleSendMessage}
-          className="ml-2 p-2 bg-blue-500 text-white rounded"
+          variant="ghost"
         >
-          Send
-        </button>
+          <Send className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
