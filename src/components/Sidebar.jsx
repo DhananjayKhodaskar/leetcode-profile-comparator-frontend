@@ -34,13 +34,13 @@ export function Sidebar() {
   }, [resData]);
 
   return (
-    <div className={cn("pb-12 bg-smoky-black w-20 flex flex-col items-center")}>
+    <div className={cn("pb-12 bg-smoky-black w-24 flex flex-col items-center")}>
       <div className="h-20 p-5 border-b-2 border-b-black-russian">
         <img src={leetcodeLogo} alt="LeetCode Logo" width={45} height={45} />
       </div>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2 w-[72px]">
-          <div className="space-y-3">
+      <div className="space-y-4 py-4 w-full flex flex-col items-center">
+        {/* <div className="px-3 py-2 w-[72px]"> */}
+          {/* <div className="space-y-3"> */}
             {joinedGroups.length > 0 &&
               joinedGroups.map((group, index) => (
                 <GroupAvatar
@@ -50,8 +50,8 @@ export function Sidebar() {
                 />
               ))}
             <CreateGroup />
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
       </div>
     </div>
   );

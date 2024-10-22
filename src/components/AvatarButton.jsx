@@ -23,7 +23,7 @@ const AvatarButton = ({
             <Avatar>
               <ButtonIconComponent
                 size={40}
-                className={`${iconBackgrounColor} ${iconColor} rounded-lg w-12 h-12 p-3`}
+                className={`${iconBackgrounColor} ${iconColor} rounded-lg w-14 h-14 p-3`}
               />
             </Avatar>
           </TooltipTrigger>

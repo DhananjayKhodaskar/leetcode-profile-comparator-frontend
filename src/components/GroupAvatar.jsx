@@ -17,7 +17,7 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
 
   return (
     <NavLink
-      className={`flex flex-col ${isActive && "    "}`}
+      className={`flex flex-col ${isActive && "    "} `}
       to={`group/${group?.groupId}/chat`}
     >
       <TooltipProvider>
@@ -29,8 +29,9 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
                   src={groupAvatar}
                   alt={groupName}
                   className={[
-                    "w-12 h-12 rounded-lg",
+                    "rounded-lg",
                     isActive ? "border-4 border-slate-200" : "",
+                    "w-14 h-14",
                   ].join(" ")}
                 />
               ) : (
@@ -38,7 +39,7 @@ const GroupAvatar = ({ group, avatarBgColor }) => {
                   className={[
                     "rounded-lg",
                     isActive ? "border-4 border-slate-200" : "",
-                    "w-12 h-12 flex justify-center items-center",
+                    "w-14 h-14 flex justify-center items-center",
                     avatarBgColor || "bg-slate-50",
                   ].join(" ")}
                 >

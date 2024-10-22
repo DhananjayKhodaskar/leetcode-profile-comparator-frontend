@@ -10,7 +10,7 @@ const SubSidebar = () => {
     <div
       className={`${cn(
         "pb-12"
-      )} bg-vampire-black w-48 flex flex-col items-center`}
+      )} bg-vampire-black w-60 flex flex-col items-center`}
     >
       <div class="w-full border-b-2 border-b-black-russian text-xl font-bold font-sans text-slate-200 h-20 flex flex-row justify-center items-center">
         E-<span class="text-yellow-500">Leet</span>Squad
