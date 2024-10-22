@@ -12,7 +12,8 @@ export default {
       colors: {
         "smoky-black": "#0D0D0D",
         "vampire-black": "#060606",
-        "dark-liver":"#4f4f4f",
+        "dark-liver":"#4F4F4F",
+        "black-russian":"#1E1E1F",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

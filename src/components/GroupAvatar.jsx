@@ -7,9 +7,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NavLink, useLocation, useParams } from "react-router-dom";
-import { useGetGroupInfoQuery } from "@/services/group";
 
-const GroupAvatar = ({ group }) => {
+const GroupAvatar = ({ group, avatarBgColor }) => {
   const location = useLocation();
   const { groupName, groupAvatar } = group;
   const fallbackInitial = groupName ? groupName.charAt(0).toUpperCase() : "";
@@ -32,7 +31,11 @@ const GroupAvatar = ({ group }) => {
                   className="rounded-lg w-12 h-12 "
                 />
               ) : (
-                <AvatarFallback className="rounded-lg w-12 h-12 flex justify-center items-center bg-slate-50">
+                <AvatarFallback
+                  className={`rounded-lg w-12 h-12 flex justify-center items-center ${
+                    avatarBgColor ? avatarBgColor : "bg-slate-50"
+                  }`}
+                >
                   <h3 className=" text-2xl rounded-full text-slate-950">
                     {" "}
                     {fallbackInitial}
