@@ -36,22 +36,18 @@ export function Sidebar() {
   return (
     <div className={cn("pb-12 bg-smoky-black w-24 flex flex-col items-center")}>
       <div className="h-20 p-5 border-b-2 border-b-black-russian">
-        <img src={leetcodeLogo} alt="LeetCode Logo" width={45} height={45} />
+        <img src={leetcodeLogo} alt="LeetCode Logo" width={35} height={35} />
       </div>
       <div className="space-y-4 py-4 w-full flex flex-col items-center">
-        {/* <div className="px-3 py-2 w-[72px]"> */}
-          {/* <div className="space-y-3"> */}
-            {joinedGroups.length > 0 &&
-              joinedGroups.map((group, index) => (
-                <GroupAvatar
-                  key={group.groupId}
-                  group={group}
-                  avatarBgColor={pastelBgColor[index % pastelBgColor.length]}
-                />
-              ))}
-            <CreateGroup />
-          {/* </div> */}
-        {/* </div> */}
+        {joinedGroups.length > 0 &&
+          joinedGroups.map((group, index) => (
+            <GroupAvatar
+              key={group.groupId}
+              group={group}
+              avatarBgColor={pastelBgColor[index % pastelBgColor.length]}
+            />
+          ))}
+        <CreateGroup />
       </div>
     </div>
   );
