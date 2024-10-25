@@ -10,6 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTableDemo } from "./DataTableDemo";
 import ChallengeDetails from "./ChallengeDetails";
+import { useGetActiveChallengeProblemsQuery } from "@/services/challenge";
 
 export function CustomTabs({ activeChallenge }) {
   const {
@@ -26,7 +27,14 @@ export function CustomTabs({ activeChallenge }) {
     challengeDetails,
     problemCount,
   } = activeChallenge || {};
-  console.log("actveChallenge", activeChallenge);
+  const {
+    data: response,
+    error,
+    isLoading,
+  } = useGetActiveChallengeProblemsQuery({
+    groupId: groupId,
+  });
+  const problems = response?.data || [];
   return (
     <Tabs defaultValue="description" className="w-full">
       <TabsList className="grid w-full grid-cols-4">
@@ -45,7 +53,7 @@ export function CustomTabs({ activeChallenge }) {
       </TabsContent>
 
       <TabsContent value="problems">
-        <DataTableDemo data={challengeDetails["problems"]} />
+        <DataTableDemo data={problems} />
       </TabsContent>
 
       <TabsContent value="leaderboard">
