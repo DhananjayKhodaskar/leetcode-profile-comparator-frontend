@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
-import { LogOut, MessageSquare, UserRoundCog } from "lucide-react";
+import { LogOut, MessageSquare, Swords, UserRoundCog } from "lucide-react";
 import CustomNavLink from "./CustomNavLink";
 import { clearUser } from "@/slices/userSlice";
 
@@ -28,6 +28,11 @@ const SubSidebar = () => {
             to={`group/${selectedGroup?._id}/manage`}
             icon={UserRoundCog}
             label="Manage"
+          />
+          <CustomNavLink
+            to={`challenge/${selectedGroup?._id}`}
+            icon={Swords}
+            label="Challenge"
           />
         </div>
         <Button

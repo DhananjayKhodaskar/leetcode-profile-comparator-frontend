@@ -8,6 +8,7 @@ import groupReducer from "@/slices/groupSlice";
 import { authApi } from "@/services/auth";
 import { groupApi } from "@/services/group";
 import { userApi } from "@/services/user";
+import { challengeApi } from "@/services/challenge";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [groupApi.reducerPath]: groupApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [challengeApi.reducerPath]: challengeApi.reducer,
     user: persistedUserReducer,
     group: groupReducer,
   },
@@ -38,7 +40,12 @@ const store = configureStore({
           "persist/FLUSH",
         ],
       },
-    }).concat(authApi.middleware, groupApi.middleware, userApi.middleware), // Add groupApi middleware here
+    }).concat(
+      authApi.middleware,
+      groupApi.middleware,
+      userApi.middleware,
+      challengeApi.middleware
+    ), // Add groupApi middleware here
 });
 
 setupListeners(store.dispatch);
