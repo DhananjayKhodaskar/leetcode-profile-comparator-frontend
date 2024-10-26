@@ -154,7 +154,10 @@ export function DataTableDemo({
         id: "method",
         header: "Method",
         cell: ({ row }) => {
-          const method = row.original.method || "-";
+          const method = row.original.method
+            ? row.original.method.charAt(0).toUpperCase() +
+              row.original.method.slice(1)
+            : "-";
           return <div className="text-center">{method}</div>;
         },
       },

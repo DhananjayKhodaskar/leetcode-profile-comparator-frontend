@@ -6,39 +6,47 @@ import MessageLoading from "./message-loading";
 import { Button } from "../button";
 
 // ChatBubble
-const chatBubbleVariant = cva("flex gap-2 max-w-[60%] items-end relative group", {
-  variants: {
-    variant: {
-      received: "self-start",
-      sent: "self-end flex-row-reverse",
+const chatBubbleVariant = cva(
+  "flex gap-2 max-w-[60%] items-end relative group",
+  {
+    variants: {
+      variant: {
+        received: "self-start",
+        sent: "self-end flex-row-reverse",
+      },
+      layout: {
+        default: "",
+        ai: "max-w-full w-full items-center",
+      },
     },
-    layout: {
-      default: "",
-      ai: "max-w-full w-full items-center",
+    defaultVariants: {
+      variant: "received",
+      layout: "default",
     },
-  },
-  defaultVariants: {
-    variant: "received",
-    layout: "default",
-  },
-});
+  }
+);
 
-const ChatBubble = forwardRef(({ className, variant, layout, children, ...props }, ref) => (
-  <div
-    className={cn(chatBubbleVariant({ variant, layout, className }), "relative group")}
-    ref={ref}
-    {...props}
-  >
-    {React.Children.map(children, (child) =>
-      React.isValidElement(child) && typeof child.type !== "string"
-        ? React.cloneElement(child, {
-            variant,
-            layout,
-          })
-        : child
-    )}
-  </div>
-));
+const ChatBubble = forwardRef(
+  ({ className, variant, layout, children, ...props }, ref) => (
+    <div
+      className={cn(
+        chatBubbleVariant({ variant, layout, className }),
+        "relative group"
+      )}
+      ref={ref}
+      {...props}
+    >
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child) && typeof child.type !== "string"
+          ? React.cloneElement(child, {
+              variant,
+              layout,
+            })
+          : child
+      )}
+    </div>
+  )
+);
 ChatBubble.displayName = "ChatBubble";
 
 // ChatBubbleAvatar
@@ -53,7 +61,8 @@ const ChatBubbleAvatar = ({ src, fallback, className }) => (
 const chatBubbleMessageVariants = cva("p-4", {
   variants: {
     variant: {
-      received: "bg-secondary text-secondary-foreground rounded-r-lg rounded-tl-lg",
+      received:
+        "bg-secondary text-secondary-foreground rounded-r-lg rounded-tl-lg",
       sent: "bg-primary text-primary-foreground rounded-l-lg rounded-tr-lg",
     },
     layout: {
@@ -68,9 +77,25 @@ const chatBubbleMessageVariants = cva("p-4", {
 });
 
 const ChatBubbleMessage = forwardRef(
-  ({ className, variant, layout, isLoading = false, children, ...props }, ref) => (
+  (
+    {
+      className,
+      variant,
+      layout,
+      isLoading = false,
+      senderName,
+      children,
+      senderNameClass,
+      senderNameLink,
+      ...props
+    },
+    ref
+  ) => (
     <div
-      className={cn(chatBubbleMessageVariants({ variant, layout, className }), "break-words max-w-full whitespace-pre-wrap")}
+      className={cn(
+        chatBubbleMessageVariants({ variant, layout, className }),
+        "break-words max-w-full whitespace-pre-wrap"
+      )}
       ref={ref}
       {...props}
     >
@@ -79,7 +104,16 @@ const ChatBubbleMessage = forwardRef(
           <MessageLoading />
         </div>
       ) : (
-        children
+        <div>
+          <p
+            className={cn("text-sm text-left underline mb-2", senderNameClass)}
+          >
+            <a href={senderNameLink} target="_blank">
+              {senderName}
+            </a>
+          </p>
+          {children}
+        </div>
       )}
     </div>
   )
@@ -94,25 +128,42 @@ const ChatBubbleTimestamp = ({ timestamp, className, ...props }) => (
 );
 
 // ChatBubbleAction
-const ChatBubbleAction = ({ icon, onClick, className, variant = "ghost", size = "icon", ...props }) => (
-  <Button variant={variant} size={size} className={className} onClick={onClick} {...props}>
+const ChatBubbleAction = ({
+  icon,
+  onClick,
+  className,
+  variant = "ghost",
+  size = "icon",
+  ...props
+}) => (
+  <Button
+    variant={variant}
+    size={size}
+    className={className}
+    onClick={onClick}
+    {...props}
+  >
     {icon}
   </Button>
 );
 
-const ChatBubbleActionWrapper = forwardRef(({ variant, className, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "absolute top-1/2 -translate-y-1/2 flex opacity-0 group-hover:opacity-100 transition-opacity duration-200",
-      variant === "sent" ? "-left-1 -translate-x-full flex-row-reverse" : "-right-1 translate-x-full",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </div>
-));
+const ChatBubbleActionWrapper = forwardRef(
+  ({ variant, className, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "absolute top-1/2 -translate-y-1/2 flex opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+        variant === "sent"
+          ? "-left-1 -translate-x-full flex-row-reverse"
+          : "-right-1 translate-x-full",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+);
 ChatBubbleActionWrapper.displayName = "ChatBubbleActionWrapper";
 
 export {

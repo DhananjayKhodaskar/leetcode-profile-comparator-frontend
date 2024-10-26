@@ -143,7 +143,18 @@ const GroupChat = () => {
                 src={userLookup[message?.from]?.userAvatar}
                 fallback={userLookup[message?.from]?.realName}
               />
-              <ChatBubbleMessage variant={message?.type}>
+              <ChatBubbleMessage
+                variant={message?.type}
+                senderName={userLookup[message?.from]?.realName}
+                senderNameClass={
+                  message?.from !== user?._id
+                    ? "text-gray-500"
+                    : "text-gray-400"
+                }
+                senderNameLink={`https://leetcode.com/u/${
+                  userLookup[message?.from]?.username
+                }/`}
+              >
                 {message?.message}
                 <ChatBubbleTimestamp
                   timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
