@@ -67,16 +67,31 @@ export const challengeApi = createApi({
     // New endpoint to create an active challenge
     createActiveChallenge: builder.mutation({
       query: (newChallengeData) => ({
-        url: "app/activeChallenges", // Endpoint to create an active challenge
+        url: "app/activeChallenges",
         method: "POST",
-        body: newChallengeData, // Pass the challenge data in the body
+        body: newChallengeData,
       }),
       async onQueryStarted(newChallengeData, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          return data; // Return the newly created challenge data
+          return data;
         } catch (error) {
           console.error("Failed to create active challenge:", error);
+        }
+      },
+    }),
+    // Adding getChallengeById endpoint
+    getChallengeById: builder.query({
+      query: (challengeId) => ({
+        url: `app/challenges/${challengeId}`, // Adjusting the URL to include the challenge ID
+        method: "GET",
+      }),
+      async onQueryStarted(challengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the fetched challenge data
+        } catch (error) {
+          console.error("Failed to fetch challenge:", error);
         }
       },
     }),
@@ -89,5 +104,6 @@ export const {
   useGetActiveChallengesQuery,
   useGetActiveChallengeProblemsQuery,
   useUpdateUserProgressManuallyMutation,
-  useCreateActiveChallengeMutation, // Export the new hook
+  useCreateActiveChallengeMutation,
+  useGetChallengeByIdQuery, // Exporting the new hook
 } = challengeApi;
