@@ -9,30 +9,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Assuming you have a Card component in your UI library
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { pastelBgColor } from "@/utils/config";
-import ChallengeDetailsDialog from "./ChallengeDetailsDialog"; // Importing the newly created component
+import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
 import { useGetChallengesQuery } from "@/services/challenge";
 
-const StartChallenge = () => {
-  const [selectedChallenge, setSelectedChallenge] = useState(null);
+const StartChallenge = ({ refetchActiveChallengeDetails }) => {
+  const [selectedChallengeId, setSelectedChallengeId] = useState(null);
+  const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const { data: response, error, isLoading } = useGetChallengesQuery();
   const challenges = response?.data || [];
 
   const handleCardClick = (challengeId) => {
-    setSelectedChallenge(challengeId);
-    setIsDetailsDialogOpen(true);
+    setSelectedChallengeId(challengeId);
+    setIsMainDialogOpen(false); // Close main dialog
+    setIsDetailsDialogOpen(true); // Open details dialog
   };
 
   const closeDetailsDialog = () => {
-    setIsDetailsDialogOpen(false);
-    setSelectedChallenge(null);
+    setIsDetailsDialogOpen(false); // Close details dialog
+    setIsMainDialogOpen(true); // Reopen main dialog
+    setSelectedChallengeId(null); // Clear selected challenge
   };
 
   return (
     <div className="h-full w-full flex flex-row justify-center items-center">
-      <Dialog>
+      <Dialog open={isMainDialogOpen} onOpenChange={setIsMainDialogOpen}>
         <DialogTrigger asChild>
           <Button>Start Challenge</Button>
         </DialogTrigger>
@@ -82,11 +85,12 @@ const StartChallenge = () => {
         </DialogContent>
       </Dialog>
 
-      {selectedChallenge && (
+      {selectedChallengeId && (
         <ChallengeDetailsDialog
-          selectedChallengeId={selectedChallenge}
+          selectedChallengeId={selectedChallengeId}
           isOpen={isDetailsDialogOpen}
           onClose={closeDetailsDialog}
+          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         />
       )}
     </div>
