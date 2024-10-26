@@ -37,10 +37,9 @@ export function CustomTabs({ activeChallenge }) {
   const problems = response?.data || [];
   return (
     <Tabs defaultValue="description" className="w-full">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="description">Description</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="description">Overview</TabsTrigger>
         <TabsTrigger value="problems">Problems</TabsTrigger>
-        <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
         <TabsTrigger value="recent-activity">Recent Activity</TabsTrigger>
       </TabsList>
 
@@ -54,27 +53,6 @@ export function CustomTabs({ activeChallenge }) {
 
       <TabsContent value="problems">
         <DataTableDemo data={problems} />
-      </TabsContent>
-
-      <TabsContent value="leaderboard">
-        <Card>
-          <CardHeader>
-            <CardTitle>Leaderboard</CardTitle>
-            <CardDescription>
-              This tab displays the rankings of participants or contributors.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ol>
-              <li>1. User A - Points: 150</li>
-              <li>2. User B - Points: 120</li>
-              <li>3. User C - Points: 100</li>
-            </ol>
-          </CardContent>
-          <CardFooter>
-            <Button>View More</Button>
-          </CardFooter>
-        </Card>
       </TabsContent>
 
       <TabsContent value="recent-activity">
