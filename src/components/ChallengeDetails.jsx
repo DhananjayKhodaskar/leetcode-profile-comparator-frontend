@@ -6,6 +6,8 @@ const ChallengeDetails = ({
   joinedUsers,
   problemCount,
   endDate,
+  activeChallengeId,
+  refetchActiveChallengeDetails,
 }) => {
   const { _id, name, description, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
@@ -13,9 +15,11 @@ const ChallengeDetails = ({
   return (
     <div>
       <ChallengeHero
+        activeChallengeId={activeChallengeId}
         title={name}
         endTime={endTime}
         problemCount={problemCount}
+        refetchActiveChallengeDetails={refetchActiveChallengeDetails}
       />
       <div className="container mx-auto px-4 py-8">
         <div className="mt-8 bg-white shadow-md rounded-lg p-6">

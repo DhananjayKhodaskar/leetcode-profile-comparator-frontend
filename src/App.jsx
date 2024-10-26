@@ -27,7 +27,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="group/:groupId/manage" element={<GroupInfo />} />
             <Route path="group/:groupId/chat" element={<GroupChat />} />
-            <Route path="challenge/:groupId" element={<Challenge />} />
+            <Route path="group/:groupId/challenge" element={<Challenge />} />
           </Route>
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />

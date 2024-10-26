@@ -30,7 +30,7 @@ const SubSidebar = () => {
             label="Manage"
           />
           <CustomNavLink
-            to={`challenge/${selectedGroup?._id}`}
+            to={`group/${selectedGroup?._id}/challenge`}
             icon={Swords}
             label="Challenge"
           />

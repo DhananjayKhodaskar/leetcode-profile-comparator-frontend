@@ -35,6 +35,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   } = useGetActiveChallengeProblemsQuery({
     groupId: groupId,
   });
+
   const problems = response?.data || [];
   return (
     <Tabs defaultValue="description" className="w-full">
@@ -46,10 +47,12 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
 
       <TabsContent value="description">
         <ChallengeDetails
+          activeChallengeId={_id}
           challengeDetails={challengeDetails}
           joinedUsers={joinedUsers}
           problemCount={problemCount}
           endDate={endDate}
+          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         />
       </TabsContent>
 

@@ -1,9 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetActiveChallengesQuery } from "@/services/challenge";
-import ChallengeHero from "@/components/ChallengeHero";
 import { CustomTabs } from "@/components/CustomTabs";
-import { DataTableDemo } from "@/components/DataTableDemo";
 import StartChallenge from "@/components/StartChallenge";
 
 const Challenge = () => {
@@ -24,7 +22,9 @@ const Challenge = () => {
   return (
     <div className="h-full w-full">
       {error?.status === 404 ? (
-        <StartChallenge refetchActiveChallengeDetails={refetchActiveChallengeDetails}/>
+        <StartChallenge
+          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+        />
       ) : (
         <CustomTabs
           activeChallenge={activeChallenge}
