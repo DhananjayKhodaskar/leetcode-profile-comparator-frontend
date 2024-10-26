@@ -11,6 +11,7 @@ const Challenge = () => {
     data: response,
     error,
     isLoading,
+    refetch: refetchActiveChallengeDetails,
   } = useGetActiveChallengesQuery({
     groupId: groupId,
   });
@@ -30,7 +31,10 @@ const Challenge = () => {
     <div>
       {/* <ChallengeHero title={title} endTime={endTime} /> */}
 
-      <CustomTabs activeChallenge={activeChallenge} />
+      <CustomTabs
+        activeChallenge={activeChallenge}
+        refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+      />
       {/* <h2>Active Challenges</h2>
       <ul>
         {activeChallenge.joinedUsers.map((user) => (

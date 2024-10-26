@@ -12,7 +12,7 @@ import { DataTableDemo } from "./DataTableDemo";
 import ChallengeDetails from "./ChallengeDetails";
 import { useGetActiveChallengeProblemsQuery } from "@/services/challenge";
 
-export function CustomTabs({ activeChallenge }) {
+export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   const {
     _id,
     challenge,
@@ -31,6 +31,7 @@ export function CustomTabs({ activeChallenge }) {
     data: response,
     error,
     isLoading,
+    refetch: refetchProblems,
   } = useGetActiveChallengeProblemsQuery({
     groupId: groupId,
   });
@@ -52,7 +53,12 @@ export function CustomTabs({ activeChallenge }) {
       </TabsContent>
 
       <TabsContent value="problems">
-        <DataTableDemo data={problems} />
+        <DataTableDemo
+          data={problems}
+          activeChallengeId={_id}
+          refetchProblems={refetchProblems}
+          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+        />
       </TabsContent>
 
       <TabsContent value="recent-activity">

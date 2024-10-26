@@ -33,6 +33,23 @@ export const challengeApi = createApi({
         }
       },
     }),
+    updateUserProgressManually: builder.mutation({
+      query: ({ activeChallengeId, problemSlug }) => ({
+        url: `app/challenges/updateUserProgress/${activeChallengeId}/${problemSlug}`,
+        method: "PUT",
+      }),
+      async onQueryStarted(
+        { activeChallengeId, problemSlug },
+        { dispatch, queryFulfilled }
+      ) {
+        try {
+          const { data } = await queryFulfilled;
+          return data;
+        } catch (error) {
+          console.error("Failed to update user progress:", error);
+        }
+      },
+    }),
     // Add other endpoints if needed
   }),
 });
@@ -41,4 +58,5 @@ export const challengeApi = createApi({
 export const {
   useGetActiveChallengesQuery,
   useGetActiveChallengeProblemsQuery,
+  useUpdateUserProgressManuallyMutation,
 } = challengeApi;
