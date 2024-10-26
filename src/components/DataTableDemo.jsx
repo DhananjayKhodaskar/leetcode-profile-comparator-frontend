@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useUpdateUserProgressManuallyMutation } from "@/services/challenge";
+import { Badge } from "./ui/badge";
 
 export function DataTableDemo({
   data,
@@ -125,9 +126,22 @@ export function DataTableDemo({
             </Button>
           );
         },
-        cell: ({ row }) => (
-          <div className="text-center">{row.getValue("difficulty")}</div>
-        ),
+        cell: ({ row }) => {
+          const difficulty = row.getValue("difficulty");
+          const difficultyClass = {
+            Easy: "bg-green-800",
+            Medium: "bg-yellow-500",
+            Hard: "bg-red-600",
+          };
+
+          return (
+            <Badge
+              className={`text-center ${difficultyClass[difficulty]}  white`}
+            >
+              {difficulty}
+            </Badge>
+          );
+        },
         sortingFn: (rowA, rowB) => {
           const difficultyOrder = { Easy: 1, Medium: 2, Hard: 3 };
           return (
@@ -275,6 +289,7 @@ export function DataTableDemo({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={row.original.solved ? "bg-green-100" : ""}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
