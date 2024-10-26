@@ -1,11 +1,18 @@
 import React from "react";
+import ChallengeHero from "./ChallengeHero";
 
-const ChallengeDetails = ({ challengeDetails, joinedUsers, problemCount }) => {
+const ChallengeDetails = ({
+  challengeDetails,
+  joinedUsers,
+  problemCount,
+  endDate,
+}) => {
   const { _id, name, description, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
-
+  const endTime = new Date(endDate).getTime();
   return (
     <div>
+      <ChallengeHero title={name} endTime={endTime} />
       <h2>Challenge Details</h2>
       <p>
         <strong>ID:</strong> {_id}

@@ -49,6 +49,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
           challengeDetails={challengeDetails}
           joinedUsers={joinedUsers}
           problemCount={problemCount}
+          endDate={endDate}
         />
       </TabsContent>
 

@@ -24,12 +24,10 @@ const Challenge = () => {
   if (!activeChallenge) return <div>No active challenges available.</div>;
 
   // Extracting title and end time from the fetched data
-  const title = activeChallenge.challengeDetails.name;
-  const endTime = new Date(activeChallenge.endDate).getTime();
 
   return (
     <div>
-      {/* <ChallengeHero title={title} endTime={endTime} /> */}
+      
 
       <CustomTabs
         activeChallenge={activeChallenge}

@@ -36,7 +36,7 @@ export default function ChallengeHero({
   }, []);
 
   return (
-    <div className="relative w-full h-[20vh]  overflow-hidden">
+    <div className="relative w-full h-[20vh] min-h-[400px] overflow-hidden">
       <img
         src={challengeImg}
         alt="Challenge Hero"
@@ -47,7 +47,7 @@ export default function ChallengeHero({
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-6 transition-all duration-300 ease-in-out hover:scale-105">
           {title}
         </h1>
-        <Card className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-white/20">
+        <Card className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-white/20 text-slate-200">
           <p className="text-xl md:text-2xl font-semibold text-center">
             Time Remaining:
           </p>
