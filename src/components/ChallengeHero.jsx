@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 export default function ChallengeHero({
   title = "150 Problems Challenge",
   endTime = new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours from now
+  problemCount,
 }) {
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
 
@@ -47,20 +48,30 @@ export default function ChallengeHero({
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-6 transition-all duration-300 ease-in-out hover:scale-105">
           {title}
         </h1>
-        <Card className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-white/20 text-slate-200">
-          <p className="text-xl md:text-2xl font-semibold text-center">
-            Time Remaining:
-          </p>
-          <div className="text-3xl md:text-4xl font-bold tabular-nums ">
-            {`${timeRemaining.hours
-              .toString()
-              .padStart(2, "0")}:${timeRemaining.minutes
-              .toString()
-              .padStart(2, "0")}:${timeRemaining.seconds
-              .toString()
-              .padStart(2, "0")}`}
-          </div>
-        </Card>
+        <div className="flex flex-row gap-2">
+          <Card className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-white/20 text-slate-200">
+            <p className="text-xl md:text-2xl font-semibold text-center">
+              Time Remaining
+            </p>
+            <div className="text-3xl md:text-4xl font-bold tabular-nums ">
+              {`${timeRemaining.hours
+                .toString()
+                .padStart(2, "0")}:${timeRemaining.minutes
+                .toString()
+                .padStart(2, "0")}:${timeRemaining.seconds
+                .toString()
+                .padStart(2, "0")}`}
+            </div>
+          </Card>
+          <Card className="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-white/20 text-slate-200">
+            <p className="text-xl md:text-2xl font-semibold text-center">
+              Total Problems
+            </p>
+            <div className="text-3xl md:text-4xl font-bold tabular-nums  text-center">
+              {problemCount}
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -12,52 +12,54 @@ const ChallengeDetails = ({
   const endTime = new Date(endDate).getTime();
   return (
     <div>
-      <ChallengeHero title={name} endTime={endTime} />
-      <h2>Challenge Details</h2>
-      <p>
-        <strong>ID:</strong> {_id}
-      </p>
-      <p>
-        <strong>Name:</strong> {name}
-      </p>
-      <p>
-        <strong>Description:</strong> {description}
-      </p>
-
-      <div>
-        <h3>Problems:</h3>
-        {problemCount}
-      </div>
-
-      <p>
-        <strong>Public:</strong> {isPublic ? "Yes" : "No"}
-      </p>
-      <p>
-        <strong>Created By:</strong> {createdBy}
-      </p>
-      <p>
-        <strong>Created At:</strong> {new Date(createdAt).toLocaleString()}
-      </p>
-      <p>
-        <strong>Updated At:</strong> {new Date(updatedAt).toLocaleString()}
-      </p>
-      <ul>
-        <p>
-          <strong>Joined Users:</strong>
-        </p>
-        {joinedUsers.map((user) => (
-          <li key={user._id}>
-            <img
-              src={user.userAvatar}
-              alt={`${user.realName}'s avatar`}
-              width={50}
-            />
+      <ChallengeHero
+        title={name}
+        endTime={endTime}
+        problemCount={problemCount}
+      />
+      <div className="container mx-auto px-4 py-8">
+        <div className="mt-8 bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-4">Challenge Details</h2>
+          <div className="space-y-4">
             <p>
-              {user.realName} - Solved Problems: {user.solvedProblemsCount}
+              <strong className="font-semibold">Description:</strong>{" "}
+              <span className="text-gray-700">{description}</span>
             </p>
-          </li>
-        ))}
-      </ul>
+            <p>
+              <strong className="font-semibold">Created By:</strong>{" "}
+              <span className="text-gray-700">{createdBy}</span>
+            </p>
+            <p>
+              <strong className="font-semibold">Created At:</strong>{" "}
+              <span className="text-gray-700">
+                {new Date(createdAt).toLocaleString()}
+              </span>
+            </p>
+          </div>
+          <div className="mt-6">
+            <h3 className="text-xl font-semibold mb-4">Joined Users</h3>
+            <ul className="space-y-4">
+              {joinedUsers.map((user) => (
+                <li key={user._id} className="flex items-center space-x-4">
+                  <img
+                    src={user.userAvatar}
+                    alt={`${user.realName}'s avatar`}
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />
+                  <div>
+                    <p className="font-medium">{user.realName}</p>
+                    <p className="text-sm text-gray-600">
+                      Solved Problems: {user.solvedProblemsCount}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
