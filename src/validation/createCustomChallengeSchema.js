@@ -6,7 +6,7 @@ export const createCustomChallengeSchema = z.object({
     .string()
     .min(5, "Description must be at least 5 characters long"),
   isPublic: z.boolean().optional(), // Optional as it might default to false
-  challenges: z
+  problems: z
     .array(
       z.object({
         link: z

@@ -37,13 +37,13 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       name: "",
       description: "",
       isPublic: false,
-      challenges: [{ link: "", difficulty: "easy" }],
+      problems: [{ link: "", difficulty: "easy" }],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "challenges",
+    name: "problems",
   });
 
   const handleSubmitCustomChallenge = (values) => {
@@ -109,7 +109,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <div key={field.id} className="flex gap-2 items-end mb-2">
                   <FormField
                     control={form.control}
-                    name={`challenges.${index}.link`}
+                    name={`problems.${index}.link`}
                     render={({ field }) => (
                       <FormItem className="flex-1">
                         <FormControl>
@@ -124,7 +124,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                   />
                   <FormField
                     control={form.control}
-                    name={`challenges.${index}.difficulty`}
+                    name={`problems.${index}.difficulty`}
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
