@@ -12,25 +12,33 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { pastelBgColor } from "@/utils/config";
 import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
+import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog"; // Import the new component
 import { useGetChallengesQuery } from "@/services/challenge";
 
 const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
-  const { data: response, error, isLoading } = useGetChallengesQuery();
+  const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
+
+  const { data: response } = useGetChallengesQuery();
   const challenges = response?.data || [];
 
   const handleCardClick = (challengeId) => {
     setSelectedChallengeId(challengeId);
-    setIsMainDialogOpen(false); // Close main dialog
-    setIsDetailsDialogOpen(true); // Open details dialog
+    setIsMainDialogOpen(false);
+    setIsDetailsDialogOpen(true);
   };
 
   const closeDetailsDialog = () => {
-    setIsDetailsDialogOpen(false); // Close details dialog
-    setIsMainDialogOpen(true); // Reopen main dialog
-    setSelectedChallengeId(null); // Clear selected challenge
+    setIsDetailsDialogOpen(false);
+    setIsMainDialogOpen(true);
+    setSelectedChallengeId(null);
+  };
+
+  const handleCreateCustomChallenge = () => {
+    setIsMainDialogOpen(false);
+    setIsCustomDialogOpen(true);
   };
 
   return (
@@ -77,7 +85,11 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
                 <div className="border-t border-gray-300 flex-grow ml-3"></div>
               </div>
 
-              <Button className="w-full" variant="outline">
+              <Button
+                className="w-full"
+                variant="outline"
+                onClick={handleCreateCustomChallenge}
+              >
                 Create Custom Challenge
               </Button>
             </div>
@@ -93,6 +105,12 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         />
       )}
+
+      {/* Custom Challenge Dialog */}
+      <CreateCustomChallengeDialog
+        isOpen={isCustomDialogOpen}
+        onOpenChange={setIsCustomDialogOpen}
+      />
     </div>
   );
 };

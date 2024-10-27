@@ -36,5 +36,3 @@ export const ChatBubbleTimestampCalculation = (timestamp) => {
   return displayTime; // Return the displayTime value
 };
 
-
-
