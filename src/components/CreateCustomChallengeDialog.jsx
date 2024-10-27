@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "./ui/checkbox";
@@ -29,6 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCreateChallengeMutation } from "@/services/challenge";
+
 
 const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const form = useForm({
@@ -46,10 +48,27 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     name: "problems",
   });
 
-  const handleSubmitCustomChallenge = (values) => {
-    console.log("Custom Challenge:", values);
-    form.reset();
-    onOpenChange(false);
+  const [createActiveChallenge] = useCreateChallengeMutation();
+
+  const handleSubmitCustomChallenge = async (values) => {
+    // Prepare the data to be sent
+    const challengeData = {
+      name: values.name,
+      description: values.description,
+      isPublic: values.isPublic,
+      problems: values.problems, // Directly use the problems array
+    };
+
+    try {
+      const response = await createActiveChallenge(challengeData).unwrap();
+      console.log("Challenge created successfully:", response);
+      // Optionally reset the form and close the dialog
+      form.reset();
+      onOpenChange(false);
+    } catch (error) {
+      console.error("Failed to create custom challenge:", error);
+      // Optionally handle the error (e.g., show a notification)
+    }
   };
 
   const addChallengeField = () => {
