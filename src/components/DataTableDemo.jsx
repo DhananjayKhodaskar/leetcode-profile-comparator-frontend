@@ -12,8 +12,8 @@ import {
 import {
   ArrowUpDown,
   ChevronDown,
-  MoreHorizontal,
   ExternalLink,
+  RefreshCcw,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -38,6 +35,7 @@ import {
 } from "@/components/ui/table";
 import { useUpdateUserProgressManuallyMutation } from "@/services/challenge";
 import { Badge } from "./ui/badge";
+import { cn } from "@/lib/utils";
 
 export function DataTableDemo({
   data,
@@ -108,7 +106,21 @@ export function DataTableDemo({
           );
         },
         cell: ({ row }) => {
-          return <span>{row.original.title}</span>;
+          return (
+            <div>
+              <a
+                href={row.original.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-row gap-2 items-center"
+              >
+                <span className="group-hover:underline ">
+                  {row.original.title}
+                </span>
+                <ExternalLink className="h-4 w-4 inline-block opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              </a>
+            </div>
+          );
         },
       },
       {
@@ -136,7 +148,7 @@ export function DataTableDemo({
 
           return (
             <Badge
-              className={`text-center ${difficultyClass[difficulty]}  white`}
+              className={`text-center ${difficultyClass[difficulty]} white`}
             >
               {difficulty}
             </Badge>
@@ -159,49 +171,6 @@ export function DataTableDemo({
               row.original.method.slice(1)
             : "-";
           return <div className="text-center">{method}</div>;
-        },
-      },
-      {
-        id: "solve",
-        header: "Solve",
-        cell: ({ row }) => {
-          return (
-            <a
-              href={row.original.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          );
-        },
-      },
-      {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() =>
-                    navigator.clipboard.writeText(row.getValue("title"))
-                  }
-                >
-                  Copy Title
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View Details</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
         },
       },
     ],
@@ -230,18 +199,21 @@ export function DataTableDemo({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex w-full flex-row justify-between py-4">
         <Input
           placeholder="Filter titles..."
           value={table.getColumn("title")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-xs "
         />
+        <Button className="gap-1">
+          <RefreshCcw className="p-1" /> Sync
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -292,7 +264,10 @@ export function DataTableDemo({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={row.original.solved ? "bg-green-100" : ""}
+                  className={cn(
+                    row.original.solved ? "bg-green-100" : "",
+                    "group"
+                  )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
