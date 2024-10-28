@@ -15,7 +15,7 @@ import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
 import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog"; // Import the new component
 import { useGetChallengesQuery } from "@/services/challenge";
 
-const StartChallenge = ({ refetchActiveChallengeDetails }) => {
+const StartChallenge = () => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
@@ -23,6 +23,8 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
 
   const { data: response } = useGetChallengesQuery();
   const challenges = response?.data || [];
+
+  console.log("this is fetched challenges", challenges);
 
   const handleCardClick = (challengeId) => {
     setSelectedChallengeId(challengeId);
@@ -102,12 +104,12 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
           selectedChallengeId={selectedChallengeId}
           isOpen={isDetailsDialogOpen}
           onClose={closeDetailsDialog}
-          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         />
       )}
 
       {/* Custom Challenge Dialog */}
       <CreateCustomChallengeDialog
+        setIsMainDialogOpen={setIsMainDialogOpen}
         isOpen={isCustomDialogOpen}
         onOpenChange={setIsCustomDialogOpen}
       />

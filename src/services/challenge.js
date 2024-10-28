@@ -4,6 +4,8 @@ import baseQueryWithAuth from "./baseQueryWithAuth";
 export const challengeApi = createApi({
   reducerPath: "challengeApi",
   baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_URL),
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   endpoints: (builder) => ({
     getChallenges: builder.query({
       query: () => ({

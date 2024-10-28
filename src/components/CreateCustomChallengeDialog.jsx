@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "./ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,8 +22,20 @@ import {
 import { createCustomChallengeSchema } from "@/validation/createCustomChallengeSchema";
 import { useCreateChallengeMutation } from "@/services/challenge";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
+const CreateCustomChallengeDialog = ({
+  isOpen,
+  onOpenChange,
+}) => {
   const form = useForm({
     resolver: zodResolver(createCustomChallengeSchema),
     defaultValues: {
@@ -35,7 +46,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   });
 
   const [data, setData] = useState([]);
-  const [createActiveChallenge] = useCreateChallengeMutation();
+  const [createChallenge] = useCreateChallengeMutation();
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -66,7 +77,6 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         );
         return;
       }
-      console.log(formattedData, "thi is sthe data from the sheet");
       setData(formattedData);
     };
 
@@ -83,9 +93,9 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     };
 
     try {
-      const response = await createActiveChallenge(challengeData).unwrap();
+      console.log(challengeData, "challengeData");
+      const response = await createChallenge(challengeData).unwrap();
       console.log("Challenge created successfully:", response);
-      // Optionally reset the form and close the dialog
       form.reset();
       setData([]); // Clear uploaded data
       onOpenChange(false);
@@ -140,7 +150,33 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Public</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value ? "yes" : "no"}
+                      onValueChange={(value) => field.onChange(value === "yes")}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Yes or No" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Visibility</SelectLabel>
+                          <SelectItem value="yes">Yes</SelectItem>
+                          <SelectItem value="no">No</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Excel Upload Section */}
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="picture">Picture</Label>
@@ -152,22 +188,6 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
               <span className="text-gray-500 font-medium">OR</span>
               <div className="border-t border-gray-300 flex-grow ml-3"></div>
             </div>
-
-            <FormField
-              control={form.control}
-              name="isPublic"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-2">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel>Public</FormLabel>
-                </FormItem>
-              )}
-            />
             <DialogFooter>
               <Button type="submit">Submit</Button>
             </DialogFooter>

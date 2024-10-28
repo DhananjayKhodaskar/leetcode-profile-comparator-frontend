@@ -22,9 +22,7 @@ const Challenge = () => {
   return (
     <div className="h-full w-full">
       {error?.status === 404 ? (
-        <StartChallenge
-          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
-        />
+        <StartChallenge />
       ) : (
         <CustomTabs
           activeChallenge={activeChallenge}

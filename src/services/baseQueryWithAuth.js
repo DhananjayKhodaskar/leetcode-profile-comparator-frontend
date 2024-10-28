@@ -15,7 +15,6 @@ const baseQueryWithAuth = (baseUrl) => {
         return headers;
       },
     });
-
     const result = await baseQuery(args, api, extraOptions);
     if (result.error && result.error.status === 401) {
       console.error("Token expired, user logged out.");
