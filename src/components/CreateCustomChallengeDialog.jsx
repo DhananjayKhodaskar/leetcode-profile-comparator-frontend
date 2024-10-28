@@ -32,10 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const CreateCustomChallengeDialog = ({
-  isOpen,
-  onOpenChange,
-}) => {
+const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const form = useForm({
     resolver: zodResolver(createCustomChallengeSchema),
     defaultValues: {
@@ -177,10 +174,26 @@ const CreateCustomChallengeDialog = ({
                 </FormItem>
               )}
             />
-            {/* Excel Upload Section */}
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="picture">Picture</Label>
-              <Input id="picture" type="file" onChange={handleFileUpload} />
+              <Label htmlFor="problemExcel" className="font-semibold">
+                Upload Problem List
+              </Label>
+              <p className="text-sm text-gray-600 mb-2">
+                Please upload an Excel file containing a list of problems and
+                their difficulty levels. You can download a sample file{" "}
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/export?format=xlsx"
+                  className="text-blue-600 underline"
+                >
+                  here
+                </a>
+                .
+              </p>
+              <Input
+                id="problemExcel"
+                type="file"
+                onChange={handleFileUpload}
+              />
             </div>
 
             <div className="flex items-center justify-center w-full">
