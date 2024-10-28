@@ -184,8 +184,21 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <a
                   href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/export?format=xlsx"
                   className="text-blue-600 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  here
+                  here{" "}
+                </a>
+                or go to the following link to view, make a copy, edit, and then
+                download:
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/edit?usp=sharing"
+                  className="text-blue-600 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  View Google Sheet
                 </a>
                 .
               </p>
@@ -193,13 +206,8 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 id="problemExcel"
                 type="file"
                 onChange={handleFileUpload}
+                className="cursor-pointer"
               />
-            </div>
-
-            <div className="flex items-center justify-center w-full">
-              <div className="border-t border-gray-300 flex-grow mr-3"></div>
-              <span className="text-gray-500 font-medium">OR</span>
-              <div className="border-t border-gray-300 flex-grow ml-3"></div>
             </div>
             <DialogFooter>
               <Button type="submit">Submit</Button>
