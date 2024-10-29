@@ -87,7 +87,19 @@ export function DataTableDemo({
       {
         accessorKey: "solved",
         id: "solvedCheckbox",
-        header: "Solved",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Solved
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
         cell: ({ row }) => {
           return (
             <Checkbox
@@ -100,8 +112,16 @@ export function DataTableDemo({
             />
           ); // Read-only checkbox
         },
-        enableSorting: false,
+        enableSorting: true, // Enable sorting on this column
         enableHiding: false,
+        sortingFn: (rowA, rowB) => {
+          // Sort by the solved status: checked items first
+          return rowA.original.solved === rowB.original.solved
+            ? 0
+            : rowA.original.solved
+            ? -1
+            : 1;
+        },
       },
       {
         accessorKey: "title",
