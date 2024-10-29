@@ -97,6 +97,23 @@ export const challengeApi = createApi({
         }
       },
     }),
+
+    // New endpoint to leave an active challenge
+    leaveActiveChallenge: builder.mutation({
+      query: (activeChallengeId) => ({
+        url: `app/activeChallenges/leave/${activeChallengeId}`,
+        method: "POST",
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from leaving the challenge
+        } catch (error) {
+          console.error("Failed to leave active challenge:", error);
+        }
+      },
+    }),
+
     // Adding getChallengeById endpoint
     getChallengeById: builder.query({
       query: (challengeId) => ({
@@ -153,6 +170,7 @@ export const {
   useUpdateUserProgressManuallyMutation,
   useCreateActiveChallengeMutation,
   useJoinActiveChallengeMutation, // Exporting the new hook
+  useLeaveActiveChallengeMutation, // Exporting the new hook
   useGetChallengeByIdQuery, // Exporting the new hook
   useCreateChallengeMutation, // Exporting the new create challenge hook
   useUpdateUserProgressByAutomaticallyMutation, // Exporting the new update user progress by automatically hook

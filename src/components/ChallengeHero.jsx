@@ -11,7 +11,7 @@ export default function ChallengeHero({
   endTime = new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours from now
   problemCount,
   activeChallengeId,
-  refetchActiveChallengeDetails
+  refetchActiveChallengeDetails,
 }) {
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
 
@@ -40,13 +40,7 @@ export default function ChallengeHero({
     return () => clearInterval(timer);
   }, []);
 
-  const [joinChallenge, { isLoading: joining, isSuccess, isError }] =
-    useJoinActiveChallengeMutation();
 
-  const handleJoin = async () => {
-    await joinChallenge(activeChallengeId);
-    refetchActiveChallengeDetails();
-  };
 
   return (
     <div className="relative w-full h-[20vh] min-h-[400px] overflow-hidden">
@@ -84,9 +78,6 @@ export default function ChallengeHero({
             </div>
           </Card>
         </div>
-        <Button className="m-4 bg-green-700" onClick={handleJoin}>
-          Join
-        </Button>
       </div>
     </div>
   );

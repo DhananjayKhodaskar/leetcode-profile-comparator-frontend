@@ -1,5 +1,11 @@
 import React from "react";
 import ChallengeHero from "./ChallengeHero";
+import {
+  useJoinActiveChallengeMutation,
+  useLeaveActiveChallengeMutation,
+} from "@/services/challenge";
+import { Button } from "./ui/button";
+import { useSelector } from "react-redux";
 
 const ChallengeDetails = ({
   challengeDetails,
@@ -9,10 +15,28 @@ const ChallengeDetails = ({
   activeChallengeId,
   refetchActiveChallengeDetails,
 }) => {
+  const { user } = useSelector((state) => state.user.user);
   const { _id, name, description, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
   const endTime = new Date(endDate).getTime();
+  const loggedInUserInJoinedUser = joinedUsers.find(
+    (joinedUser) => joinedUser._id === user._id
+  );
+  const [joinChallenge, { isLoading: joining, isSuccess, isError }] =
+    useJoinActiveChallengeMutation();
 
+  const [leaveChallenge, { isLoading: leaving }] =
+    useLeaveActiveChallengeMutation();
+
+  const handleJoin = async () => {
+    await joinChallenge(activeChallengeId);
+    refetchActiveChallengeDetails();
+  };
+
+  const handleLeave = async () => {
+    await leaveChallenge(activeChallengeId);
+    refetchActiveChallengeDetails();
+  };
   return (
     <div>
       <ChallengeHero
@@ -24,7 +48,18 @@ const ChallengeDetails = ({
       />
       <div className="container mx-auto px-4 py-8">
         <div className="mt-8 bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Challenge Details</h2>
+          <div className="flex flex-row justify-between">
+            <h2 className="text-2xl font-bold mb-4">Challenge Details</h2>
+            {loggedInUserInJoinedUser ? (
+              <Button variant="destructive" onClick={handleLeave}>
+                Leave
+              </Button>
+            ) : (
+              <Button className="m-4 bg-green-700" onClick={handleJoin}>
+                Join
+              </Button>
+            )}
+          </div>
           <div className="space-y-4">
             <p>
               <strong className="font-semibold">Description:</strong>{" "}
@@ -44,19 +79,26 @@ const ChallengeDetails = ({
           <div className="mt-6">
             <h3 className="text-xl font-semibold mb-4">Joined Users</h3>
             <ul className="space-y-4">
-              {joinedUsers.map((user) => (
-                <li key={user._id} className="flex items-center space-x-4">
+              {joinedUsers.map((joinedUser) => (
+                <li
+                  key={joinedUser._id}
+                  className="flex items-center space-x-4"
+                >
                   <img
-                    src={user.userAvatar}
-                    alt={`${user.realName}'s avatar`}
+                    src={joinedUser.userAvatar}
+                    alt={`${joinedUser.realName}'s avatar`}
                     width={50}
                     height={50}
                     className="rounded-full"
                   />
                   <div>
-                    <p className="font-medium">{user.realName}</p>
+                    <p className="font-medium">
+                      {joinedUser._id === user._id
+                        ? "You"
+                        : joinedUser.realName}
+                    </p>
                     <p className="text-sm text-gray-600">
-                      Solved Problems: {user.solvedProblemsCount}
+                      Solved Problems: {joinedUser.solvedProblemsCount}
                     </p>
                   </div>
                 </li>
