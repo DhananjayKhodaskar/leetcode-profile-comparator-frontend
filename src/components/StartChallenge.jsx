@@ -24,8 +24,6 @@ const StartChallenge = () => {
   const { data: response } = useGetChallengesQuery();
   const challenges = response?.data || [];
 
-  console.log("this is fetched challenges", challenges);
-
   const handleCardClick = (challengeId) => {
     setSelectedChallengeId(challengeId);
     setIsMainDialogOpen(false);

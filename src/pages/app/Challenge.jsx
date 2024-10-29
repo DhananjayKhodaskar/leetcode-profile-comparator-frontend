@@ -16,7 +16,6 @@ const Challenge = () => {
   });
   const activeChallenge = response?.data;
 
-  console.log("activeChallenge", activeChallenge);
   if (isLoading) return <div>Loading...</div>;
 
   return (

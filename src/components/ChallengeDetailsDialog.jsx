@@ -45,7 +45,6 @@ const ChallengeDetailsDialog = ({
     try {
       const result = await createActiveChallenge(challengeData).unwrap();
       refetchActiveChallengeDetails();
-      console.log("Challenge created successfully:", result);
       // Optionally reset the form or navigate to another page
       setCreateChallengeModalOpen(false); // Close modal after submission
       setDescription(""); // Reset description

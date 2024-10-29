@@ -37,7 +37,6 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
     groupId: groupId,
   });
 
-  console.log("problems fetching", problemsFetching);
 
   const problems = response?.data || [];
   return (

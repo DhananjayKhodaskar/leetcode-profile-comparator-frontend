@@ -111,9 +111,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     };
 
     try {
-      console.log(challengeData, "challengeData");
       const response = await createChallenge(challengeData).unwrap();
-      console.log("Challenge created successfully:", response);
       form.reset();
       setData([]);
       setInputFields([{ link: "", difficulty: "" }]);
