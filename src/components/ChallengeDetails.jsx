@@ -12,6 +12,7 @@ const ChallengeDetails = ({
   const { _id, name, description, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
   const endTime = new Date(endDate).getTime();
+
   return (
     <div>
       <ChallengeHero

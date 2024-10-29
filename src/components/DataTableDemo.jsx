@@ -46,6 +46,7 @@ export function DataTableDemo({
   refetchProblems,
   refetchActiveChallengeDetails,
   problemsFetching,
+  disableTableFunctionality,
 }) {
   // State to manage the rows (if needed for your hooks logic)
   const [sorting, setSorting] = React.useState([]);
@@ -106,7 +107,8 @@ export function DataTableDemo({
               checked={row.original.solved}
               readOnly
               disabled={
-                !(!row?.original.method || row?.original.method === "manual")
+                !(!row?.original.method || row?.original.method === "manual") ||
+                disableTableFunctionality
               }
               onClick={() => handleCheckboxClick(row)} // Use the handler function here
             />
@@ -207,7 +209,7 @@ export function DataTableDemo({
         },
       },
     ],
-    [] // Dependency array should include any state used inside columns if needed
+    [disableTableFunctionality] // Dependency array should include any state used inside columns if needed
   );
 
   // Table instance creation
@@ -241,18 +243,20 @@ export function DataTableDemo({
           }
           className="max-w-xs "
         />
-        <Button
-          className={`gap-1`}
-          onClick={handleAutoSync}
-          disabled={autoProblemUpdateLoading || problemsFetching}
-        >
-          <RefreshCcw
-            className={`p-1 ${
-              (autoProblemUpdateLoading || problemsFetching) && "animate-spin"
-            }`}
-          />{" "}
-          Sync
-        </Button>
+        {!disableTableFunctionality && (
+          <Button
+            className={`gap-1`}
+            onClick={handleAutoSync}
+            disabled={autoProblemUpdateLoading || problemsFetching}
+          >
+            <RefreshCcw
+              className={`p-1 ${
+                (autoProblemUpdateLoading || problemsFetching) && "animate-spin"
+              }`}
+            />{" "}
+            Sync
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">

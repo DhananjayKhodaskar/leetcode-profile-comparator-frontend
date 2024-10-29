@@ -36,8 +36,8 @@ export const challengeApi = createApi({
       },
     }),
     getActiveChallengeProblems: builder.query({
-      query: ({ groupId }) => ({
-        url: `app/activeChallenges/${groupId}/problems`,
+      query: ({ groupId, userId = "" }) => ({
+        url: `app/activeChallenges/${groupId}/problems/${userId}`,
         method: "GET",
       }),
       async onQueryStarted({ groupId }, { dispatch, queryFulfilled }) {

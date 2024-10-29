@@ -11,8 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTableDemo } from "./DataTableDemo";
 import ChallengeDetails from "./ChallengeDetails";
 import { useGetActiveChallengeProblemsQuery } from "@/services/challenge";
+import { SelectUserProblemTableDropdown } from "./SelectUserProblemTableDropdown";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
+  const { user } = useSelector((state) => state.user.user);
+  const [selectedUserId, setSelectedUserId] = useState(user?._id);
   const {
     _id,
     challenge,
@@ -35,7 +40,9 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
     refetch: refetchProblems,
   } = useGetActiveChallengeProblemsQuery({
     groupId: groupId,
+    userId: selectedUserId,
   });
+  const disableTableFunctionality = user._id !== selectedUserId;
 
 
   const problems = response?.data || [];
@@ -59,12 +66,19 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
       </TabsContent>
 
       <TabsContent value="problems">
+        <SelectUserProblemTableDropdown
+          joinedUsers={joinedUsers}
+          setSelectedUserId={setSelectedUserId}
+          selectedUserId={selectedUserId}
+          user={user}
+        />
         <DataTableDemo
           data={problems}
           activeChallengeId={_id}
           refetchProblems={refetchProblems}
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
           problemsFetching={problemsFetching}
+          disableTableFunctionality={disableTableFunctionality}
         />
       </TabsContent>
 
