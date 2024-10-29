@@ -128,6 +128,20 @@ export const challengeApi = createApi({
         }
       },
     }),
+    updateUserProgressByAutomatically: builder.mutation({
+      query: (activeChallengeId) => ({
+        url: `app/challenges/updateUserProgress/${activeChallengeId}`,
+        method: "POST", // This uses the POST method as described
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response data if successful
+        } catch (error) {
+          console.error("Failed to update user progress:", error);
+        }
+      },
+    }),
   }),
 });
 
@@ -141,4 +155,5 @@ export const {
   useJoinActiveChallengeMutation, // Exporting the new hook
   useGetChallengeByIdQuery, // Exporting the new hook
   useCreateChallengeMutation, // Exporting the new create challenge hook
+  useUpdateUserProgressByAutomaticallyMutation, // Exporting the new update user progress by automatically hook
 } = challengeApi;

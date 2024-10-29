@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Trash2 } from "lucide-react"; // Importing Trash2 icon
 
 const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const form = useForm({
@@ -43,7 +44,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   });
 
   const [data, setData] = useState([]);
+  const [inputFields, setInputFields] = useState([
+    { link: "", difficulty: "" },
+  ]);
   const [createChallenge] = useCreateChallengeMutation();
+  const [inputMode, setInputMode] = useState("file");
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -56,13 +61,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      // Assuming the first row contains headers like ['Problem Link', 'Difficulty']
       const formattedData = parsedData.slice(1).map((row) => ({
         link: row[0],
         difficulty: row[1],
       }));
 
-      // Basic validation for difficulty
       const validDifficulties = ["Easy", "Medium", "Hard"];
       const isValid = formattedData.every((item) =>
         validDifficulties.includes(item.difficulty)
@@ -80,13 +83,31 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleInputChange = (index, field, value) => {
+    const updatedFields = [...inputFields];
+    updatedFields[index][field] = value;
+    setInputFields(updatedFields);
+    setData(updatedFields); // Update data with manual entries
+  };
+
+  const addMoreFields = () => {
+    if (inputFields.length < 20) {
+      setInputFields([...inputFields, { link: "", difficulty: "" }]);
+    }
+  };
+
+  const removeField = (index) => {
+    const updatedFields = inputFields.filter((_, i) => i !== index);
+    setInputFields(updatedFields);
+    setData(updatedFields);
+  };
+
   const handleSubmitCustomChallenge = async (values) => {
-    // Prepare the data to be sent
     const challengeData = {
       name: values.name,
       description: values.description,
       isPublic: values.isPublic,
-      problems: data, // Use the uploaded problems
+      problems: data,
     };
 
     try {
@@ -94,17 +115,17 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       const response = await createChallenge(challengeData).unwrap();
       console.log("Challenge created successfully:", response);
       form.reset();
-      setData([]); // Clear uploaded data
+      setData([]);
+      setInputFields([{ link: "", difficulty: "" }]);
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to create custom challenge:", error);
-      // Optionally handle the error (e.g., show a notification)
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] w-screen">
+      <DialogContent className="sm:max-w-[425px] max-h-[600px] overflow-auto">
         <DialogHeader>
           <DialogTitle>Create Custom Challenge</DialogTitle>
         </DialogHeader>
@@ -174,41 +195,81 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 </FormItem>
               )}
             />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="problemExcel" className="font-semibold">
-                Upload Problem List
-              </Label>
-              <p className="text-sm text-gray-600 mb-2">
-                Please upload an Excel file containing a list of problems and
-                their difficulty levels. You can download a sample file{" "}
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/export?format=xlsx"
-                  className="text-blue-600 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  here{" "}
-                </a>
-                or go to the following link to view, make a copy, edit, and then
-                download:
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/edit?usp=sharing"
-                  className="text-blue-600 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {" "}
-                  View Google Sheet
-                </a>
-                .
-              </p>
-              <Input
-                id="problemExcel"
-                type="file"
-                onChange={handleFileUpload}
-                className="cursor-pointer"
-              />
+            <div className="mb-2">
+              <Select value={inputMode} onValueChange={setInputMode}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Input Mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Input Mode</SelectLabel>
+                    <SelectItem value="file">Upload File</SelectItem>
+                    <SelectItem value="manual">Manual Input</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
+            {inputMode === "file" ? (
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="problemExcel" className="font-semibold">
+                  Upload Problem List
+                </Label>
+                <Input
+                  id="problemExcel"
+                  type="file"
+                  onChange={handleFileUpload}
+                  className="cursor-pointer"
+                />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {inputFields.map((field, index) => (
+                  <div key={index} className="flex items-center space-x-4">
+                    <Input
+                      placeholder="Enter problem link"
+                      value={field.link}
+                      onChange={(e) =>
+                        handleInputChange(index, "link", e.target.value)
+                      }
+                    />
+                    <Select
+                      value={field.difficulty}
+                      onValueChange={(value) =>
+                        handleInputChange(index, "difficulty", value)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Difficulty" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Difficulty</SelectLabel>
+                          <SelectItem value="Easy">Easy</SelectItem>
+                          <SelectItem value="Medium">Medium</SelectItem>
+                          <SelectItem value="Hard">Hard</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <button
+                      type="button"
+                      onClick={() => removeField(index)}
+                      className="text-red-500"
+                    >
+                      <Trash2 />
+                    </button>
+                  </div>
+                ))}
+                {inputFields.length < 20 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addMoreFields}
+                  >
+                    Add More
+                  </Button>
+                )}
+              </div>
+            )}
             <DialogFooter>
               <Button type="submit">Submit</Button>
             </DialogFooter>

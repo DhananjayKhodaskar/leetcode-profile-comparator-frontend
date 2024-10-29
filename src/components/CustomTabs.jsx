@@ -30,11 +30,14 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   const {
     data: response,
     error,
+    isFetching: problemsFetching,
     isLoading,
     refetch: refetchProblems,
   } = useGetActiveChallengeProblemsQuery({
     groupId: groupId,
   });
+
+  console.log("problems fetching", problemsFetching);
 
   const problems = response?.data || [];
   return (
@@ -62,6 +65,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
           activeChallengeId={_id}
           refetchProblems={refetchProblems}
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+          problemsFetching={problemsFetching}
         />
       </TabsContent>
 

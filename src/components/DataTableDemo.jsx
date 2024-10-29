@@ -33,7 +33,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useUpdateUserProgressManuallyMutation } from "@/services/challenge";
+import {
+  useUpdateUserProgressByAutomaticallyMutation,
+  useUpdateUserProgressManuallyMutation,
+} from "@/services/challenge";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -42,6 +45,7 @@ export function DataTableDemo({
   activeChallengeId,
   refetchProblems,
   refetchActiveChallengeDetails,
+  problemsFetching,
 }) {
   // State to manage the rows (if needed for your hooks logic)
   const [sorting, setSorting] = React.useState([]);
@@ -50,6 +54,10 @@ export function DataTableDemo({
   const [rowSelection, setRowSelection] = React.useState({});
   const [updateUserProgressManually, { isLoading, isSuccess, isError, error }] =
     useUpdateUserProgressManuallyMutation();
+  const [
+    updateUserProgressByAutomatically,
+    { isLoading: autoProblemUpdateLoading },
+  ] = useUpdateUserProgressByAutomaticallyMutation();
 
   const handleCheckboxClick = async (row) => {
     if (!row?.original.method || row?.original.method === "manual") {
@@ -66,6 +74,11 @@ export function DataTableDemo({
         console.error("Failed to update progress:", err);
       }
     }
+  };
+
+  const handleAutoSync = async () => {
+    await updateUserProgressByAutomatically(activeChallengeId);
+    refetchProblems();
   };
 
   // Columns definition including the handler function
@@ -208,8 +221,17 @@ export function DataTableDemo({
           }
           className="max-w-xs "
         />
-        <Button className="gap-1">
-          <RefreshCcw className="p-1" /> Sync
+        <Button
+          className={`gap-1`}
+          onClick={handleAutoSync}
+          disabled={autoProblemUpdateLoading || problemsFetching}
+        >
+          <RefreshCcw
+            className={`p-1 ${
+              (autoProblemUpdateLoading || problemsFetching) && "animate-spin"
+            }`}
+          />{" "}
+          Sync
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
