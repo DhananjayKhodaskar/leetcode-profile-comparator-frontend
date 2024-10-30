@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { createCustomChallengeSchema } from "@/validation/createCustomChallengeSchema";
 import { useCreateChallengeMutation } from "@/services/challenge";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -44,9 +43,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   });
 
   const [data, setData] = useState([]);
-  const [inputFields, setInputFields] = useState([
-    { link: "", difficulty: "" },
-  ]);
+  const [inputFields, setInputFields] = useState([{ link: "", difficulty: "" }]);
   const [createChallenge] = useCreateChallengeMutation();
   const [inputMode, setInputMode] = useState("file");
 
@@ -57,15 +54,13 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     reader.onload = (e) => {
       const binaryStr = e.target.result;
       const workbook = XLSX.read(binaryStr, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      // Extracting and formatting data including the category from the third column
+      // Extracting and formatting data
       const formattedData = parsedData.slice(1).map((row) => ({
         link: row[0],
         difficulty: row[1],
-        category: row[2] || "", // Defaulting to an empty string if no category is provided
       }));
 
       const validDifficulties = ["Easy", "Medium", "Hard"];
@@ -74,9 +69,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       );
 
       if (!isValid) {
-        alert(
-          "Invalid difficulty detected! Please use 'Easy', 'Medium', or 'Hard'."
-        );
+        alert("Invalid difficulty detected! Please use 'Easy', 'Medium', or 'Hard'.");
         return;
       }
 
@@ -90,7 +83,6 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     const updatedFields = [...inputFields];
     updatedFields[index][field] = value;
     setInputFields(updatedFields);
-    setData(updatedFields); // Update data with manual entries
   };
 
   const addMoreFields = () => {
@@ -102,7 +94,6 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const removeField = (index) => {
     const updatedFields = inputFields.filter((_, i) => i !== index);
     setInputFields(updatedFields);
-    setData(updatedFields);
   };
 
   const handleSubmitCustomChallenge = async (values) => {
@@ -114,7 +105,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
     };
 
     try {
-      const response = await createChallenge(challengeData).unwrap();
+      await createChallenge(challengeData).unwrap();
       form.reset();
       setData([]);
       setInputFields([{ link: "", difficulty: "" }]);
@@ -142,11 +133,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <FormItem>
                   <FormLabel>Challenge Name</FormLabel>
                   <FormControl>
-                    <Input
-                      id="name"
-                      placeholder="Enter challenge name"
-                      {...field}
-                    />
+                    <Input id="name" placeholder="Enter challenge name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,11 +146,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <FormItem>
                   <FormLabel>Challenge Description</FormLabel>
                   <FormControl>
-                    <Input
-                      id="description"
-                      placeholder="Enter challenge description"
-                      {...field}
-                    />
+                    <Input id="description" placeholder="Enter challenge description" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -212,9 +195,9 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
             </div>
             {inputMode === "file" ? (
               <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="problemExcel" className="font-semibold">
+                <FormLabel htmlFor="problemExcel" className="font-semibold">
                   Upload Problem List
-                </Label>
+                </FormLabel>
                 <Input
                   id="problemExcel"
                   type="file"
@@ -261,11 +244,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                   </div>
                 ))}
                 {inputFields.length < 20 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addMoreFields}
-                  >
+                  <Button type="button" variant="outline" onClick={addMoreFields}>
                     Add More
                   </Button>
                 )}

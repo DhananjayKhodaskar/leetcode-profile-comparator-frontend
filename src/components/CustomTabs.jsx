@@ -17,6 +17,11 @@ import { useSelector } from "react-redux";
 
 export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   const { user } = useSelector((state) => state.user.user);
+  const [paginationData, setPaginationData] = useState({
+    page: 1,
+    limit: 10,
+    selectedCategories: [],
+  });
   const [selectedUserId, setSelectedUserId] = useState(user?._id);
   const {
     _id,
@@ -41,11 +46,22 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   } = useGetActiveChallengeProblemsQuery({
     groupId: groupId,
     userId: selectedUserId,
+    page: paginationData.page,
+    limit: paginationData.limit,
+    categories: paginationData.selectedCategories.join(","),
   });
   const disableTableFunctionality = user._id !== selectedUserId;
 
-
-  const problems = response?.data || [];
+  const data = response?.data || {};
+  const { totalProblems, totalPages, currentPage, categories, problems } = data;
+  console.log(
+    "totalProblems, totalPages, currentPage, categories, problems",
+    totalProblems,
+    totalPages,
+    currentPage,
+    categories,
+    problems
+  );
   return (
     <Tabs defaultValue="description" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
@@ -73,12 +89,18 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
           user={user}
         />
         <DataTableDemo
-          data={problems}
+          problems={problems}
+          totalProblems={totalProblems}
+          currentPage={currentPage}
+          categories={categories}
+          totalPages={totalPages}
           activeChallengeId={_id}
           refetchProblems={refetchProblems}
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
           problemsFetching={problemsFetching}
           disableTableFunctionality={disableTableFunctionality}
+          paginationData={paginationData}
+          setPaginationData={setPaginationData}
         />
       </TabsContent>
 

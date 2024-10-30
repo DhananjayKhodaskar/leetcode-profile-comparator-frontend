@@ -36,9 +36,20 @@ export const challengeApi = createApi({
       },
     }),
     getActiveChallengeProblems: builder.query({
-      query: ({ groupId, userId = "" }) => ({
+      query: ({
+        groupId,
+        userId = "",
+        page = 1,
+        limit = 10,
+        categories = "",
+      }) => ({
         url: `app/activeChallenges/${groupId}/problems/${userId}`,
         method: "GET",
+        params: {
+          page,
+          limit,
+          categories, // Comma-separated categories (e.g., "arrays,math")
+        },
       }),
       async onQueryStarted({ groupId }, { dispatch, queryFulfilled }) {
         try {
@@ -49,6 +60,7 @@ export const challengeApi = createApi({
         }
       },
     }),
+
     updateUserProgressManually: builder.mutation({
       query: ({ activeChallengeId, problemSlug }) => ({
         url: `app/challenges/updateUserProgress/${activeChallengeId}/${problemSlug}`,

@@ -47,6 +47,13 @@ export function DataTableDemo({
   refetchActiveChallengeDetails,
   problemsFetching,
   disableTableFunctionality,
+  paginationData,
+  setPaginationData,
+  problems,
+  totalProblems,
+  currentPage,
+  categories,
+  totalPages,
 }) {
   // State to manage the rows (if needed for your hooks logic)
   const [sorting, setSorting] = React.useState([]);
@@ -82,7 +89,11 @@ export function DataTableDemo({
     refetchProblems();
   };
 
-  console.log("data", data);
+  const handlePagination = (direction) => {
+    setPaginationData((prevData) => {
+      return { ...prevData, page: prevData.page + direction };
+    });
+  };
 
   // Columns definition including the handler function
   const columns = React.useMemo(
@@ -241,7 +252,7 @@ export function DataTableDemo({
 
   // Table instance creation
   const table = useReactTable({
-    data,
+    data: problems,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -366,24 +377,20 @@ export function DataTableDemo({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => handlePagination(-1)} // Decrement the page
+            disabled={currentPage === 1}
           >
             Previous
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => handlePagination(1)} // Increment the page
+            disabled={currentPage === totalPages}
           >
             Next
           </Button>
