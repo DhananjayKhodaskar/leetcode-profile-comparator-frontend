@@ -14,6 +14,7 @@ import { useGetActiveChallengeProblemsQuery } from "@/services/challenge";
 import { SelectUserProblemTableDropdown } from "./SelectUserProblemTableDropdown";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { SelectCategoryDropdown } from "./SelectCategoryDropdown";
 
 export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   const { user } = useSelector((state) => state.user.user);
@@ -82,6 +83,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
       </TabsContent>
 
       <TabsContent value="problems">
+        <SelectCategoryDropdown categories={categories} paginationData={paginationData} setPaginationData={setPaginationData}/>
         <SelectUserProblemTableDropdown
           joinedUsers={joinedUsers}
           setSelectedUserId={setSelectedUserId}
