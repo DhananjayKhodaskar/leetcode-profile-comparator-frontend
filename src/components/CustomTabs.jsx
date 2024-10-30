@@ -83,7 +83,11 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
       </TabsContent>
 
       <TabsContent value="problems">
-        <SelectCategoryDropdown categories={categories} paginationData={paginationData} setPaginationData={setPaginationData}/>
+        <SelectCategoryDropdown
+          categories={categories}
+          paginationData={paginationData}
+          setPaginationData={setPaginationData}
+        />
         <SelectUserProblemTableDropdown
           joinedUsers={joinedUsers}
           setSelectedUserId={setSelectedUserId}

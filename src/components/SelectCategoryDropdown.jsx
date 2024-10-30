@@ -17,22 +17,41 @@ export function SelectCategoryDropdown({
   setPaginationData,
 }) {
   const handleValueChange = (category) => {
-    // Update the selectedCategories in paginationData state
-    setPaginationData((prevData) => ({
-      ...prevData,
-      page: 1,
-      selectedCategories: [category],
-    }));
+    if (category === "All") {
+      // If "All" is selected, set selectedCategories to an empty array
+      setPaginationData((prevData) => ({
+        ...prevData,
+        page: 1,
+        selectedCategories: [],
+      }));
+    } else {
+      // Update the selectedCategories in paginationData state
+      setPaginationData((prevData) => ({
+        ...prevData,
+        page: 1,
+        selectedCategories: [category],
+      }));
+    }
   };
 
   return (
-    <Select onValueChange={handleValueChange}>
+    <Select
+      onValueChange={handleValueChange}
+      value={
+        paginationData?.selectedCategories?.length > 0
+          ? paginationData.selectedCategories[0]
+          : "All"
+      }
+    >
       <SelectTrigger className="w-[250px]">
         <SelectValue placeholder="Select a category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Categories</SelectLabel>
+          <SelectItem key="all" value="All">
+            All
+          </SelectItem>
           {categories.map((category) => (
             <SelectItem key={category} value={category}>
               {category}
