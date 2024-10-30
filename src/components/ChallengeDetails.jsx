@@ -1,6 +1,7 @@
 import React from "react";
 import ChallengeHero from "./ChallengeHero";
 import {
+  useFinishActiveChallengeMutation,
   useJoinActiveChallengeMutation,
   useLeaveActiveChallengeMutation,
 } from "@/services/challenge";
@@ -28,6 +29,9 @@ const ChallengeDetails = ({
   const [leaveChallenge, { isLoading: leaving }] =
     useLeaveActiveChallengeMutation();
 
+  const [finishChallenge, { isLoading: finishing }] =
+    useFinishActiveChallengeMutation();
+
   const handleJoin = async () => {
     await joinChallenge(activeChallengeId);
     refetchActiveChallengeDetails();
@@ -37,6 +41,12 @@ const ChallengeDetails = ({
     await leaveChallenge(activeChallengeId);
     refetchActiveChallengeDetails();
   };
+
+  const handleFinishChallenge = async () => {
+    await finishChallenge(activeChallengeId);
+    refetchActiveChallengeDetails();
+  };
+
   return (
     <div>
       <ChallengeHero
@@ -50,15 +60,10 @@ const ChallengeDetails = ({
         <div className="mt-8 bg-white shadow-md rounded-lg p-6">
           <div className="flex flex-row justify-between">
             <h2 className="text-2xl font-bold mb-4">Challenge Details</h2>
-            {loggedInUserInJoinedUser ? (
-              <Button variant="destructive" onClick={handleLeave}>
-                Leave
-              </Button>
-            ) : (
-              <Button className="m-4 bg-green-700" onClick={handleJoin}>
-                Join
-              </Button>
-            )}
+
+            <Button variant="outline" onClick={handleFinishChallenge}>
+              Finish Challenge
+            </Button>
           </div>
           <div className="space-y-4">
             <p>
@@ -77,7 +82,19 @@ const ChallengeDetails = ({
             </p>
           </div>
           <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-4">Joined Users</h3>
+            <div className="flex flex-row justify-between">
+              {" "}
+              <h3 className="text-xl font-semibold mb-4">Joined Users</h3>
+              {loggedInUserInJoinedUser ? (
+                <Button variant="destructive" onClick={handleLeave}>
+                  Leave
+                </Button>
+              ) : (
+                <Button className="m-4 bg-green-700" onClick={handleJoin}>
+                  Join
+                </Button>
+              )}
+            </div>
             <ul className="space-y-4">
               {joinedUsers.map((joinedUser) => (
                 <li

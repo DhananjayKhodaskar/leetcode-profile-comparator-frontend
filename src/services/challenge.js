@@ -114,6 +114,22 @@ export const challengeApi = createApi({
       },
     }),
 
+    // New endpoint to finish an active challenge
+    finishActiveChallenge: builder.mutation({
+      query: (activeChallengeId) => ({
+        url: `app/activeChallenges/finish/${activeChallengeId}`,
+        method: "POST",
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from finishing the challenge
+        } catch (error) {
+          console.error("Failed to finish active challenge:", error);
+        }
+      },
+    }),
+
     // Adding getChallengeById endpoint
     getChallengeById: builder.query({
       query: (challengeId) => ({
@@ -171,6 +187,7 @@ export const {
   useCreateActiveChallengeMutation,
   useJoinActiveChallengeMutation, // Exporting the new hook
   useLeaveActiveChallengeMutation, // Exporting the new hook
+  useFinishActiveChallengeMutation, // Exporting the new finish active challenge hook
   useGetChallengeByIdQuery, // Exporting the new hook
   useCreateChallengeMutation, // Exporting the new create challenge hook
   useUpdateUserProgressByAutomaticallyMutation, // Exporting the new update user progress by automatically hook
