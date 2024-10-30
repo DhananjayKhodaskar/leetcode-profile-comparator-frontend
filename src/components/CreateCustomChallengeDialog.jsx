@@ -61,9 +61,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
+      // Extracting and formatting data including the category from the third column
       const formattedData = parsedData.slice(1).map((row) => ({
         link: row[0],
         difficulty: row[1],
+        category: row[2] || "", // Defaulting to an empty string if no category is provided
       }));
 
       const validDifficulties = ["Easy", "Medium", "Hard"];
@@ -77,6 +79,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         );
         return;
       }
+
       setData(formattedData);
     };
 

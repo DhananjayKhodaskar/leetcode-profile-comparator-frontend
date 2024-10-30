@@ -82,6 +82,8 @@ export function DataTableDemo({
     refetchProblems();
   };
 
+  console.log("data", data);
+
   // Columns definition including the handler function
   const columns = React.useMemo(
     () => [
@@ -195,6 +197,31 @@ export function DataTableDemo({
             difficultyOrder[rowA.getValue("difficulty")] -
             difficultyOrder[rowB.getValue("difficulty")]
           );
+        },
+      },
+      {
+        accessorKey: "category",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Category
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const category = row.getValue("category");
+          return <div className="text-center">{category || "-"}</div>;
+        },
+        sortingFn: (rowA, rowB) => {
+          const catA = rowA.getValue("category") || "";
+          const catB = rowB.getValue("category") || "";
+          return catA.localeCompare(catB);
         },
       },
       {
