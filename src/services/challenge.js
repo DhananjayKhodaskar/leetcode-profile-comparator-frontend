@@ -142,6 +142,22 @@ export const challengeApi = createApi({
       },
     }),
 
+    // New endpoint to get recent activity in an active challenge
+    getRecentActivityInActiveChallenge: builder.query({
+      query: (activeChallengeId) => ({
+        url: `app/activeChallenges/recentActivity/${activeChallengeId}`,
+        method: "GET",
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from fetching recent activity
+        } catch (error) {
+          console.error("Failed to fetch recent activity:", error);
+        }
+      },
+    }),
+
     // Adding getChallengeById endpoint
     getChallengeById: builder.query({
       query: (challengeId) => ({
@@ -200,6 +216,7 @@ export const {
   useJoinActiveChallengeMutation, // Exporting the new hook
   useLeaveActiveChallengeMutation, // Exporting the new hook
   useFinishActiveChallengeMutation, // Exporting the new finish active challenge hook
+  useGetRecentActivityInActiveChallengeQuery,
   useGetChallengeByIdQuery, // Exporting the new hook
   useCreateChallengeMutation, // Exporting the new create challenge hook
   useUpdateUserProgressByAutomaticallyMutation, // Exporting the new update user progress by automatically hook

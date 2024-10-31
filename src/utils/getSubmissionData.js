@@ -191,8 +191,15 @@ export const getProblemNameFromSlug = (input) =>
     .join(" ");
 
 export const formatTimestamp = (timestamp) => {
+  // Create a Date object from the ISO 8601 date string
+  const date = new Date(timestamp);
+
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return "Invalid Date"; // Return an error message for invalid date
+  }
+
   const now = Date.now();
-  const date = new Date(timestamp * 1000);
   const diff = now - date.getTime();
 
   const seconds = Math.floor(diff / 1000);

@@ -15,6 +15,7 @@ import { SelectUserProblemTableDropdown } from "./SelectUserProblemTableDropdown
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { SelectCategoryDropdown } from "./SelectCategoryDropdown";
+import { RecentActivityTable } from "./RecentActivityTable";
 
 export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
   const { user } = useSelector((state) => state.user.user);
@@ -111,24 +112,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
       </TabsContent>
 
       <TabsContent value="recent-activity">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
-              Overview of the latest actions taken on the project.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul>
-              <li>User A completed Task 1.</li>
-              <li>User B submitted feedback.</li>
-              <li>User C joined the project.</li>
-            </ul>
-          </CardContent>
-          <CardFooter>
-            <Button>View All Activity</Button>
-          </CardFooter>
-        </Card>
+        <RecentActivityTable activeChallengeId={_id} />
       </TabsContent>
     </Tabs>
   );
