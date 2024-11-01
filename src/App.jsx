@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import GroupInfo from "./pages/app/GroupInfo";
 import GroupChat from "./components/GroupChat";
 import Challenge from "./pages/app/Challenge";
+import Progress from "./pages/app/Progress";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="group/:groupId/manage" element={<GroupInfo />} />
             <Route path="group/:groupId/chat" element={<GroupChat />} />
             <Route path="group/:groupId/challenge" element={<Challenge />} />
+            <Route path="group/:groupId/progress" element={<Progress />} />
           </Route>
         </Route>
         <Route path="*" element={<h1>Invalid Path</h1>} />

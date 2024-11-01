@@ -1,7 +1,13 @@
 import { cn } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
-import { LogOut, MessageSquare, Swords, UserRoundCog } from "lucide-react";
+import {
+  LogOut,
+  MessageSquare,
+  NotebookPen,
+  Swords,
+  UserRoundCog,
+} from "lucide-react";
 import CustomNavLink from "./CustomNavLink";
 import { clearUser } from "@/slices/userSlice";
 
@@ -25,14 +31,19 @@ const SubSidebar = () => {
             label="Chat"
           />
           <CustomNavLink
-            to={`group/${selectedGroup?._id}/manage`}
-            icon={UserRoundCog}
-            label="Manage"
-          />
-          <CustomNavLink
             to={`group/${selectedGroup?._id}/challenge`}
             icon={Swords}
             label="Challenge"
+          />
+          <CustomNavLink
+            to={`group/${selectedGroup?._id}/progress`}
+            icon={NotebookPen}
+            label="Progress"
+          />
+          <CustomNavLink
+            to={`group/${selectedGroup?._id}/manage`}
+            icon={UserRoundCog}
+            label="Manage"
           />
         </div>
         <Button
