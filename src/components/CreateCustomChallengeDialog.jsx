@@ -43,7 +43,9 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   });
 
   const [data, setData] = useState([]);
-  const [inputFields, setInputFields] = useState([{ link: "", difficulty: "" }]);
+  const [inputFields, setInputFields] = useState([
+    { link: "", difficulty: "" },
+  ]);
   const [createChallenge] = useCreateChallengeMutation();
   const [inputMode, setInputMode] = useState("file");
 
@@ -61,6 +63,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       const formattedData = parsedData.slice(1).map((row) => ({
         link: row[0],
         difficulty: row[1],
+        category: row[2],
       }));
 
       const validDifficulties = ["Easy", "Medium", "Hard"];
@@ -69,7 +72,9 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       );
 
       if (!isValid) {
-        alert("Invalid difficulty detected! Please use 'Easy', 'Medium', or 'Hard'.");
+        alert(
+          "Invalid difficulty detected! Please use 'Easy', 'Medium', or 'Hard'."
+        );
         return;
       }
 
@@ -133,7 +138,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <FormItem>
                   <FormLabel>Challenge Name</FormLabel>
                   <FormControl>
-                    <Input id="name" placeholder="Enter challenge name" {...field} />
+                    <Input
+                      id="name"
+                      placeholder="Enter challenge name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +155,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <FormItem>
                   <FormLabel>Challenge Description</FormLabel>
                   <FormControl>
-                    <Input id="description" placeholder="Enter challenge description" {...field} />
+                    <Input
+                      id="description"
+                      placeholder="Enter challenge description"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,7 +257,11 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                   </div>
                 ))}
                 {inputFields.length < 20 && (
-                  <Button type="button" variant="outline" onClick={addMoreFields}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addMoreFields}
+                  >
                     Add More
                   </Button>
                 )}
