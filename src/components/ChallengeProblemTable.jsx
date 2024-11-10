@@ -6,7 +6,12 @@ import { SelectUserProblemTableDropdown } from "./SelectUserProblemTableDropdown
 import { DataTableDemo } from "./DataTableDemo";
 import { useParams } from "react-router-dom";
 
-const ChallengeProblemTable = ({ joinedUsers, activeChallengeId }) => {
+const ChallengeProblemTable = ({
+  joinedUsers,
+  activeChallengeId,
+  forHistory,
+  refetchActiveChallengeDetails,
+}) => {
   const { groupId } = useParams();
   const { user } = useSelector((state) => state.user.user);
   const [paginationData, setPaginationData] = useState({
@@ -21,13 +26,18 @@ const ChallengeProblemTable = ({ joinedUsers, activeChallengeId }) => {
     isFetching: problemsFetching,
     isLoading,
     refetch: refetchProblems,
-  } = useGetActiveChallengeProblemsQuery({
-    groupId: groupId,
-    userId: selectedUserId,
-    page: paginationData.page,
-    limit: paginationData.limit,
-    categories: paginationData.selectedCategories.join(","),
-  });
+  } = useGetActiveChallengeProblemsQuery(
+    {
+      groupId: groupId,
+      userId: selectedUserId,
+      page: paginationData.page,
+      limit: paginationData.limit,
+      categories: paginationData.selectedCategories.join(","),
+    },
+    {
+      skip: forHistory,
+    }
+  );
   const disableTableFunctionality = user._id !== selectedUserId;
 
   const data = response?.data || {};
@@ -57,6 +67,7 @@ const ChallengeProblemTable = ({ joinedUsers, activeChallengeId }) => {
         problemsFetching={problemsFetching}
         disableTableFunctionality={disableTableFunctionality}
         paginationData={paginationData}
+        refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         setPaginationData={setPaginationData}
       />
     </>
