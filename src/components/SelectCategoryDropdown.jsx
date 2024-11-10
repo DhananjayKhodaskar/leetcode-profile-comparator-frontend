@@ -52,7 +52,7 @@ export function SelectCategoryDropdown({
           <SelectItem key="all" value="All">
             All
           </SelectItem>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <SelectItem key={category} value={category}>
               {category}
             </SelectItem>

@@ -24,11 +24,11 @@ export function Sidebar() {
 
   useFetchJoinedGroupsQuery();
 
-  useEffect(() => {
-    if (!selectedGroup && joinedGroups?.length > 0) {
-      navigate(`group/${joinedGroups[0]?.groupId}/chat`);
-    }
-  }, [selectedGroup, joinedGroups]);
+  // useEffect(() => {
+  //   if (!selectedGroup && joinedGroups?.length > 0) {
+  //     navigate(`group/${joinedGroups[0]?.groupId}/chat`);
+  //   }
+  // }, [selectedGroup, joinedGroups]);
 
   useEffect(() => {
     if (resData?.data) {

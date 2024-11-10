@@ -252,7 +252,7 @@ export function DataTableDemo({
 
   // Table instance creation
   const table = useReactTable({
-    data: problems,
+    data: problems || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
