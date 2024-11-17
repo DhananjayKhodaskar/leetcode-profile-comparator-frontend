@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 
 const ChallengeProblemTable = ({
   joinedUsers,
-  activeChallengeId,
+  activeChallengeId = "",
   forHistory,
   refetchActiveChallengeDetails,
 }) => {
@@ -50,7 +50,7 @@ const ChallengeProblemTable = ({
     // refetch: refetchProblems,
   } = useGetProblemsByActiveChallengeIdQuery(
     {
-      activeChallengeId: "6730b8d8db4d9b0df43f4c1b",
+      activeChallengeId,
       page: paginationData.page,
       limit: paginationData.limit,
       categories: paginationData.selectedCategories.join(","),
