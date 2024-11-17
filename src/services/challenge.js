@@ -157,6 +157,32 @@ export const challengeApi = createApi({
       },
     }),
 
+    getProblemsByActiveChallengeId: builder.query({
+      query: ({
+        activeChallengeId,
+        groupId,
+        userId = "",
+        page = 1,
+        limit = 10,
+        categories = "",
+      }) => ({
+        url: `app/getProblemsByActiveChallengeId/${activeChallengeId}`,
+        method: "GET",
+        params: { page, limit, categories },
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from the API call
+        } catch (error) {
+          console.error(
+            "Failed to fetch problems for active challenge:",
+            error
+          );
+        }
+      },
+    }),
+
     // New endpoint to get recent activity in an active challenge
     getRecentActivityInActiveChallenge: builder.query({
       query: (activeChallengeId) => ({
@@ -228,6 +254,7 @@ export const {
   useGetActiveChallengeProblemsQuery,
   useUpdateUserProgressManuallyMutation,
   useCreateActiveChallengeMutation,
+  useGetProblemsByActiveChallengeIdQuery,
   useGetChallengeHistoryQuery,
   useJoinActiveChallengeMutation, // Exporting the new hook
   useLeaveActiveChallengeMutation, // Exporting the new hook

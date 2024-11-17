@@ -1,4 +1,7 @@
-import { useGetActiveChallengeProblemsQuery } from "@/services/challenge";
+import {
+  useGetActiveChallengeProblemsQuery,
+  useGetProblemsByActiveChallengeIdQuery,
+} from "@/services/challenge";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { SelectCategoryDropdown } from "./SelectCategoryDropdown";
@@ -21,7 +24,7 @@ const ChallengeProblemTable = ({
   });
   const [selectedUserId, setSelectedUserId] = useState(user?._id);
   const {
-    data: response,
+    data: currProblemResponse,
     error,
     isFetching: problemsFetching,
     isLoading,
@@ -38,9 +41,30 @@ const ChallengeProblemTable = ({
       skip: forHistory,
     }
   );
+
+  const {
+    data: historyProblemResponse,
+    // error,
+    // isFetching: problemsFetching,
+    // isLoading,
+    // refetch: refetchProblems,
+  } = useGetProblemsByActiveChallengeIdQuery(
+    {
+      activeChallengeId: "6730b8d8db4d9b0df43f4c1b",
+      page: paginationData.page,
+      limit: paginationData.limit,
+      categories: paginationData.selectedCategories.join(","),
+    },
+    {
+      skip: !forHistory,
+    }
+  );
+
   const disableTableFunctionality = user._id !== selectedUserId;
 
-  const data = response?.data || {};
+  const data =
+    (forHistory ? historyProblemResponse?.data : currProblemResponse?.data) ||
+    {};
   const { totalProblems, totalPages, currentPage, categories, problems } = data;
 
   return (
@@ -57,7 +81,7 @@ const ChallengeProblemTable = ({
         user={user}
       />
       <DataTableDemo
-        problems={problems}
+        problems={problems || []}
         totalProblems={totalProblems}
         currentPage={currentPage}
         categories={categories}
@@ -65,7 +89,7 @@ const ChallengeProblemTable = ({
         activeChallengeId={activeChallengeId}
         refetchProblems={refetchProblems}
         problemsFetching={problemsFetching}
-        disableTableFunctionality={disableTableFunctionality}
+        disableTableFunctionality={disableTableFunctionality || forHistory}
         paginationData={paginationData}
         refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         setPaginationData={setPaginationData}

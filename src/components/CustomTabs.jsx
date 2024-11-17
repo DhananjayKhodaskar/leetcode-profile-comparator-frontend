@@ -56,12 +56,12 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
       </TabsContent>
 
       <TabsContent value="problems">
-        {/* <ChallengeProblemTable
+        <ChallengeProblemTable
           joinedUsers={joinedUsers}
           activeChallengeId={_id}
           forHistory={false}
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
-        /> */}
+        />
       </TabsContent>
 
       <TabsContent value="recent-activity">
