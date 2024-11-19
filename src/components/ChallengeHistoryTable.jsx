@@ -11,20 +11,11 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { useGetChallengeHistoryQuery } from "@/services/challenge"; // Import the correct hook
-import ChallengeProblemTable from "./ChallengeProblemTable";
+import { useGetChallengeHistoryQuery } from "@/services/challenge";
 import { useParams } from "react-router-dom";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { ChallengeDetailsDrawer } from "./ChallengeDetailsDrawer";
 
 export function ChallengeHistoryTable() {
-  // Fetch challenge history data using the API hook
   const { groupId } = useParams();
   const { data: response } = useGetChallengeHistoryQuery(groupId);
   const challengeHistoryData = response?.data || [];
@@ -106,26 +97,12 @@ export function ChallengeHistoryTable() {
         </TableFooter>
       </Table>
 
-      {/* Drawer for Challenge Details */}
-      <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Challenge Details</DrawerTitle>
-          </DrawerHeader>
-          {selectedActiveChallenge && (
-            <ChallengeProblemTable
-              showUserDropdown={false}
-              activeChallengeId={selectedActiveChallenge}
-              groupId={groupId}
-              joinedUsers={[]}
-              forHistory={true}
-            />
-          )}
-          <DrawerClose asChild>
-            <Button variant="outline">Close</Button>
-          </DrawerClose>
-        </DrawerContent>
-      </Drawer>
+      <ChallengeDetailsDrawer
+        isOpen={isDrawerOpen}
+        onClose={setIsDrawerOpen}
+        activeChallengeId={selectedActiveChallenge}
+        groupId={groupId}
+      />
     </div>
   );
 }

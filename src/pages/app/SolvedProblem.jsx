@@ -11,9 +11,13 @@ import {
 } from "@/components/ui/table"; // Assuming you have these components
 import { useGetAllSolvedProblemsQuery } from "@/services/challenge";
 import { Button } from "@/components/ui/button";
+import { ChallengeDetailsDrawer } from "@/components/ChallengeDetailsDrawer";
+
 
 const SolvedProblem = () => {
   const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // State for drawer visibility
+  const [activeChallengeId, setActiveChallengeId] = useState(""); // State for selected active challenge ID
   const limit = 5; // Set limit per page
 
   const { data, isLoading, error } = useGetAllSolvedProblemsQuery({
@@ -43,6 +47,11 @@ const SolvedProblem = () => {
     }
   };
 
+  const handleChallengeClick = (challengeId) => {
+    setActiveChallengeId(challengeId); // Set the clicked challenge ID
+    setIsDrawerOpen(true); // Open the drawer
+  };
+
   return (
     <div>
       <h1>Solved Problems</h1>
@@ -60,7 +69,10 @@ const SolvedProblem = () => {
             <TableRow key={index}>
               <TableCell>{problem.titleSlug || "N/A"}</TableCell>
               <TableCell>{problem.method || "N/A"}</TableCell>
-              <TableCell className="cursor-pointer text-blue-500">
+              <TableCell
+                className="cursor-pointer text-blue-500"
+                onClick={() => handleChallengeClick(problem.activeChallengeId)} // Handle click
+              >
                 {problem.activeChallengeId || "N/A"}
               </TableCell>
             </TableRow>
@@ -82,6 +94,13 @@ const SolvedProblem = () => {
           </TableRow>
         </TableFooter>
       </Table>
+
+      <ChallengeDetailsDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)} 
+        activeChallengeId={activeChallengeId} 
+        groupId={null}
+      />
     </div>
   );
 };
