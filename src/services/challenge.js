@@ -142,6 +142,64 @@ export const challengeApi = createApi({
       },
     }),
 
+    getChallengeHistory: builder.query({
+      query: (groupId) => ({
+        url: `app/getChallengeHistory/${groupId}`,
+        method: "GET", // This uses the GET method as required
+      }),
+      async onQueryStarted(groupId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response data if successful
+        } catch (error) {
+          console.error("Failed to fetch challenge history:", error);
+        }
+      },
+    }),
+
+    getProblemsByActiveChallengeId: builder.query({
+      query: ({
+        activeChallengeId,
+        groupId,
+        userId = "",
+        page = 1,
+        limit = 10,
+        categories = "",
+      }) => ({
+        url: `app/getProblemsByActiveChallengeId/${activeChallengeId}`,
+        method: "GET",
+        params: { page, limit, categories },
+      }),
+      async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from the API call
+        } catch (error) {
+          console.error(
+            "Failed to fetch problems for active challenge:",
+            error
+          );
+        }
+      },
+    }),
+
+    getAllSolvedProblems: builder.query({
+      query: ({ userId = "", page = 1, limit = 10 }) => ({
+        url: `app/allSolvedProblems`,
+        method: "GET",
+        params: { page, limit },
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data; // Return the response from the API call
+        } catch (error) {
+          console.error("Failed to fetch solved problems:", error);
+        }
+      },
+    }),
+    
+
     // New endpoint to get recent activity in an active challenge
     getRecentActivityInActiveChallenge: builder.query({
       query: (activeChallengeId) => ({
@@ -213,6 +271,9 @@ export const {
   useGetActiveChallengeProblemsQuery,
   useUpdateUserProgressManuallyMutation,
   useCreateActiveChallengeMutation,
+  useGetProblemsByActiveChallengeIdQuery,
+  useGetChallengeHistoryQuery,
+  useGetAllSolvedProblemsQuery,
   useJoinActiveChallengeMutation, // Exporting the new hook
   useLeaveActiveChallengeMutation, // Exporting the new hook
   useFinishActiveChallengeMutation, // Exporting the new finish active challenge hook

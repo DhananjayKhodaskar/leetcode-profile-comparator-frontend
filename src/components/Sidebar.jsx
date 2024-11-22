@@ -11,7 +11,11 @@ import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 import { pastelBgColor } from "@/utils/config";
 import leetcodeLogo from "../assets/leetcodeLogo.png";
+import AvatarButton from "./AvatarButton";
+import { ListTodo } from "lucide-react";
+
 export function Sidebar() {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { groupId } = useParams();
@@ -24,11 +28,11 @@ export function Sidebar() {
 
   useFetchJoinedGroupsQuery();
 
-  useEffect(() => {
-    if (!selectedGroup && joinedGroups?.length > 0) {
-      navigate(`group/${joinedGroups[0]?.groupId}/chat`);
-    }
-  }, [selectedGroup, joinedGroups]);
+  // useEffect(() => {
+  //   if (!selectedGroup && joinedGroups?.length > 0) {
+  //     navigate(`group/${joinedGroups[0]?.groupId}/chat`);
+  //   }
+  // }, [selectedGroup, joinedGroups]);
 
   useEffect(() => {
     if (resData?.data) {
@@ -51,6 +55,13 @@ export function Sidebar() {
             />
           ))}
         <CreateGroup />
+        <AvatarButton
+          groupName={"Add Squad"}
+          ButtonIconComponent={ListTodo}
+          buttonName="Solved Problems"
+          handleOnClick={()=>navigate('/app/solvedProblems')}
+          iconBackgrounColor="bg-dark-liver"
+        />
       </div>
     </div>
   );

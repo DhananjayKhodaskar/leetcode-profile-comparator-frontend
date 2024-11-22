@@ -48,6 +48,20 @@ export const groupApi = createApi({
         }
       },
     }),
+    leaveOrRemoveMember: builder.mutation({
+      query: ({ groupId, userId }) => ({
+        url: `/app/groups/${groupId}/members`,
+        method: "DELETE",
+        body: userId ? { userId } : undefined, // Include body only if userId is provided
+      }),
+    }),
+    makeAdmin: builder.mutation({
+      query: ({ groupId, userId }) => ({
+        url: `/app/groups/a/${groupId}/make-admin`,
+        method: "PUT",
+        body: { userId },
+      }),
+    }),
   }),
 });
 
@@ -55,6 +69,8 @@ export const groupApi = createApi({
 export const {
   useCreateGroupMutation,
   useGetGroupInfoQuery,
+  useLeaveOrRemoveMemberMutation,
+  useMakeAdminMutation,
   useGetGroupMessagesQuery,
   useAddMemberToGroupMutation,
   useFetchJoinedGroupsQuery,

@@ -1,11 +1,12 @@
-import React from 'react'
+import { ChallengeHistoryTable } from "@/components/ChallengeHistoryTable";
+import React from "react";
 
 const Progress = () => {
   return (
     <div>
-      Progress
+      <ChallengeHistoryTable />
     </div>
-  )
-}
+  );
+};
 
-export default Progress
+export default Progress;

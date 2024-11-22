@@ -46,14 +46,6 @@ const SubSidebar = () => {
             label="Manage"
           />
         </div>
-        <Button
-          variant="ghost"
-          className="w-48 text-slate-300 flex flex-row justify-start items-center gap-3 cursor-pointer p-2 rounded hover:text-red-500 hover:bg-transparent"
-          onClick={() => dipatch(clearUser())}
-        >
-          <LogOut />
-          Logout
-        </Button>
       </div>
     </div>
   );
