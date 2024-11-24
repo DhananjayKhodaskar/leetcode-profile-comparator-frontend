@@ -10,47 +10,36 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { loginSchema } from "@/validation/loginSchema";
-import AuthHeader from "@/components/AuthHeader";
-import { useLoginMutation } from "@/services/auth";
-import { useNavigate } from "react-router-dom";
+import { useResetPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
+import { resetPasswordSchema } from "@/validation/resetPasswordSchema";
 
-const Login = () => {
+const ResetPassword = () => {
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
-  const navigate = useNavigate();
-  const [login, { data: leetcodeLoginData, error, isLoading }] =
-    useLoginMutation();
-
-  const { success, message, data } = leetcodeLoginData || {};
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const onSubmit = (data) => {
-    login(data)
+    const { newPassword } = data; // Only send the newPassword field
+    resetPassword({ newPassword })
       .unwrap()
       .then(() => {
-        navigate("/app");
+        console.log("Password reset successful!");
       })
       .catch((err) => {
-        console.error("Login failed:", err);
+        console.error("Reset failed:", err);
       });
   };
 
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       <div className="flex flex-col gap-3">
-        <AuthHeader
-          title="Sign In"
-          subtitle="Don't have an account?"
-          linkText="Create an account"
-          linkHref={"/auth/signup"}
-        />
         <Form {...form}>
           <form
             method="POST"
@@ -59,14 +48,14 @@ const Login = () => {
           >
             <FormField
               control={form.control}
-              name="email"
+              name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>New Password</FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder="Enter your email"
+                      type="password"
+                      placeholder="Enter new password"
                       {...field}
                     />
                   </FormControl>
@@ -77,14 +66,14 @@ const Login = () => {
 
             <FormField
               control={form.control}
-              name="password"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Confirm New Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder="Confirm new password"
                       {...field}
                     />
                   </FormControl>
@@ -95,7 +84,7 @@ const Login = () => {
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Logging In" : "Login"}
+              {isLoading ? "Resetting" : "Reset Password"}
             </Button>
           </form>
         </Form>
@@ -104,4 +93,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
