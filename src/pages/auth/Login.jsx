@@ -92,6 +92,11 @@ const Login = () => {
                 </FormItem>
               )}
             />
+            <span className="text-sm text-gray-600">
+                <a href={'/auth/forgot-password'} className="underline">
+                  Forgot Password
+                </a>
+            </span>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

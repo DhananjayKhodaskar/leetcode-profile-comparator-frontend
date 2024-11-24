@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useResetPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
 import { resetPasswordSchema } from "@/validation/resetPasswordSchema";
+import AuthHeader from "@/components/AuthHeader";
 
 const ResetPassword = () => {
   const form = useForm({
@@ -40,6 +41,13 @@ const ResetPassword = () => {
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       <div className="flex flex-col gap-3">
+        <AuthHeader
+          title="Set New Password"
+          subtitle="Remembered your password?"
+          linkText="Go to Sign In"
+          linkHref={"/auth/login"}
+        />
+
         <Form {...form}>
           <form
             method="POST"
