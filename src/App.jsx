@@ -13,6 +13,7 @@ import GroupChat from "./components/GroupChat";
 import Challenge from "./pages/app/Challenge";
 import Progress from "./pages/app/Progress";
 import SolvedProblem from "./pages/app/SolvedProblem";
+import Profile from "./pages/app/Profile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/app" element={<Layout />}>
           <Route element={<ProtectedRoute />}>
             <Route index element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="solvedProblems" element={<SolvedProblem />} />
             <Route path="group/:groupId/manage" element={<GroupInfo />} />
             <Route path="group/:groupId/chat" element={<GroupChat />} />
