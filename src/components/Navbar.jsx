@@ -8,7 +8,7 @@ import {
   MenubarTrigger,
 } from "./ui/menubar";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { clearUser } from "@/slices/userSlice";
 
 export function Navbar() {
@@ -19,7 +19,7 @@ export function Navbar() {
     dipatch(clearUser()).then(() => navigate("/auth/login"));
   };
   return (
-    <Menubar className="rounded-none border-b border-none p-0 w-full flex justify-end">
+    <Menubar className="rounded-none border-b border-none p-0 w-full flex justify-end bg-smoky-black">
       <MenubarMenu>
         <MenubarTrigger className="font-bold">
           <>
@@ -31,13 +31,15 @@ export function Navbar() {
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <MenubarLabel className="rounded-full">
+            <MenubarLabel className="rounded-full text-slate-200">
               {user?.realName}
             </MenubarLabel>
           </>
         </MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>View Profile</MenubarItem>
+          <MenubarItem>
+          <Link to="/app/profile">View Profile</Link>
+          </MenubarItem>
           <MenubarItem onClick={handleLogout}>Logout</MenubarItem>
         </MenubarContent>
       </MenubarMenu>

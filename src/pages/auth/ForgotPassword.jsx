@@ -10,35 +10,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { loginSchema } from "@/validation/loginSchema";
 import AuthHeader from "@/components/AuthHeader";
-import { useLoginMutation } from "@/services/auth";
-import { useNavigate } from "react-router-dom";
+import { useForgotPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
+import { forgotPasswordSchema } from "@/validation/forgotPassword";
 
-const Login = () => {
+const ForgotPassword = () => {
   const form = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const navigate = useNavigate();
-  const [login, { data: leetcodeLoginData, error, isLoading }] =
-    useLoginMutation();
-
-  const { success, message, data } = leetcodeLoginData || {};
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
   const onSubmit = (data) => {
-    login(data)
+    forgotPassword(data)
       .unwrap()
       .then(() => {
-        navigate("/app");
+        console.log("Password reset email sent!");
       })
       .catch((err) => {
-        console.error("Login failed:", err);
+        console.error("Request failed:", err);
       });
   };
 
@@ -46,10 +40,10 @@ const Login = () => {
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       <div className="flex flex-col gap-3">
         <AuthHeader
-          title="Sign In"
-          subtitle="Don't have an account?"
-          linkText="Create an account"
-          linkHref={"/auth/signup"}
+          title="Forgot Password"
+          subtitle="Remember your password?"
+          linkText="Login"
+          linkHref={"/auth/login"}
         />
         <Form {...form}>
           <form
@@ -75,27 +69,9 @@ const Login = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Logging In" : "Login"}
+              {isLoading ? "Submitting" : "Submit"}
             </Button>
           </form>
         </Form>
@@ -104,4 +80,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

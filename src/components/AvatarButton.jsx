@@ -14,6 +14,7 @@ const AvatarButton = ({
   iconBackgrounColor = "bg-slate-100",
   iconColor = "",
   handleOnClick = () => "",
+  isActive = false,
 }) => {
   return (
     <div className="cursor-pointer" onClick={handleOnClick}>
@@ -23,7 +24,9 @@ const AvatarButton = ({
             <Avatar>
               <ButtonIconComponent
                 size={40}
-                className={`${iconBackgrounColor} ${iconColor} rounded-lg w-14 h-14 p-3`}
+                className={`${iconBackgrounColor} ${iconColor} rounded-lg w-14 h-14 p-3 ${
+                  isActive && "border-4 border-slate-200"
+                }`}
               />
             </Avatar>
           </TooltipTrigger>

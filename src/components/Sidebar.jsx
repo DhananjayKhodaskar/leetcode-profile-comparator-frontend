@@ -6,7 +6,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import GroupAvatar from "./GroupAvatar";
 import CreateGroup from "./CreateGroup";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 import { pastelBgColor } from "@/utils/config";
@@ -15,11 +15,12 @@ import AvatarButton from "./AvatarButton";
 import { ListTodo } from "lucide-react";
 
 export function Sidebar() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { groupId } = useParams();
   const { selectedGroup } = useSelector((state) => state.group);
+  const { pathname } = useLocation();
   const { joinedGroups } = useSelector((state) => state.group);
   const { data: resData } = useGetGroupInfoQuery(
     { groupId },
@@ -59,8 +60,9 @@ export function Sidebar() {
           groupName={"Add Squad"}
           ButtonIconComponent={ListTodo}
           buttonName="Solved Problems"
-          handleOnClick={()=>navigate('/app/solvedProblems')}
+          handleOnClick={() => navigate("/app/solvedProblems")}
           iconBackgrounColor="bg-dark-liver"
+          isActive={pathname === '/app/solvedProblems'}
         />
       </div>
     </div>

@@ -14,6 +14,9 @@ import { clearUser } from "@/slices/userSlice";
 const SubSidebar = () => {
   const { selectedGroup } = useSelector((state) => state.group);
   const dipatch = useDispatch();
+  if (!selectedGroup) {
+    return null; // Early return if no group is selected
+  }
   return (
     <div
       className={`${cn(
