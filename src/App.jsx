@@ -14,6 +14,7 @@ import Challenge from "./pages/app/Challenge";
 import Progress from "./pages/app/Progress";
 import SolvedProblem from "./pages/app/SolvedProblem";
 import Profile from "./pages/app/Profile";
+import ChangePassword from "./pages/app/ChangePassword";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="change-password" element={<ChangePassword />} />
             <Route path="solvedProblems" element={<SolvedProblem />} />
             <Route path="group/:groupId/manage" element={<GroupInfo />} />
             <Route path="group/:groupId/chat" element={<GroupChat />} />

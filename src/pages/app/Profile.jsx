@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user.user);
@@ -62,7 +63,9 @@ const Profile = () => {
                   <p>Leetcode Username</p>
                  <p className="font-bold"> {user?.username}</p>
                 </div>
-                <Button>Change Password</Button>
+                <Button>
+                <Link to="/app/change-password">Change Password</Link>
+                </Button>
                 <div className="mb-2 text-blueGray-600 mt-10">
                   <p className="font-bold">{user?.email}</p>
                 </div>
