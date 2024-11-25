@@ -14,8 +14,10 @@ import { useResetPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
 import { resetPasswordSchema } from "@/validation/resetPasswordSchema";
 import AuthHeader from "@/components/AuthHeader";
+import { useParams } from "react-router-dom";
 
 const ResetPassword = () => {
+  const { token } = useParams();
   const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -28,7 +30,7 @@ const ResetPassword = () => {
 
   const onSubmit = (data) => {
     const { newPassword } = data; // Only send the newPassword field
-    resetPassword({ newPassword })
+    resetPassword({ newPassword, token })
       .unwrap()
       .then(() => {
         console.log("Password reset successful!");
