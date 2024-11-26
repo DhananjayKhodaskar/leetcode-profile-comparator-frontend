@@ -60,15 +60,15 @@ export function ChallengeHistoryTable() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Description</TableHead>
             <TableHead>Active Challenge ID</TableHead>
+            <TableHead>Started On</TableHead>
+            <TableHead>Ended On</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {currentItems.map((challenge) => (
             <TableRow key={uuidv4()}>
               <TableCell>{challenge.name || "N/A"}</TableCell>
-              <TableCell>{challenge.description || "N/A"}</TableCell>
               <TableCell
                 onClick={() =>
                   handleChallengeClick(challenge.activeChallengeId)
@@ -77,12 +77,30 @@ export function ChallengeHistoryTable() {
               >
                 {challenge.activeChallengeId || "N/A"}
               </TableCell>
+              <TableCell>
+                {challenge.startDate
+                  ? new Intl.DateTimeFormat("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }).format(new Date(challenge.startDate))
+                  : "N/A"}
+              </TableCell>
+              <TableCell>
+                {challenge.endDate
+                  ? new Intl.DateTimeFormat("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }).format(new Date(challenge.startDate))
+                  : "N/A"}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3} className="flex justify-end gap-2">
+            <TableCell colSpan={5} className="flex justify-end gap-2">
               <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
                 Previous
               </Button>
