@@ -8,6 +8,7 @@ import { SelectCategoryDropdown } from "./SelectCategoryDropdown";
 import { SelectUserProblemTableDropdown } from "./SelectUserProblemTableDropdown";
 import { DataTableDemo } from "./DataTableDemo";
 import { useParams } from "react-router-dom";
+import { SelectStatusDropdown } from "./SelectStatusDropdown";
 
 const ChallengeProblemTable = ({
   joinedUsers,
@@ -21,6 +22,7 @@ const ChallengeProblemTable = ({
     page: 1,
     limit: 10,
     selectedCategories: [],
+    selectedStatus: "",
   });
   const [selectedUserId, setSelectedUserId] = useState(user?._id);
   const {
@@ -36,6 +38,7 @@ const ChallengeProblemTable = ({
       page: paginationData.page,
       limit: paginationData.limit,
       categories: paginationData.selectedCategories.join(","),
+      status: paginationData.selectedStatus,
     },
     {
       skip: forHistory,
@@ -54,6 +57,7 @@ const ChallengeProblemTable = ({
       page: paginationData.page,
       limit: paginationData.limit,
       categories: paginationData.selectedCategories.join(","),
+      status: paginationData.selectedStatus,
     },
     {
       skip: !forHistory,
@@ -73,6 +77,11 @@ const ChallengeProblemTable = ({
         categories={categories}
         paginationData={paginationData}
         setPaginationData={setPaginationData}
+      />
+      <SelectStatusDropdown
+        paginationData={paginationData}
+        setPaginationData={setPaginationData}
+        statuses={["solved", "unsolved"]}
       />
       <SelectUserProblemTableDropdown
         joinedUsers={joinedUsers}
