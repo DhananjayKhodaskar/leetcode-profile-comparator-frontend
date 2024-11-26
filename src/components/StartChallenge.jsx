@@ -15,7 +15,7 @@ import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
 import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog"; // Import the new component
 import { useGetChallengesQuery } from "@/services/challenge";
 
-const StartChallenge = () => {
+const StartChallenge = ({refetchActiveChallengeDetails}) => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
   const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
@@ -102,6 +102,7 @@ const StartChallenge = () => {
           selectedChallengeId={selectedChallengeId}
           isOpen={isDetailsDialogOpen}
           onClose={closeDetailsDialog}
+          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
         />
       )}
 
