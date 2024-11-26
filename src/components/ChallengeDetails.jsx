@@ -15,9 +15,10 @@ const ChallengeDetails = ({
   endDate,
   activeChallengeId,
   refetchActiveChallengeDetails,
+  challengeDescription
 }) => {
   const { user } = useSelector((state) => state.user.user);
-  const { _id, name, description, isPublic, createdBy, createdAt, updatedAt } =
+  const { _id, name, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
   const endTime = new Date(endDate).getTime();
   const loggedInUserInJoinedUser = joinedUsers.find(
@@ -68,7 +69,7 @@ const ChallengeDetails = ({
           <div className="space-y-4">
             <p>
               <strong className="font-semibold">Description:</strong>{" "}
-              <span className="text-gray-700">{description}</span>
+              <span className="text-gray-700">{challengeDescription}</span>
             </p>
             <p>
               <strong className="font-semibold">Created By:</strong>{" "}
