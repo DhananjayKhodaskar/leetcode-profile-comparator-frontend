@@ -14,7 +14,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import startChallegeImg from "../assets/StartChallenge.jpeg";
+
 const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
@@ -60,6 +67,7 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
               <TableHead className="w-[200px]">Challenge Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead className="text-right">Total Problems</TableHead>
+              <TableHead className="text-right">Created By</TableHead> {/* New header */}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -73,6 +81,25 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
                 <TableCell>{challenge.description}</TableCell>
                 <TableCell className="text-right">
                   {challenge.totalProblems}
+                </TableCell>
+                <TableCell className="text-right">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost">
+                          {challenge.createdBy.realName}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="flex flex-col">
+                          <p><strong>Username:</strong> {challenge.createdBy.username}</p>
+                          <p><strong>Email:</strong> {challenge.createdBy.email}</p>
+                          <p><strong>Role:</strong> {challenge.createdBy.role}</p>
+                          {/* Add any additional details you want here */}
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </TableCell>
               </TableRow>
             ))}
