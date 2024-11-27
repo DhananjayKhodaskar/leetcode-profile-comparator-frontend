@@ -26,9 +26,16 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
   const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
+  const [page, setPage] = useState(1); // Page state
+  const [pageSize, setPageSize] = useState(10); // Page size state
 
-  const { data: response } = useGetChallengesQuery();
-  const challenges = response?.data || [];
+  // Query with pagination parameters
+  const {
+    data: response,
+    isLoading,
+    error,
+  } = useGetChallengesQuery({ page, pageSize });
+  const resData = response?.data || [];
 
   const handleRowClick = (challengeId) => {
     setSelectedChallengeId(challengeId);
@@ -43,6 +50,16 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const handleCreateCustomChallenge = () => {
     setIsCustomDialogOpen(true);
   };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(parseInt(e.target.value, 10));
+    setPage(1); // Reset to the first page when page size changes
+  };
+
 
   return (
     <div className="h-full w-full">
@@ -60,51 +77,88 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
       <div className="py-4 px-4">
         <h2 className="text-lg font-semibold mb-2">Challenges</h2>
         <p className="text-gray-500 mb-4">Choose a challenge to get started.</p>
-        <Table>
-          <TableCaption>A list of available challenges.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[200px]">Challenge Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="text-right">Total Problems</TableHead>
-              <TableHead className="text-right">Created By</TableHead> {/* New header */}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {challenges.map((challenge) => (
-              <TableRow
-                key={challenge._id}
-                className="cursor-pointer"
-                onClick={() => handleRowClick(challenge._id)}
-              >
-                <TableCell className="font-medium">{challenge.name}</TableCell>
-                <TableCell>{challenge.description}</TableCell>
-                <TableCell className="text-right">
-                  {challenge.totalProblems}
-                </TableCell>
-                <TableCell className="text-right">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="ghost">
-                          {challenge.createdBy.realName}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <div className="flex flex-col">
-                          <p><strong>Username:</strong> {challenge.createdBy.username}</p>
-                          <p><strong>Email:</strong> {challenge.createdBy.email}</p>
-                          <p><strong>Role:</strong> {challenge.createdBy.role}</p>
-                          {/* Add any additional details you want here */}
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </TableCell>
+
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error fetching challenges.</p>
+        ) : (
+          <Table>
+            <TableCaption>A list of available challenges.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[200px]">Challenge Name</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead className="text-right">Total Problems</TableHead>
+                <TableHead className="text-right">Created By</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {resData?.challenges?.map((challenge) => (
+                <TableRow
+                  key={challenge._id}
+                  className="cursor-pointer"
+                  onClick={() => handleRowClick(challenge._id)}
+                >
+                  <TableCell className="font-medium">
+                    {challenge.name}
+                  </TableCell>
+                  <TableCell>{challenge.description}</TableCell>
+                  <TableCell className="text-right">
+                    {challenge.totalProblems}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost">
+                            {challenge.createdBy.realName}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="flex flex-col">
+                            <p>
+                              <strong>Username:</strong>{" "}
+                              {challenge.createdBy.username}
+                            </p>
+                            <p>
+                              <strong>Email:</strong>{" "}
+                              {challenge.createdBy.email}
+                            </p>
+                            <p>
+                              <strong>Role:</strong> {challenge.createdBy.role}
+                            </p>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+
+        <TableFooter>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="space-x-2">
+              <Button
+                disabled={page === 1}
+                onClick={() => handlePageChange(page - 1)}
+                className="mr-2"
+              >
+                Previous
+              </Button>
+              <Button
+                onClick={() => handlePageChange(page + 1)}
+                className="ml-2"
+                disabled={resData?.totalPages == page}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </TableFooter>
       </div>
 
       {selectedChallengeId && (
@@ -116,7 +170,6 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
         />
       )}
 
-      {/* Custom Challenge Dialog */}
       <CreateCustomChallengeDialog
         isOpen={isCustomDialogOpen}
         onOpenChange={setIsCustomDialogOpen}
