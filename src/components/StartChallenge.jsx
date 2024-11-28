@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { Input } from "@/components/ui/input"; // Import Input component
+import { Input } from "@/components/ui/input";
 import { pastelBgColor } from "@/utils/config";
 import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
 import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog";
@@ -22,6 +22,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import startChallegeImg from "../assets/StartChallenge.jpeg";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "@/components/ui/label";
+
+
 
 const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [selectedChallengeId, setSelectedChallengeId] = useState(null);
@@ -30,13 +34,19 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [page, setPage] = useState(1); // Page state
   const [pageSize, setPageSize] = useState(10); // Page size state
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [createdByYou, setCreatedByYou] = useState(false); // New state for checkbox
 
-  // Query with pagination and search parameters
+  // Query with pagination, search, and createdByYou filter
   const {
     data: response,
     isLoading,
     error,
-  } = useGetChallengesQuery({ page, pageSize, search: searchTerm });
+  } = useGetChallengesQuery({
+    page,
+    pageSize,
+    search: searchTerm,
+    createdByYou,
+  });
   const resData = response?.data || [];
 
   const handleRowClick = (challengeId) => {
@@ -67,6 +77,11 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
     setPage(1); // Reset to the first page when search changes
   };
 
+  const handleCheckboxChange = (e) => {
+    setCreatedByYou(e.target.checked);
+    setPage(1); // Reset to the first page when filter changes
+  };
+
   return (
     <div className="h-full w-full">
       <div className="relative h-[20vh] w-full">
@@ -84,14 +99,26 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
         <h2 className="text-lg font-semibold mb-2">Challenges</h2>
         <p className="text-gray-500 mb-4">Choose a challenge to get started.</p>
 
-        {/* Search Field */}
-        <div className="mb-4">
+        <div className="mb-4 flex items-center space-x-4">
+          {/* Search Field */}
           <Input
             type="text"
             placeholder="Search challenges..."
             value={searchTerm}
             onChange={handleSearchChange}
           />
+          {/* Checkbox */}
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="createdByYou"
+              checked={createdByYou}
+              onCheckedChange={(checked) => {
+                setCreatedByYou(checked);
+                setPage(1); // Reset to the first page when filter changes
+              }}
+            />
+            <Label htmlFor="createdByYou">Created by You</Label>
+          </div>
         </div>
 
         {isLoading ? (
