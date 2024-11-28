@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input"; // Import Input component
 import { pastelBgColor } from "@/utils/config";
 import ChallengeDetailsDialog from "./ChallengeDetailsDialog";
-import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog"; // Import the new component
+import CreateCustomChallengeDialog from "./CreateCustomChallengeDialog";
 import { useGetChallengesQuery } from "@/services/challenge";
 import {
   Table,
@@ -28,13 +29,14 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
   const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
   const [page, setPage] = useState(1); // Page state
   const [pageSize, setPageSize] = useState(10); // Page size state
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
-  // Query with pagination parameters
+  // Query with pagination and search parameters
   const {
     data: response,
     isLoading,
     error,
-  } = useGetChallengesQuery({ page, pageSize });
+  } = useGetChallengesQuery({ page, pageSize, search: searchTerm });
   const resData = response?.data || [];
 
   const handleRowClick = (challengeId) => {
@@ -60,6 +62,10 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
     setPage(1); // Reset to the first page when page size changes
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setPage(1); // Reset to the first page when search changes
+  };
 
   return (
     <div className="h-full w-full">
@@ -77,6 +83,16 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
       <div className="py-4 px-4">
         <h2 className="text-lg font-semibold mb-2">Challenges</h2>
         <p className="text-gray-500 mb-4">Choose a challenge to get started.</p>
+
+        {/* Search Field */}
+        <div className="mb-4">
+          <Input
+            type="text"
+            placeholder="Search challenges..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
 
         {isLoading ? (
           <p>Loading...</p>

@@ -8,8 +8,8 @@ export const challengeApi = createApi({
   refetchOnReconnect: true,
   endpoints: (builder) => ({
     getChallenges: builder.query({
-      query: ({ page = 1, pageSize = 10 }) => ({
-        url: `app/challenges?page=${page}&pageSize=${pageSize}`,
+      query: ({ page = 1, pageSize = 10, search = "" }) => ({
+        url: `app/challenges?page=${page}&pageSize=${pageSize}&search=${search}`,
         method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -21,7 +21,7 @@ export const challengeApi = createApi({
         }
       },
     }),
-    
+
     getActiveChallenges: builder.query({
       query: ({ groupId }) => ({
         url: `app/activeChallenges/${groupId}`,
