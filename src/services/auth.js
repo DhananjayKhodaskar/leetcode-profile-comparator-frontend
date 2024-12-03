@@ -19,6 +19,13 @@ export const authApi = createApi({
         body: values,
       }),
     }),
+    signUpWithGoogle: builder.mutation({
+      query: (values) => ({
+        url: "/auth/signUpWithGoogle",
+        method: "POST",
+        body:  values,
+      }),
+    }),
     verifyEmail: builder.query({
       query: (token) => ({
         url: `/auth/verify-email?token=${token}`,
@@ -60,6 +67,7 @@ export const authApi = createApi({
 export const {
   useFetchLeetCodeDataMutation,
   useSignUpMutation,
+  useSignUpWithGoogleMutation,
   useVerifyEmailQuery,
   useLoginMutation,
   useForgotPasswordMutation,

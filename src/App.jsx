@@ -17,34 +17,38 @@ import Profile from "./pages/app/Profile";
 import ChangePassword from "./pages/app/ChangePassword";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/auth" element={<AuthSideImage />}>
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path='forgot-password' element={<ForgotPassword />} />
-          <Route path="reset-password/:token" element={<ResetPassword />} />
-          <Route path="verify-email/:token" element={<VerifyEmail />} />
-        </Route>
-        <Route path="/app" element={<Layout />}>
-          <Route element={<ProtectedRoute />}>
-            <Route index element={<Dashboard />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="change-password" element={<ChangePassword />} />
-            <Route path="solvedProblems" element={<SolvedProblem />} />
-            <Route path="group/:groupId/manage" element={<GroupInfo />} />
-            <Route path="group/:groupId/chat" element={<GroupChat />} />
-            <Route path="group/:groupId/challenge" element={<Challenge />} />
-            <Route path="group/:groupId/progress" element={<Progress />} />
+      <GoogleOAuthProvider clientId="1050286419280-p582p65o3ns35acgf2o3gnaavcmd4sti.apps.googleusercontent.com">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/auth" element={<AuthSideImage />}>
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
+            <Route path="verify-email/:token" element={<VerifyEmail />} />
           </Route>
-        </Route>
-        <Route path="*" element={<h1>Invalid Path</h1>} />
-      </Routes>
-      <Toaster />
+          <Route path="/app" element={<Layout />}>
+            <Route element={<ProtectedRoute />}>
+              <Route index element={<Dashboard />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="change-password" element={<ChangePassword />} />
+              <Route path="solvedProblems" element={<SolvedProblem />} />
+              <Route path="group/:groupId/manage" element={<GroupInfo />} />
+              <Route path="group/:groupId/chat" element={<GroupChat />} />
+              <Route path="group/:groupId/challenge" element={<Challenge />} />
+              <Route path="group/:groupId/progress" element={<Progress />} />
+            </Route>
+          </Route>
+          <Route path="*" element={<h1>Invalid Path</h1>} />
+        </Routes>
+        <Toaster />
+      </GoogleOAuthProvider>
+      ;
     </ThemeProvider>
   );
 }
