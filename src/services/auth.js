@@ -47,6 +47,21 @@ export const authApi = createApi({
         }
       },
     }),
+    loginWithGoogle: builder.mutation({
+      query: (values) => ({
+        url: "/auth/loginWithGoogle",
+        method: "POST",
+        body: values,
+      }),
+      async onQueryStarted(values, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data?.data));
+        } catch (error) {
+          console.error("Login failed:", error);
+        }
+      },
+    }),
     forgotPassword: builder.mutation({
       query: (values) => ({
         url: "/auth/forgot-password",
@@ -70,6 +85,7 @@ export const {
   useSignUpWithGoogleMutation,
   useVerifyEmailQuery,
   useLoginMutation,
+  useLoginWithGoogleMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
 } = authApi;
