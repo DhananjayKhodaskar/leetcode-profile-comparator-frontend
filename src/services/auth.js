@@ -19,6 +19,13 @@ export const authApi = createApi({
         body: values,
       }),
     }),
+    signUpWithGoogle: builder.mutation({
+      query: (values) => ({
+        url: "/auth/signUpWithGoogle",
+        method: "POST",
+        body:  values,
+      }),
+    }),
     verifyEmail: builder.query({
       query: (token) => ({
         url: `/auth/verify-email?token=${token}`,
@@ -28,6 +35,21 @@ export const authApi = createApi({
     login: builder.mutation({
       query: (values) => ({
         url: "/auth/login",
+        method: "POST",
+        body: values,
+      }),
+      async onQueryStarted(values, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data?.data));
+        } catch (error) {
+          console.error("Login failed:", error);
+        }
+      },
+    }),
+    loginWithGoogle: builder.mutation({
+      query: (values) => ({
+        url: "/auth/loginWithGoogle",
         method: "POST",
         body: values,
       }),
@@ -60,8 +82,10 @@ export const authApi = createApi({
 export const {
   useFetchLeetCodeDataMutation,
   useSignUpMutation,
+  useSignUpWithGoogleMutation,
   useVerifyEmailQuery,
   useLoginMutation,
+  useLoginWithGoogleMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
 } = authApi;

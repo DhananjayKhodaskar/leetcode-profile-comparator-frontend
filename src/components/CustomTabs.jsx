@@ -52,6 +52,7 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
           problemCount={problemCount}
           endDate={endDate}
           refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+          challengeDescription={description}
         />
       </TabsContent>
 

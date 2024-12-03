@@ -96,6 +96,7 @@ const SignUp = () => {
           <ProfileCard
             data={leetcodeUserData?.leetcodeData || {}}
             onSubmit={onCredentialSubmit}
+            leetcodeUserData={leetcodeUserData}
           />
         </div>
       )}

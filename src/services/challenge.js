@@ -8,8 +8,8 @@ export const challengeApi = createApi({
   refetchOnReconnect: true,
   endpoints: (builder) => ({
     getChallenges: builder.query({
-      query: () => ({
-        url: "app/challenges",
+      query: ({ page = 1, pageSize = 10, search = "",createdByYou=false }) => ({
+        url: `app/challenges?page=${page}&pageSize=${pageSize}&search=${search}&createdByYou=${createdByYou}`,
         method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -21,6 +21,7 @@ export const challengeApi = createApi({
         }
       },
     }),
+
     getActiveChallenges: builder.query({
       query: ({ groupId }) => ({
         url: `app/activeChallenges/${groupId}`,
@@ -42,6 +43,7 @@ export const challengeApi = createApi({
         page = 1,
         limit = 10,
         categories = "",
+        status = "",
       }) => ({
         url: `app/activeChallenges/${groupId}/problems/${userId}`,
         method: "GET",
@@ -49,6 +51,7 @@ export const challengeApi = createApi({
           page,
           limit,
           categories, // Comma-separated categories (e.g., "arrays,math")
+          status,
         },
       }),
       async onQueryStarted({ groupId }, { dispatch, queryFulfilled }) {
@@ -165,10 +168,11 @@ export const challengeApi = createApi({
         page = 1,
         limit = 10,
         categories = "",
+        status = "",
       }) => ({
         url: `app/getProblemsByActiveChallengeId/${activeChallengeId}`,
         method: "GET",
-        params: { page, limit, categories },
+        params: { page, limit, categories, status },
       }),
       async onQueryStarted(activeChallengeId, { dispatch, queryFulfilled }) {
         try {
@@ -198,7 +202,6 @@ export const challengeApi = createApi({
         }
       },
     }),
-    
 
     // New endpoint to get recent activity in an active challenge
     getRecentActivityInActiveChallenge: builder.query({
