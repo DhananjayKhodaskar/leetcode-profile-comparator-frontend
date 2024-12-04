@@ -16,6 +16,7 @@ import { useLoginMutation, useLoginWithGoogleMutation } from "@/services/auth";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
+import { useEffect } from "react";
 
 const Login = () => {
   const form = useForm({
@@ -27,13 +28,9 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const [login, { data: leetcodeLoginData, error, isLoading }] =
-    useLoginMutation();
-  const [
-    loginWithGoogle,
-    { data: loginWithGoogleData, error: singUpWithGoogleLogin },
-  ] = useLoginWithGoogleMutation();
-  const { success, message, data } = leetcodeLoginData || {};
+  const [login, { error: loginError, isLoading }] = useLoginMutation();
+  const [loginWithGoogle, { error: loginWithGoogleError }] =
+    useLoginWithGoogleMutation();
 
   const onSubmit = (data) => {
     login(data)
@@ -56,6 +53,24 @@ const Login = () => {
         console.error("Login failed:", err);
       });
   };
+
+  useEffect(() => {
+    if (loginError?.data?.message) {
+      form.setError("form", {
+        type: "manual",
+        message: loginError?.data?.message,
+      });
+    }
+  }, [loginError, form]);
+
+  useEffect(() => {
+    if (loginWithGoogleError?.data?.message) {
+      form.setError("google", {
+        type: "manual",
+        message: loginWithGoogleError?.data?.message,
+      });
+    }
+  }, [loginWithGoogleError, form]);
 
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
@@ -112,7 +127,9 @@ const Login = () => {
                 Forgot Password
               </a>
             </span>
-
+            <span className="block mt-2 text-sm text-red-600">
+              {form.formState.errors.form && form.formState.errors.form.message}
+            </span>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? "Logging In" : "Login"}
@@ -131,6 +148,10 @@ const Login = () => {
               }}
             />
           </div>
+          <span className="block mt-2 text-sm text-red-600">
+            {form.formState.errors.google &&
+              form.formState.errors.google.message}
+          </span>
         </Form>
       </div>
     </div>
