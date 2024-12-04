@@ -78,11 +78,20 @@ const SignUp = () => {
     }
   }, [leetcodeUserSuccess, leetcodeUserMessage, toast]);
 
+  useEffect(() => {
+    if (leetcodeUserError?.data?.message) {
+      console.log(leetcodeUserError?.data?.message, "::::<<<<<<<<<<<<<<<<<");
+      toast({
+        title: "Failed!",
+        description: leetcodeUserError?.data?.message || "User data fetched successfully.",
+      });
+    }
+  }, [leetcodeUserError, toast]);
 
   console.log(leetcodeSignUpError,'leetcodeSignUpError')
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
-      {!leetcodeUserData && !leetcodeUserLoading ? (
+      {!leetcodeUserData && !leetcodeUserLoading  ? (
         <div className="flex flex-col gap-3">
           <AuthHeader
             title="Create an account"
@@ -92,8 +101,6 @@ const SignUp = () => {
           />
           <LeetCodeForm onSubmit={onLeetCodeIdSubmit} />
         </div>
-      ) : leetcodeUserLoading ? (
-        <ProfileCardSkeleton />
       ) : (
         <div className="flex flex-col gap-3">
           <ProfileCard
@@ -101,6 +108,7 @@ const SignUp = () => {
             onSubmit={onCredentialSubmit}
             leetcodeUserData={leetcodeUserData}
             leetcodeSignUpError={leetcodeSignUpError}
+            leetcodeSignUpLoading={leetcodeSignUpLoading}
           />
         </div>
       )}

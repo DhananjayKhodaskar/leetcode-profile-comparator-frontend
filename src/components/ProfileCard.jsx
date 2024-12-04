@@ -26,6 +26,7 @@ const ProfileCard = ({
   onSubmit,
   leetcodeUserData,
   leetcodeSignUpError,
+  leetcodeSignUpLoading
 }) => {
   const [visiblePasswordField, setVisiblePasswordField] = useState(null);
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const ProfileCard = ({
     {
       data: leetcodeSignUpWithGoogleData,
       // error: leetcodeSignUpError,
-      isLoading: leetcodeSignUpLoading,
+      // isLoading: leetcodeSignUpLoading,
     },
   ] = useSignUpWithGoogleMutation();
 
@@ -245,7 +246,7 @@ const ProfileCard = ({
         <span className="block mt-2 text-sm text-red-600">
           {form.formState.errors.form && form.formState.errors.form.message}
         </span>
-        <Button type="submit" form="signUpForm" className="w-full">
+        <Button type="submit" form="signUpForm" className="w-full" disabled={leetcodeSignUpLoading}>
           Complete Signup
         </Button>
         <div className="flex items-center justify-center w-full">
