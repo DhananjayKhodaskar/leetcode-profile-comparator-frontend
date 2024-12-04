@@ -21,7 +21,12 @@ import { useSignUpWithGoogleMutation } from "@/services/auth";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
-const ProfileCard = ({ data, onSubmit, leetcodeUserData }) => {
+const ProfileCard = ({
+  data,
+  onSubmit,
+  leetcodeUserData,
+  leetcodeSignUpError,
+}) => {
   const [visiblePasswordField, setVisiblePasswordField] = useState(null);
   const navigate = useNavigate();
   const form = useForm({
@@ -55,7 +60,7 @@ const ProfileCard = ({ data, onSubmit, leetcodeUserData }) => {
     signUpWithGoogle,
     {
       data: leetcodeSignUpWithGoogleData,
-      error: leetcodeSignUpError,
+      // error: leetcodeSignUpError,
       isLoading: leetcodeSignUpLoading,
     },
   ] = useSignUpWithGoogleMutation();
@@ -82,6 +87,16 @@ const ProfileCard = ({ data, onSubmit, leetcodeUserData }) => {
     console.log(leetcodeUserData, codeResponse, "<<<<<<<<<<<<<<<<<");
     signUpWithGoogle({ ...codeResponse, ...leetcodeUserData }); //
   };
+
+  useEffect(() => {
+    if (leetcodeSignUpError?.data?.message) {
+      console.log(leetcodeSignUpError?.data?.message, "::::<<<<<<<<<<<<<<<<<");
+      form.setError("form", {
+        type: "manual",
+        message: leetcodeSignUpError?.data?.message,
+      });
+    }
+  }, [leetcodeSignUpError, form]);
 
   return (
     <div className="flex flex-col gap-3 max-h-[60vh] overflow-auto relative">
@@ -227,6 +242,9 @@ const ProfileCard = ({ data, onSubmit, leetcodeUserData }) => {
 
       {/* Sticky Button Container */}
       <div className="sticky bottom-0 bg-white p-3 w-full flex flex-col gap-2">
+        <span className="block mt-2 text-sm text-red-600">
+          {form.formState.errors.form && form.formState.errors.form.message}
+        </span>
         <Button type="submit" form="signUpForm" className="w-full">
           Complete Signup
         </Button>

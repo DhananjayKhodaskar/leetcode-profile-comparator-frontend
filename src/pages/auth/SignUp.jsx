@@ -77,6 +77,9 @@ const SignUp = () => {
       });
     }
   }, [leetcodeUserSuccess, leetcodeUserMessage, toast]);
+
+
+  console.log(leetcodeSignUpError,'leetcodeSignUpError')
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       {!leetcodeUserData && !leetcodeUserLoading ? (
@@ -89,7 +92,7 @@ const SignUp = () => {
           />
           <LeetCodeForm onSubmit={onLeetCodeIdSubmit} />
         </div>
-      ) : leetcodeUserLoading || leetcodeSignUpLoading ? (
+      ) : leetcodeUserLoading ? (
         <ProfileCardSkeleton />
       ) : (
         <div className="flex flex-col gap-3">
@@ -97,6 +100,7 @@ const SignUp = () => {
             data={leetcodeUserData?.leetcodeData || {}}
             onSubmit={onCredentialSubmit}
             leetcodeUserData={leetcodeUserData}
+            leetcodeSignUpError={leetcodeSignUpError}
           />
         </div>
       )}
