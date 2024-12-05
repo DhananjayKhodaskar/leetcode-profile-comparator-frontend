@@ -48,7 +48,6 @@ function App() {
         </Routes>
         <Toaster />
       </GoogleOAuthProvider>
-      ;
     </ThemeProvider>
   );
 }

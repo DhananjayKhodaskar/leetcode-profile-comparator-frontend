@@ -93,6 +93,10 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
         <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white">
           <h2 className="text-xl md:text-3xl font-bold">Select a Challenge</h2>
         </div>
+        <Button
+          className="absolute bottom-4 right-4 bg-orange-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-orange-400 focus:outline-none"
+          onClick={handleCreateCustomChallenge}
+        >Create Custom Challenge</Button>
       </div>
 
       <div className="py-4 px-4">
