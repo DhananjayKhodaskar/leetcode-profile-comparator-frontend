@@ -85,13 +85,11 @@ const ProfileCard = ({
   }, [signUpWithGoogleMessage, signUpWithGoogleSuccess]);
 
   const handleSignUpWithGoogle = (codeResponse) => {
-    console.log(leetcodeUserData, codeResponse, "<<<<<<<<<<<<<<<<<");
     signUpWithGoogle({ ...codeResponse, ...leetcodeUserData }); //
   };
 
   useEffect(() => {
     if (leetcodeSignUpError?.data?.message) {
-      console.log(leetcodeSignUpError?.data?.message, "::::<<<<<<<<<<<<<<<<<");
       form.setError("form", {
         type: "manual",
         message: leetcodeSignUpError?.data?.message,
