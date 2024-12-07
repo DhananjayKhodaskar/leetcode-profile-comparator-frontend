@@ -22,7 +22,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <GoogleOAuthProvider clientId="1050286419280-p582p65o3ns35acgf2o3gnaavcmd4sti.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/auth" element={<AuthSideImage />}>
