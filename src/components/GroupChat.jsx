@@ -18,7 +18,7 @@ import { Input } from "./ui/input";
 import EmojiPicker from "emoji-picker-react"; // Import the emoji picker
 import GroupHeader from "./GroupHeader";
 
-const socket = io(import.meta.env.VITE_BACKEND_URL||"http://localhost:4000");
+const socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:4000");
 
 const GroupChat = () => {
   const { user } = useSelector((state) => state.user.user);
