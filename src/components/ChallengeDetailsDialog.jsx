@@ -9,7 +9,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   useCreateActiveChallengeMutation,
   useGetChallengeByIdQuery,
@@ -36,6 +45,9 @@ const ChallengeDetailsDialog = ({
   const [date, setDate] = useState(null);
   const [dateError, setDateError] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const handleSubmit = async () => {
     // Check if the date is today or later
     if (!date || new Date(date) < new Date()) {
@@ -61,42 +73,84 @@ const ChallengeDetailsDialog = ({
     }
   };
 
-  useEffect(()=>{
-     setDateError(""); // Clear any existing error
-  },[date])
+  useEffect(() => {
+    setDateError(""); // Clear any existing error
+  }, [date]);
 
   const challenge = response?.data;
+  const problems = challenge?.problems || [];
+
+  // Calculate the index range for current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProblems = problems.slice(startIndex, endIndex);
+
+  // Calculate the total pages
+  const totalPages = Math.ceil(problems.length / itemsPerPage);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-1/2">
         <DialogHeader>
           <DialogTitle>{challenge?.name}</DialogTitle>
           <DialogDescription>{challenge?.description}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 max-h-96 overflow-auto">
-          {challenge?.problems?.map((problem) => (
-            <Card key={problem._id} className="border p-4 bg-slate-50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">
-                  {problem?.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500">
-                  Difficulty: {problem?.difficulty}
-                </p>
-                <a
-                  href={problem?.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  View Problem
-                </a>
-              </CardContent>
-            </Card>
-          ))}
+          <Table>
+            <TableCaption>A list of the challenge problems.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Title</TableHead>
+                <TableHead>Difficulty</TableHead>
+                <TableHead>Link</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentProblems.map((problem) => (
+                <TableRow key={problem._id}>
+                  <TableCell className="font-medium">
+                    {problem?.title}
+                  </TableCell>
+                  <TableCell>{problem?.difficulty}</TableCell>
+                  <TableCell>
+                    <a
+                      href={problem?.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View Problem
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3} className="text-center">
+                  <Button
+                    disabled={currentPage === 1}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                  >
+                    Previous
+                  </Button>
+                  <span className="mx-2">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <Button
+                    disabled={currentPage === totalPages}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                  >
+                    Next
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
         </div>
         <DialogFooter>
           <Button
