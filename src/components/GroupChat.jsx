@@ -17,6 +17,7 @@ import { Send, Smile } from "lucide-react";
 import { Input } from "./ui/input";
 import EmojiPicker from "emoji-picker-react"; // Import the emoji picker
 import GroupHeader from "./GroupHeader";
+import NoMessagesIllustration from "./NoMessagesIllustration"; // Placeholder component or SVG
 
 const socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:4000");
 
@@ -124,56 +125,59 @@ const GroupChat = () => {
 
   return (
     <div className="flex flex-col h-full relative">
-      {" "}
-      {/* Added relative to the parent */}
       <GroupHeader selectedGroup={selectedGroup} />
       <ScrollArea className="flex-1 rounded-md border overflow-auto">
-        <ChatMessageList>
-          {messages.map((message) => (
-            <ChatBubble
-              key={message._id}
-              variant={message?.from === user?._id ? "sent" : "received"}
-              className={`transition-transform duration-500 ease-in-out ${
-                newMessageId === message._id && animating
-                  ? "translate-y-10 opacity-0"
-                  : "translate-y-0 opacity-100"
-              }`}
-            >
-              <ChatBubbleAvatar
-                src={userLookup[message?.from]?.userAvatar}
-                fallback={userLookup[message?.from]?.realName}
-              />
-              <ChatBubbleMessage
-                variant={message?.type}
-                senderName={userLookup[message?.from]?.realName}
-                senderNameClass={
-                  message?.from !== user?._id
-                    ? "text-gray-500"
-                    : "text-gray-400"
-                }
-                senderNameLink={`https://leetcode.com/u/${
-                  userLookup[message?.from]?.username
-                }/`}
+        {messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full">
+            <NoMessagesIllustration />
+            <p className="text-gray-500 mt-4">No messages yet. Be the first to start a conversation!</p>
+          </div>
+        ) : (
+          <ChatMessageList>
+            {messages.map((message) => (
+              <ChatBubble
+                key={message._id}
+                variant={message?.from === user?._id ? "sent" : "received"}
+                className={`transition-transform duration-500 ease-in-out ${
+                  newMessageId === message._id && animating
+                    ? "translate-y-10 opacity-0"
+                    : "translate-y-0 opacity-100"
+                }`}
               >
-                {message?.message}
-                <ChatBubbleTimestamp
-                  timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
-                  className={
+                <ChatBubbleAvatar
+                  src={userLookup[message?.from]?.userAvatar}
+                  fallback={userLookup[message?.from]?.realName}
+                />
+                <ChatBubbleMessage
+                  variant={message?.type}
+                  senderName={userLookup[message?.from]?.realName}
+                  senderNameClass={
                     message?.from !== user?._id
                       ? "text-gray-500"
                       : "text-gray-400"
                   }
-                />
-              </ChatBubbleMessage>
-            </ChatBubble>
-          ))}
-          {/* Reference element for auto-scrolling */}
-          <div ref={messagesEndRef} />
-        </ChatMessageList>
+                  senderNameLink={`https://leetcode.com/u/${
+                    userLookup[message?.from]?.username
+                  }/`}
+                >
+                  {message?.message}
+                  <ChatBubbleTimestamp
+                    timestamp={ChatBubbleTimestampCalculation(message?.timestamp)}
+                    className={
+                      message?.from !== user?._id
+                        ? "text-gray-500"
+                        : "text-gray-400"
+                    }
+                  />
+                </ChatBubbleMessage>
+              </ChatBubble>
+            ))}
+            {/* Reference element for auto-scrolling */}
+            <div ref={messagesEndRef} />
+          </ChatMessageList>
+        )}
       </ScrollArea>
       <div className="flex justify-center items-center gap-3 p-3 relative">
-        {" "}
-        {/* Added relative */}
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -183,8 +187,6 @@ const GroupChat = () => {
         <Smile onClick={() => setShowEmoji((prev) => !prev)} />
         {showEmoji && (
           <div ref={emojiPickerRef} className="absolute bottom-20 right-4">
-            {" "}
-            {/* Add ref here */}
             <EmojiPicker onEmojiClick={onEmojiClick} skinTonesDisabled={true} />
           </div>
         )}
