@@ -79,7 +79,13 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       // Extracting and validating data
       const validDifficulties = ["Easy", "Medium", "Hard"];
       const formattedData = rows.map((row, index) => {
-        const [link, difficulty, category = ""] = row;
+        // Check if all columns exist and validate each row's data
+        if (row.length < 3) {
+          alert(`Missing columns at row ${index + 2}. Each row must have 3 columns.`);
+          throw new Error("Validation Error");
+        }
+  
+        const [link, difficulty, category] = row;
   
         // Validate LeetCode link format (only care about the slug)
         if (
@@ -95,7 +101,12 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
           throw new Error("Validation Error");
         }
   
-        if (category && category.length > 50) {
+        if (!category || category.trim() === "") {
+          alert(`Category is missing or empty at row ${index + 2}. Each problem must have a category.`);
+          throw new Error("Validation Error");
+        }
+  
+        if (category.length > 50) {
           alert(
             `Category is too long at row ${
               index + 2
@@ -268,6 +279,17 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                 <FormLabel htmlFor="problemExcel" className="font-semibold">
                   Upload Problem List
                 </FormLabel>
+                <p className="text-sm text-gray-500 mb-2">
+                  Use the{" "}
+                  <a
+                    href="https://docs.google.com/spreadsheets/d/1HL5WHK2MfMc68uQX_KP2ztO-FdaJF9Cx5G8uxwoH-xQ/edit?gid=0#gid=0"
+                    target="_blank"
+                    className="text-blue-500 hover:underline"
+                  >
+                    example Excel template
+                  </a>{" "}
+                  for your problem list.
+                </p>
                 <Input
                   id="problemExcel"
                   type="file"
