@@ -52,37 +52,94 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-
+  
     reader.onload = (e) => {
       const binaryStr = e.target.result;
       const workbook = XLSX.read(binaryStr, { type: "binary" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-      // Extracting and formatting data
-      const formattedData = parsedData.slice(1).map((row) => ({
-        link: row[0],
-        difficulty: row[1],
-        category: row[2],
-      }));
-
-      const validDifficulties = ["Easy", "Medium", "Hard"];
-      const isValid = formattedData.every((item) =>
-        validDifficulties.includes(item.difficulty)
-      );
-
-      if (!isValid) {
-        alert(
-          "Invalid difficulty detected! Please use 'Easy', 'Medium', or 'Hard'."
-        );
+  
+      // Check for header structure
+      const [header, ...rows] = parsedData;
+      if (
+        header.length !== 3 ||
+        header[0] !== "Problem Link" ||
+        header[1] !== "Difficulty" ||
+        header[2] !== "Category"
+      ) {
+        alert("Invalid file format! Please upload the correct template.");
         return;
       }
-
+  
+      if (rows.length > 150) {
+        alert("Sheet exceeds the 150-problem limit.");
+        return;
+      }
+  
+      // Extracting and validating data
+      const validDifficulties = ["Easy", "Medium", "Hard"];
+      const formattedData = rows.map((row, index) => {
+        const [link, difficulty, category = ""] = row;
+  
+        // Validate LeetCode link format (only care about the slug)
+        if (
+          !link ||
+          !/^https:\/\/leetcode\.com\/problems\/[a-z0-9-]+\/?.*$/.test(link)
+        ) {
+          alert(`Invalid link format at row ${index + 2}: ${link}`);
+          throw new Error("Validation Error");
+        }
+  
+        if (!validDifficulties.includes(difficulty?.trim())) {
+          alert(`Invalid difficulty at row ${index + 2}: ${difficulty}`);
+          throw new Error("Validation Error");
+        }
+  
+        if (category && category.length > 50) {
+          alert(
+            `Category is too long at row ${
+              index + 2
+            }: ${category} (max 50 characters)`
+          );
+          throw new Error("Validation Error");
+        }
+  
+        return {
+          link: link.trim(),
+          difficulty: difficulty.trim(),
+          category: category.trim(),
+          rowIndex: index + 2, // Store the original row number for better error reporting
+        };
+      });
+  
+      // Check for duplicate links
+      const linkCount = {};
+      formattedData.forEach((item) => {
+        linkCount[item.link] = linkCount[item.link] || [];
+        linkCount[item.link].push(item.rowIndex);
+      });
+  
+      const duplicateLinks = Object.entries(linkCount).filter(
+        ([_, indices]) => indices.length > 1
+      );
+  
+      if (duplicateLinks.length > 0) {
+        const duplicateMessages = duplicateLinks
+          .map(
+            ([link, indices]) =>
+              `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
+          )
+          .join("\n");
+        alert(`Duplicate links detected:\n${duplicateMessages}`);
+        return;
+      }
+  
       setData(formattedData);
     };
-
+  
     reader.readAsArrayBuffer(file);
   };
+  
 
   const handleInputChange = (index, field, value) => {
     const updatedFields = [...inputFields];
