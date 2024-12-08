@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -34,8 +34,16 @@ const ChallengeDetailsDialog = ({
     useState(false);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(null);
+  const [dateError, setDateError] = useState("");
 
   const handleSubmit = async () => {
+    // Check if the date is today or later
+    if (!date || new Date(date) < new Date()) {
+      setDateError("The date must be today or later.");
+      return; // Prevent form submission
+    }
+    setDateError(""); // Clear any existing error
+
     const challengeData = {
       challengeId: selectedChallengeId,
       groupId: selectedGroup._id,
@@ -45,7 +53,6 @@ const ChallengeDetailsDialog = ({
     try {
       const result = await createActiveChallenge(challengeData).unwrap();
       refetchActiveChallengeDetails();
-      // Optionally reset the form or navigate to another page
       setCreateChallengeModalOpen(false); // Close modal after submission
       setDescription(""); // Reset description
       setDate(null); // Reset date
@@ -53,6 +60,10 @@ const ChallengeDetailsDialog = ({
       console.error("Failed to create challenge:", err);
     }
   };
+
+  useEffect(()=>{
+     setDateError(""); // Clear any existing error
+  },[date])
 
   const challenge = response?.data;
 
@@ -107,7 +118,7 @@ const ChallengeDetailsDialog = ({
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Create New Challenge</DialogTitle>
+            <DialogTitle>Start New Challenge</DialogTitle>
             <DialogDescription>Fill in the details below:</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -118,12 +129,13 @@ const ChallengeDetailsDialog = ({
               onChange={(e) => setDescription(e.target.value)}
             />
             <DatePickerDemo date={date} setDate={setDate} />
+            {dateError && <p className="text-red-500 text-sm">{dateError}</p>}
           </div>
           <DialogFooter>
             <Button
               variant="primary"
               onClick={handleSubmit}
-              disabled={isLoading}
+              disabled={isLoading || !date || dateError}
             >
               {isLoading ? "Creating..." : "Create Challenge"}
             </Button>
