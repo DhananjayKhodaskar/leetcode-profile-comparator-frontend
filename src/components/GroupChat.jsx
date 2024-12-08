@@ -19,7 +19,7 @@ import EmojiPicker from "emoji-picker-react"; // Import the emoji picker
 import GroupHeader from "./GroupHeader";
 import NoMessagesIllustration from "./NoMessagesIllustration"; // Placeholder component or SVG
 
-const socket = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:4000");
+const socket = io(import.meta.env.VITE_BACKEND_URL);
 
 const GroupChat = () => {
   const { user } = useSelector((state) => state.user.user);
