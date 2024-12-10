@@ -10,7 +10,14 @@ import {
 } from "@/services/group";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useSelector } from "react-redux";
-import { DoorOpen, Trash, UserRoundX, Shield } from "lucide-react";
+import {
+  DoorOpen,
+  Trash,
+  UserRoundX,
+  Shield,
+  ShieldBan,
+  Plus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -192,15 +199,25 @@ const GroupInfo = () => {
                             onClick={() => handleMakeAdmin(_id)}
                             aria-label="Make admin"
                           >
-                            <Shield
-                              size={16}
-                              strokeWidth={2}
-                              aria-hidden="true"
-                            />
+                            {role === "admin" ? (
+                              <ShieldBan
+                                size={16}
+                                strokeWidth={2}
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <Shield
+                                size={16}
+                                strokeWidth={2}
+                                aria-hidden="true"
+                              />
+                            )}
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="border border-input bg-popover px-2 py-1 text-xs text-muted-foreground">
-                          Make Admin
+                          {role === "admin"
+                            ? "Demote to Member"
+                            : "Promote to Admin"}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
