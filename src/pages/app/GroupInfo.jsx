@@ -56,7 +56,7 @@ const GroupInfo = () => {
   } = data;
 
   const currentUserIsAdmin = joinedMember?.some(
-    (member) => member._id === user._id && member.groupRole === "admin"
+    (member) => member._id === user._id && member.role === "admin"
   );
 
   const handleLeaveGroup = async () => {
@@ -117,7 +117,7 @@ const GroupInfo = () => {
         <AddMemberModal groupId={groupId} refetchGroupInfo={refetchGroupInfo} />
         <div className="w-full flex flex-col gap-2">
           {joinedMember?.map((member) => {
-            const { _id, username, realName, userAvatar, groupRole } = member;
+            const { _id, username, realName, userAvatar, role } = member;
 
             return (
               <UserCard
@@ -127,9 +127,9 @@ const GroupInfo = () => {
                 username={username}
               >
                 {/* Show Badge if the user is an Admin */}
-                {groupRole === "admin" && (
+                {role === "admin" && (
                   <Badge variant="secondary" className="h-5 rounded-full">
-                    {groupRole.charAt(0).toUpperCase() + groupRole.slice(1)}
+                    {role.charAt(0).toUpperCase() + role.slice(1)}
                   </Badge>
                 )}
 
