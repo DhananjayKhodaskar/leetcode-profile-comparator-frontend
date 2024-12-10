@@ -126,7 +126,7 @@ const GroupChat = () => {
   return (
     <div className="flex flex-col h-full relative">
       <GroupHeader selectedGroup={selectedGroup} />
-      <ScrollArea className="flex-1 rounded-md border overflow-auto">
+      <ScrollArea className="flex-1 rounded-md border overflow-auto ">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full">
             <NoMessagesIllustration />
@@ -181,6 +181,7 @@ const GroupChat = () => {
         <Input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} 
           placeholder="Type your message here..."
           className="rounded-lg"
         />

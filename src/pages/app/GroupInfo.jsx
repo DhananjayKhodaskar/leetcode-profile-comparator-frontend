@@ -105,7 +105,7 @@ const GroupInfo = () => {
               alt={name}
               className="rounded-full w-48 h-48 "
             />
-            <AvatarFallback className="rounded-full w-48 h-48 flex justify-center items-center">
+            <AvatarFallback className={`rounded-full w-48 h-48 flex justify-center items-center bg-dark-liver`}>
               <h3 className="text-4xl font-bold rounded-full text-slate-950">
                 {name ? name.charAt(0).toUpperCase() : ""}
               </h3>
