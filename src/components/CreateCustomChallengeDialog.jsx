@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +31,43 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2 } from "lucide-react"; // Importing Trash2 icon
+const dsaCategories = [
+  "Array",
+  "String",
+  "Hashing",
+  "Linked List",
+  "Stack",
+  "Queue",
+  "Heap",
+  "Graph",
+  "Tree",
+  "Binary Search Tree",
+  "Dynamic Programming",
+  "Divide and Conquer",
+  "Recursion",
+  "Backtracking",
+  "Sorting and Searching",
+  "Greedy Algorithms",
+  "Bit Manipulation",
+  "Trie",
+  "Sliding Window",
+  "Two Pointers",
+  "Mathematics",
+  "Number Theory",
+  "Geometry",
+  "Game Theory",
+  "Union-Find (Disjoint Set Union)",
+  "Segment Tree",
+  "Fenwick Tree (Binary Indexed Tree)",
+  "Matrix",
+  "Combinatorics",
+  "String Matching Algorithms",
+  "Graph Traversals (DFS, BFS)",
+  "Shortest Path Algorithms",
+  "Minimum Spanning Tree",
+  "Topological Sort",
+  "Flow Network",
+];
 
 const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const form = useForm({
@@ -44,7 +81,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
 
   const [data, setData] = useState([]);
   const [inputFields, setInputFields] = useState([
-    { link: "", difficulty: "" },
+    { link: "", difficulty: "Medium", category: "Array" },
   ]);
   const [createChallenge] = useCreateChallengeMutation();
   const [inputMode, setInputMode] = useState("file");
@@ -52,13 +89,13 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-  
+
     reader.onload = (e) => {
       const binaryStr = e.target.result;
       const workbook = XLSX.read(binaryStr, { type: "binary" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-  
+
       // Check for header structure
       const [header, ...rows] = parsedData;
       if (
@@ -70,23 +107,25 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         alert("Invalid file format! Please upload the correct template.");
         return;
       }
-  
+
       if (rows.length > 150) {
         alert("Sheet exceeds the 150-problem limit.");
         return;
       }
-  
+
       // Extracting and validating data
       const validDifficulties = ["Easy", "Medium", "Hard"];
       const formattedData = rows.map((row, index) => {
         // Check if all columns exist and validate each row's data
         if (row.length < 3) {
-          alert(`Missing columns at row ${index + 2}. Each row must have 3 columns.`);
+          alert(
+            `Missing columns at row ${index + 2}. Each row must have 3 columns.`
+          );
           throw new Error("Validation Error");
         }
-  
+
         const [link, difficulty, category] = row;
-  
+
         // Validate LeetCode link format (only care about the slug)
         if (
           !link ||
@@ -95,17 +134,21 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
           alert(`Invalid link format at row ${index + 2}: ${link}`);
           throw new Error("Validation Error");
         }
-  
+
         if (!validDifficulties.includes(difficulty?.trim())) {
           alert(`Invalid difficulty at row ${index + 2}: ${difficulty}`);
           throw new Error("Validation Error");
         }
-  
+
         if (!category || category.trim() === "") {
-          alert(`Category is missing or empty at row ${index + 2}. Each problem must have a category.`);
+          alert(
+            `Category is missing or empty at row ${
+              index + 2
+            }. Each problem must have a category.`
+          );
           throw new Error("Validation Error");
         }
-  
+
         if (category.length > 50) {
           alert(
             `Category is too long at row ${
@@ -114,7 +157,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
           );
           throw new Error("Validation Error");
         }
-  
+
         return {
           link: link.trim(),
           difficulty: difficulty.trim(),
@@ -122,18 +165,18 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
           rowIndex: index + 2, // Store the original row number for better error reporting
         };
       });
-  
+
       // Check for duplicate links
       const linkCount = {};
       formattedData.forEach((item) => {
         linkCount[item.link] = linkCount[item.link] || [];
         linkCount[item.link].push(item.rowIndex);
       });
-  
+
       const duplicateLinks = Object.entries(linkCount).filter(
         ([_, indices]) => indices.length > 1
       );
-  
+
       if (duplicateLinks.length > 0) {
         const duplicateMessages = duplicateLinks
           .map(
@@ -144,13 +187,12 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         alert(`Duplicate links detected:\n${duplicateMessages}`);
         return;
       }
-  
+
       setData(formattedData);
     };
-  
+
     reader.readAsArrayBuffer(file);
   };
-  
 
   const handleInputChange = (index, field, value) => {
     const updatedFields = [...inputFields];
@@ -160,7 +202,10 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
 
   const addMoreFields = () => {
     if (inputFields.length < 20) {
-      setInputFields([...inputFields, { link: "", difficulty: "" }]);
+      setInputFields([
+        ...inputFields,
+        { link: "", difficulty: "Medium", category: "Array" },
+      ]);
     }
   };
 
@@ -174,23 +219,85 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       name: values.name,
       description: values.description,
       isPublic: values.isPublic,
-      problems: data,
+      problems: inputMode === "file" ? data : inputFields,
     };
+
+    if (inputMode === "manual") {
+      const errors = [];
+      const validDifficulties = ["Easy", "Medium", "Hard"];
+      inputFields.forEach((field, index) => {
+        const { link, difficulty, category } = field;
+
+        if (
+          !link ||
+          !/^https:\/\/leetcode\.com\/problems\/[a-z0-9-]+\/?.*$/.test(link)
+        ) {
+          errors.push(`Invalid link format at row ${index + 1}: ${link}`);
+        }
+
+        if (!validDifficulties.includes(difficulty)) {
+          errors.push(`Invalid difficulty at row ${index + 1}: ${difficulty}`);
+        }
+
+        if (!category || category.trim() === "") {
+          errors.push(`Category is missing at row ${index + 1}`);
+        }
+
+        if (category.length > 50) {
+          errors.push(
+            `Category is too long at row ${
+              index + 1
+            }: ${category} (max 50 characters)`
+          );
+        }
+      });
+
+      if (errors.length > 0) {
+        alert(`Validation errors:\n${errors.join("\n")}`);
+        return;
+      }
+
+      // Check for duplicate links in manual mode
+      const linkCount = {};
+      inputFields.forEach((field, index) => {
+        linkCount[field.link] = linkCount[field.link] || [];
+        linkCount[field.link].push(index + 1);
+      });
+
+      const duplicateLinks = Object.entries(linkCount).filter(
+        ([_, indices]) => indices.length > 1
+      );
+
+      if (duplicateLinks.length > 0) {
+        const duplicateMessages = duplicateLinks
+          .map(
+            ([link, indices]) =>
+              `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
+          )
+          .join("\n");
+        alert(`Duplicate links detected:\n${duplicateMessages}`);
+        return;
+      }
+    }
 
     try {
       await createChallenge(challengeData).unwrap();
       form.reset();
       setData([]);
-      setInputFields([{ link: "", difficulty: "" }]);
+      setInputFields([{ link: "", difficulty: "Medium", category: "Array" }]);
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to create custom challenge:", error);
     }
   };
 
+  useEffect(() => {
+    console.log("input fields", inputFields);
+  }, [inputFields]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] max-h-[600px] overflow-auto">
+      <DialogContent className="sm:max-w-[425px] max-h-[600px] w-1/2 overflow-auto">
         <DialogHeader>
           <DialogTitle>Create Custom Challenge</DialogTitle>
         </DialogHeader>
@@ -243,6 +350,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                     <Select
                       value={field.value ? "yes" : "no"}
                       onValueChange={(value) => field.onChange(value === "yes")}
+                      className="w-full max-w-[500px]"
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Yes or No" />
@@ -262,6 +370,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
             />
             <div className="mb-2">
               <Select value={inputMode} onValueChange={setInputMode}>
+                <FormLabel>Select Input Method</FormLabel>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Input Mode" />
                 </SelectTrigger>
@@ -326,24 +435,55 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    <Select
+                      value={field.category}
+                      onValueChange={(value) =>
+                        handleInputChange(index, "category", value)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Category</SelectLabel>
+                          {dsaCategories.map((category, index) => {
+                            return (
+                              <SelectItem key={index} value={category}>
+                                {category}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                     <button
                       type="button"
                       onClick={() => removeField(index)}
-                      className="text-red-500"
+                      className={`${
+                        inputFields.length >= 1
+                          ? "text-red-500"
+                          : "text-slate-800"
+                      }`}
+                      disabled={inputFields.length === 1}
                     >
                       <Trash2 />
                     </button>
                   </div>
                 ))}
-                {inputFields.length < 20 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addMoreFields}
-                  >
-                    Add More
-                  </Button>
-                )}
+
+                <div className="flex gap-2 items-center">
+                  {inputFields.length < 20 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={addMoreFields}
+                    >
+                      Add More
+                    </Button>
+                  )}
+                  <p className="text-slate-600">Add upto 20 problems</p>
+                </div>
               </div>
             )}
             <DialogFooter>
