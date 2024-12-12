@@ -297,7 +297,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] max-h-[600px] w-1/2 overflow-auto">
+      <DialogContent className="sm:max-w-[1000px] max-h-[600px] w-3/4 overflow-auto">
         <DialogHeader>
           <DialogTitle>Create Custom Challenge</DialogTitle>
         </DialogHeader>
