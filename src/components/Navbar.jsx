@@ -12,35 +12,46 @@ import { Link, useNavigate } from "react-router-dom";
 import { clearUser } from "@/slices/userSlice";
 
 export function Navbar() {
-  const { user } = useSelector((state) => (state?.user?.user)||{});
-  const dipatch = useDispatch();
+  const { user } = useSelector((state) => state?.user?.user || {});
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleLogout = () => {
-    dipatch(clearUser()).then(() => navigate("/auth/login"));
+    dispatch(clearUser()).then(() => navigate("/auth/login"));
   };
+
   return (
     <Menubar className="rounded-none border-b border-none p-0 w-full flex justify-end bg-smoky-black">
       <MenubarMenu>
         <MenubarTrigger className="font-bold">
           <>
-            <Avatar className="w-4 h-4">
+            <Avatar className="w-6 h-6">
               <AvatarImage
                 src={user?.userAvatar}
-                alt="@shadcn"
+                alt="User Avatar"
                 className="rounded-full"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <MenubarLabel className="rounded-full text-slate-200">
+            <MenubarLabel className="rounded-full text-slate-200 ml-2">
               {user?.realName}
             </MenubarLabel>
           </>
         </MenubarTrigger>
         <MenubarContent>
           <MenubarItem>
-          <Link to="/app/profile">View Profile</Link>
+            <span className="font-bold text-sm">{user?.realName}</span>
           </MenubarItem>
-          <MenubarItem onClick={handleLogout}>Logout</MenubarItem>
+          <MenubarItem>
+            <span className="text-sm">{user?.email}</span>
+          </MenubarItem>
+          <MenubarItem>
+            <span className="text-sm">Leetcode Username: {user?.username}</span>
+          </MenubarItem>
+          <MenubarItem>
+            <Link to="/app/change-password">Change Password</Link>
+          </MenubarItem>
+          <MenubarItem onClick={handleLogout} className="cursor-pointer">Logout</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
