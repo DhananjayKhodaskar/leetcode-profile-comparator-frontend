@@ -27,7 +27,6 @@ const Login = () => {
       password: "",
     },
   });
-  const user = useSelector((state) => state?.user?.user);
   const navigate = useNavigate();
   const [login, { error: loginError, isLoading }] = useLoginMutation();
   const [loginWithGoogle, { error: loginWithGoogleError }] =
@@ -73,12 +72,6 @@ const Login = () => {
     }
   }, [loginWithGoogleError, form]);
 
-
-  useEffect(() => {
-    if (user && user?.token) {
-      navigate("/app");
-    }
-  }, [user, navigate]);
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
       <div className="flex flex-col gap-3">
