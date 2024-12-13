@@ -48,24 +48,31 @@ const NotFound = () => {
       {/* Decorative code blocks */}
       <div className="hidden lg:block absolute top-20 left-20 transform -rotate-12">
         <pre className="text-xs text-blue-400/30 font-mono">
-          {`function findPage() {
-        try {
-            return page.load()
-        } catch {
-            return 404
+          {`class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        bool flag = false;
+        for(int i =0;i<nums.size();i++){
+            for(int j=i+1;j<nums.size();j++){
+                if(nums[i] == nums[j]) return true;
+            }
         }
-        }`}
+        return flag;
+    }
+};`}
         </pre>
       </div>
 
       <div className="hidden lg:block absolute bottom-20 right-20 transform rotate-12">
         <pre className="text-xs text-blue-400/30 font-mono">
-          {`async function redirect() {
-        await navigate('/')
-        return {
-            status: 301
-        }
-        }`}
+          {`class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        n = len(nums)
+        for i in range(n - 1):
+            for j in range(i + 1, n):
+                if nums[i] + nums[j] == target:
+                    return [i, j]
+        return []  # No solution found`}
         </pre>
       </div>
     </div>
