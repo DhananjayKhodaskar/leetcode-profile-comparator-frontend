@@ -3,7 +3,7 @@ import baseQueryWithAuth from "./baseQueryWithAuth";
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_URL),
+  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_API_URL),
   endpoints: (builder) => ({
     searchUser: builder.mutation({
       query: (searchQuery) => ({

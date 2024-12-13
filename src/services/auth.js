@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
   reducerPath: "leetCodeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BACKEND_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BACKEND_API_URL }),
   endpoints: (builder) => ({
     fetchLeetCodeData: builder.mutation({
       query: (values) => ({
@@ -23,7 +23,7 @@ export const authApi = createApi({
       query: (values) => ({
         url: "/auth/signUpWithGoogle",
         method: "POST",
-        body:  values,
+        body: values,
       }),
     }),
     verifyEmail: builder.query({

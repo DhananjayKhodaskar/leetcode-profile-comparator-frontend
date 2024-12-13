@@ -4,7 +4,7 @@ import { setJoinedGroups, setSelectedGroup } from "@/slices/groupSlice";
 
 export const groupApi = createApi({
   reducerPath: "groupApi",
-  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_URL),
+  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_API_URL),
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: (builder) => ({

@@ -25,7 +25,7 @@ const GroupHeader = ({ selectedGroup }) => {
   const moreCount = memberNames.length > 3 ? `+${memberNames.length - 3}` : "";
 
   return (
-    <div className="flex flex-row items-center justify-start p-4 border-b border-gray-200 gap-3">
+    <div className="flex flex-row items-center justify-start p-4 border-b border-gray-200 gap-3 bg-sl">
       <Avatar>
         <AvatarImage
           src={avatar}

@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { useGetChallengeHistoryQuery } from "@/services/challenge";
 import { useParams } from "react-router-dom";
 import { ChallengeDetailsDrawer } from "./ChallengeDetailsDrawer";
+import startChallegeImg from "../assets/6615.jpg";
 
 export function ChallengeHistoryTable() {
   const { groupId } = useParams();
@@ -52,8 +53,20 @@ export function ChallengeHistoryTable() {
   };
 
   return (
-    <div>
-      <Table className="border rounded-md">
+    <div className="h-full w-full">
+    <div className="relative h-[20vh] w-full">
+      <img
+        src={startChallegeImg}
+        alt="Finished Challenges Hero"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center text-white">
+        <h2 className="text-xl md:text-3xl font-bold">Finished Challenges</h2>
+      </div>
+    </div>
+  
+    <div className="py-4 px-4">
+      <Table className="border rounded-md p-3">
         <TableCaption>
           A list of finished challenges in your group.
         </TableCaption>
@@ -92,7 +105,7 @@ export function ChallengeHistoryTable() {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
-                    }).format(new Date(challenge.startDate))
+                    }).format(new Date(challenge.endDate))
                   : "N/A"}
               </TableCell>
             </TableRow>
@@ -114,7 +127,7 @@ export function ChallengeHistoryTable() {
           </TableRow>
         </TableFooter>
       </Table>
-
+  
       <ChallengeDetailsDrawer
         isOpen={isDrawerOpen}
         onClose={setIsDrawerOpen}
@@ -122,5 +135,6 @@ export function ChallengeHistoryTable() {
         groupId={groupId}
       />
     </div>
+  </div>
   );
 }

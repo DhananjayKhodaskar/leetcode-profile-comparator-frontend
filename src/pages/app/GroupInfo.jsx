@@ -10,7 +10,14 @@ import {
 } from "@/services/group";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useSelector } from "react-redux";
-import { DoorOpen, Trash, UserRoundX, Shield } from "lucide-react";
+import {
+  DoorOpen,
+  Trash,
+  UserRoundX,
+  Shield,
+  ShieldBan,
+  Plus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -56,7 +63,7 @@ const GroupInfo = () => {
   } = data;
 
   const currentUserIsAdmin = joinedMember?.some(
-    (member) => member._id === user._id && member.groupRole === "admin"
+    (member) => member._id === user._id && member.role === "admin"
   );
 
   const handleLeaveGroup = async () => {
@@ -98,7 +105,7 @@ const GroupInfo = () => {
               alt={name}
               className="rounded-full w-48 h-48 "
             />
-            <AvatarFallback className="rounded-full w-48 h-48 flex justify-center items-center">
+            <AvatarFallback className={`rounded-full w-48 h-48 flex justify-center items-center bg-dark-liver`}>
               <h3 className="text-4xl font-bold rounded-full text-slate-950">
                 {name ? name.charAt(0).toUpperCase() : ""}
               </h3>
@@ -117,7 +124,7 @@ const GroupInfo = () => {
         <AddMemberModal groupId={groupId} refetchGroupInfo={refetchGroupInfo} />
         <div className="w-full flex flex-col gap-2">
           {joinedMember?.map((member) => {
-            const { _id, username, realName, userAvatar, groupRole } = member;
+            const { _id, username, realName, userAvatar, role } = member;
 
             return (
               <UserCard
@@ -127,9 +134,9 @@ const GroupInfo = () => {
                 username={username}
               >
                 {/* Show Badge if the user is an Admin */}
-                {groupRole === "admin" && (
+                {role === "admin" && (
                   <Badge variant="secondary" className="h-5 rounded-full">
-                    {groupRole.charAt(0).toUpperCase() + groupRole.slice(1)}
+                    {role.charAt(0).toUpperCase() + role.slice(1)}
                   </Badge>
                 )}
 
@@ -192,15 +199,25 @@ const GroupInfo = () => {
                             onClick={() => handleMakeAdmin(_id)}
                             aria-label="Make admin"
                           >
-                            <Shield
-                              size={16}
-                              strokeWidth={2}
-                              aria-hidden="true"
-                            />
+                            {role === "admin" ? (
+                              <ShieldBan
+                                size={16}
+                                strokeWidth={2}
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <Shield
+                                size={16}
+                                strokeWidth={2}
+                                aria-hidden="true"
+                              />
+                            )}
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent className="border border-input bg-popover px-2 py-1 text-xs text-muted-foreground">
-                          Make Admin
+                          {role === "admin"
+                            ? "Demote to Member"
+                            : "Promote to Admin"}
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

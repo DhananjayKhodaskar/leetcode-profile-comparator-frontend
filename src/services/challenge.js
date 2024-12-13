@@ -3,12 +3,17 @@ import baseQueryWithAuth from "./baseQueryWithAuth";
 
 export const challengeApi = createApi({
   reducerPath: "challengeApi",
-  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_URL),
+  baseQuery: baseQueryWithAuth(import.meta.env.VITE_BACKEND_API_URL),
   refetchOnFocus: true,
   refetchOnReconnect: true,
   endpoints: (builder) => ({
     getChallenges: builder.query({
-      query: ({ page = 1, pageSize = 10, search = "",createdByYou=false }) => ({
+      query: ({
+        page = 1,
+        pageSize = 10,
+        search = "",
+        createdByYou = false,
+      }) => ({
         url: `app/challenges?page=${page}&pageSize=${pageSize}&search=${search}&createdByYou=${createdByYou}`,
         method: "GET",
       }),
