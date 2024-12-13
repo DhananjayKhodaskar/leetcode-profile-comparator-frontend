@@ -18,6 +18,7 @@ import ChangePassword from "./pages/app/ChangePassword";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
               <Route path="group/:groupId/progress" element={<Progress />} />
             </Route>
           </Route>
-          <Route path="*" element={<h1>Invalid Path</h1>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
         <Toaster />
       </GoogleOAuthProvider>
