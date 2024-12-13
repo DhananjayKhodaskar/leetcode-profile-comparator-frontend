@@ -45,7 +45,7 @@ function App() {
               <Route path="group/:groupId/progress" element={<Progress />} />
             </Route>
           </Route>
-          <Route path="*" element={<NotFound/>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
       </GoogleOAuthProvider>
