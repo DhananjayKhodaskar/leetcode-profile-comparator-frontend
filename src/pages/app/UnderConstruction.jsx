@@ -11,7 +11,7 @@ export default function ComingSoonPage() {
         {/* Left side with illustration */}
         <div className="hidden lg:flex items-center justify-center">
           <div className="relative w-full max-w-md">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#F49D03]/20 to-blue-500/20 blur-3xl" />
             <img
               src={authImg}
               alt="Cyberpunk illustration"
@@ -24,24 +24,24 @@ export default function ComingSoonPage() {
         <div className="flex flex-col items-center justify-center p-8 text-center lg:text-left">
           <div className="w-full max-w-md space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              E-<span className="text-orange-500">Leet</span>Squad
+              E-<span className="text-[#F49D03]">Leet</span>Squad
             </h1>
             <h2 className="text-2xl md:text-3xl font-semibold text-white/90">
-              Coming Soon
+              Home Page Coming Soon...
             </h2>
             <p className="text-lg text-gray-400">
-              Our elite team is working hard to bring you the ultimate coding experience. Stay tuned!
+              This Page is under developement. Stay tuned!
             </p>
             
             <div className="relative">
-              <div className="h-1 w-full bg-gradient-to-r from-orange-500 to-blue-500 rounded-full overflow-hidden">
-                <div className="h-full w-1/2 bg-orange-500 animate-pulse" />
+              <div className="h-1 w-full bg-gradient-to-r from-[#F49D03] to-blue-500 rounded-full overflow-hidden">
+                <div className="h-full w-1/2 bg-[#F49D03] animate-pulse" />
               </div>
             </div>
 
             <div className="pt-4">
               <Link to="/auth/login">
-                <Button className="w-full bg-orange-500 text-white hover:bg-orange-600 transition-colors">
+                <Button className="w-full bg-[#F49D03] text-white hover:bg-[#F49D03] transition-colors animate-bounce">
                   Go to Login
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
