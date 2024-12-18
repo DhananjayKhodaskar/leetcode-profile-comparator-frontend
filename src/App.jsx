@@ -18,14 +18,16 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import NotFound from "./components/NotFound";
+import ComingSoonPage from "./pages/app/UnderConstruction";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<ComingSoonPage />} />
           <Route path="/auth" element={<AuthSideImage />}>
+            <Route path="" element={<Dashboard />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
