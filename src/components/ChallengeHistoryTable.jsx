@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { useGetChallengeHistoryQuery } from "@/services/challenge";
 import { useParams } from "react-router-dom";
 import { ChallengeDetailsDrawer } from "./ChallengeDetailsDrawer";
-import startChallegeImg from "../assets/6615.jpg";
+import startChallegeImg from "@/assets/6615.jpg";
 
 export function ChallengeHistoryTable() {
   const { groupId } = useParams();

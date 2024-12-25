@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import challengeImg from "../assets/challengeHero.jpeg";
+import challengeImg from "@/assets/challengeHero.jpeg";
 import { Card } from "@/components/ui/card";
 import { useJoinActiveChallengeMutation } from "@/services/challenge";
 import { Button } from "./ui/button";

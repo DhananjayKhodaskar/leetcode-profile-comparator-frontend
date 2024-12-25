@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import authImg from "../assets/E-LeetSquad.png";
+import authImg from "@/assets/E-LeetSquad.png";
 import { useSelector } from "react-redux";
 
 const AuthSideImage = () => {

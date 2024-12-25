@@ -12,7 +12,7 @@ import {
 import { useGetAllSolvedProblemsQuery } from "@/services/challenge";
 import { Button } from "@/components/ui/button";
 import { ChallengeDetailsDrawer } from "@/components/ChallengeDetailsDrawer";
-import solvedProblemImg from "../../assets/2142076.jpg";
+import solvedProblemImg from "@/assets/2142076.jpg";
 
 const SolvedProblem = () => {
   const [currentPage, setCurrentPage] = useState(1); // State for current page

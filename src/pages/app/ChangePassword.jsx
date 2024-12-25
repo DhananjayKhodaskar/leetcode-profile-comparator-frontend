@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { updatePasswordSchema } from "@/validation/changePassword";
 import { useChangePasswordMutation } from "@/services/user";
-import backgroundImage from "../../assets/E-LeetSquad.png";
+import backgroundImage from "@/assets/E-LeetSquad.png";
 
 const ChangePassword = () => {
   const form = useForm({

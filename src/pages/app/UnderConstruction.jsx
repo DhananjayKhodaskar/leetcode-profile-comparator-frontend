@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from 'lucide-react'
 import { Link } from "react-router-dom"
-// import authImg from "../assets/E-LeetSquad.png";
-import authImg from "../../assets/E-LeetSquad.png";
+import authImg from "@/assets/E-LeetSquad.png";
 
 export default function ComingSoonPage() {
   return (

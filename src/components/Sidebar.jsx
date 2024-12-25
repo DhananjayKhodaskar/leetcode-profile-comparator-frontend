@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 import { pastelBgColor } from "@/utils/config";
-import leetcodeLogo from "../assets/leetcodeLogo.png";
+import leetcodeLogo from "@/assets/leetcodeLogo.png";
 import AvatarButton from "./AvatarButton";
 import { ListTodo } from "lucide-react";
 

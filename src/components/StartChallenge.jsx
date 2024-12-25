@@ -21,7 +21,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import startChallegeImg from "../assets/StartChallenge.jpeg";
+import startChallegeImg from "@/assets/StartChallenge.jpeg";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "@/components/ui/label";
 
