@@ -12,7 +12,6 @@ import {
 import { useGetAllSolvedProblemsQuery } from "@/services/challenge";
 import { Button } from "@/components/ui/button";
 import { ChallengeDetailsDrawer } from "@/components/ChallengeDetailsDrawer";
-import solvedProblemImg from "@/assets/2142076.jpg";
 
 const SolvedProblem = () => {
   const [currentPage, setCurrentPage] = useState(1); // State for current page
@@ -56,7 +55,7 @@ const SolvedProblem = () => {
     <div className="h-full w-full">
       <div className="relative h-[20vh] w-full">
         <img
-          src={solvedProblemImg} // Replace with the actual image source for this page
+          src="https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/2142076.jpg" // Replace with the actual image source for this page
           alt="Solved Problems Hero"
           className="absolute inset-0 w-full h-full object-cover"
         />

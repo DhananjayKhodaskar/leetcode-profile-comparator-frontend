@@ -21,7 +21,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import startChallegeImg from "@/assets/StartChallenge.jpeg";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -86,7 +85,7 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
     <div className="h-full w-full">
       <div className="relative h-[20vh] w-full">
         <img
-          src={startChallegeImg}
+          src="https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/StartChallenge.jpeg"
           alt="Challenge Hero"
           className="absolute inset-0 w-full h-full object-cover"
         />

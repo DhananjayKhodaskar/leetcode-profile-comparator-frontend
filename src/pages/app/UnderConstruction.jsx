@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from 'lucide-react'
 import { Link } from "react-router-dom"
-import authImg from "@/assets/E-LeetSquad.png";
 
 export default function ComingSoonPage() {
   return (
@@ -12,7 +11,7 @@ export default function ComingSoonPage() {
           <div className="relative w-full max-w-md">
             <div className="absolute inset-0 bg-gradient-to-r from-[#F49D03]/20 to-blue-500/20 blur-3xl" />
             <img
-              src={authImg}
+              src="https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/E-LeetSquad.png"
               alt="Cyberpunk illustration"
               className="relative z-10"
             />

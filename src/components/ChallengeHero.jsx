@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import challengeImg from "@/assets/challengeHero.jpeg";
 import { Card } from "@/components/ui/card";
 import { useJoinActiveChallengeMutation } from "@/services/challenge";
 import { Button } from "./ui/button";
@@ -45,7 +44,7 @@ export default function ChallengeHero({
   return (
     <div className="relative w-full h-[20vh] min-h-[400px] overflow-hidden">
       <img
-        src={challengeImg}
+        src="https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/challengeHero.jpeg"
         alt="Challenge Hero"
         className="absolute inset-0 w-full h-full object-cover"
       />

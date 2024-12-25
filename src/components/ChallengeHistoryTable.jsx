@@ -14,7 +14,6 @@ import { Button } from "./ui/button";
 import { useGetChallengeHistoryQuery } from "@/services/challenge";
 import { useParams } from "react-router-dom";
 import { ChallengeDetailsDrawer } from "./ChallengeDetailsDrawer";
-import startChallegeImg from "@/assets/6615.jpg";
 
 export function ChallengeHistoryTable() {
   const { groupId } = useParams();
@@ -56,7 +55,7 @@ export function ChallengeHistoryTable() {
     <div className="h-full w-full">
     <div className="relative h-[20vh] w-full">
       <img
-        src={startChallegeImg}
+        src={"https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/6615.jpg"}
         alt="Finished Challenges Hero"
         className="absolute inset-0 w-full h-full object-cover"
       />

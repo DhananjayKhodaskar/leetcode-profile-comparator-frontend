@@ -10,7 +10,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { setSelectedGroup } from "@/slices/groupSlice";
 import { useEffect } from "react";
 import { pastelBgColor } from "@/utils/config";
-import leetcodeLogo from "@/assets/leetcodeLogo.png";
 import AvatarButton from "./AvatarButton";
 import { ListTodo } from "lucide-react";
 
@@ -44,7 +43,14 @@ export function Sidebar() {
   return (
     <div className={cn("pb-12 bg-smoky-black w-24 flex flex-col items-center")}>
       <div className="h-20 p-5 border-b-2 border-b-black-russian">
-        <img src={leetcodeLogo} alt="LeetCode Logo" width={35} height={35} />
+        <img
+          src={
+            "https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/leetcodeLogo.png"
+          }
+          alt="LeetCode Logo"
+          width={35}
+          height={35}
+        />
       </div>
       <div className="space-y-4 py-4 w-full flex flex-col items-center">
         {joinedGroups.length > 0 &&
@@ -62,7 +68,7 @@ export function Sidebar() {
           buttonName="Solved Problems"
           handleOnClick={() => navigate("/app/solvedProblems")}
           iconBackgrounColor="bg-dark-liver"
-          isActive={pathname === '/app/solvedProblems'}
+          isActive={pathname === "/app/solvedProblems"}
         />
       </div>
     </div>

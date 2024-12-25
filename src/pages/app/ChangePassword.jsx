@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { updatePasswordSchema } from "@/validation/changePassword";
 import { useChangePasswordMutation } from "@/services/user";
-import backgroundImage from "@/assets/E-LeetSquad.png";
 
 const ChangePassword = () => {
   const form = useForm({
@@ -47,7 +46,7 @@ const ChangePassword = () => {
   return (
     <div
       className="flex justify-center items-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{ backgroundImage: `url(https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/E-LeetSquad.png)` }}
     >
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
         <div className="flex flex-col gap-3">
