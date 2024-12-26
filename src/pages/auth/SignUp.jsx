@@ -50,7 +50,7 @@ const SignUp = () => {
     } catch (err) {
       console.error("Error fetching data:", err);
     }
-  };
+  }; 
 
   const onCredentialSubmit = async (formValues) => {
     const token = leetcodeUserData?.token || "";
