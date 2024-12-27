@@ -104,12 +104,14 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         header[1] !== "Difficulty" ||
         header[2] !== "Category"
       ) {
-        alert("Invalid file format! Please upload the correct template.");
+        alert(
+          "Invalid file format! Column name  must be Problem Link, Difficulty, Category"
+        );
         return;
       }
 
-      if (rows.length > 150) {
-        alert("Sheet exceeds the 150-problem limit.");
+      if (rows.length >= 155) {
+        alert("Sheet exceeds the 150-problem limit. rows should be under 155");
         return;
       }
 
