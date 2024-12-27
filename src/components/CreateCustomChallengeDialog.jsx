@@ -110,8 +110,8 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
         return;
       }
 
-      if (rows.length >= 155) {
-        alert("Sheet exceeds the 150-problem limit. rows should be under 155");
+      if (rows.length >= 300) {
+        alert("Sheet exceeds the 300-problem limit. rows should be under 310");
         return;
       }
 
