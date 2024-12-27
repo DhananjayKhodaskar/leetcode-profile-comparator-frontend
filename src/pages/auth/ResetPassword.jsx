@@ -14,10 +14,13 @@ import { useResetPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
 import { resetPasswordSchema } from "@/validation/resetPasswordSchema";
 import AuthHeader from "@/components/AuthHeader";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   const { token } = useParams();
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -33,10 +36,19 @@ const ResetPassword = () => {
     resetPassword({ newPassword, token })
       .unwrap()
       .then(() => {
-        console.log("Password reset successful!");
+        toast({
+          title: "Success!",
+          description: "Your password has been reset successfully.",
+        });
+        navigate("/auth/login");
       })
       .catch((err) => {
-        console.error("Reset failed:", err);
+        toast({
+          title: "Failed!",
+          description:
+            err?.data?.message ||
+            "An error occurred while resetting your password.",
+        });
       });
   };
 

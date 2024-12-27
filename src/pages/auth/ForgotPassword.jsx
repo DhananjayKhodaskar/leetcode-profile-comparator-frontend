@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,8 +15,10 @@ import AuthHeader from "@/components/AuthHeader";
 import { useForgotPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
 import { forgotPasswordSchema } from "@/validation/forgotPassword";
+import { useToast } from "@/hooks/use-toast";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
@@ -23,17 +26,26 @@ const ForgotPassword = () => {
     },
   });
 
+  const { toast } = useToast(); // Add toast hook
+
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-  const onSubmit = (data) => {
-    forgotPassword(data)
-      .unwrap()
-      .then(() => {
-        console.log("Password reset email sent!");
-      })
-      .catch((err) => {
-        console.error("Request failed:", err);
+  const onSubmit = async (data) => {
+    try {
+      await forgotPassword(data).unwrap();
+      toast({
+        title: "Success!",
+        description: "Password reset email sent successfully.",
       });
+      navigate("/auth/login");
+    } catch (err) {
+      toast({
+        title: "Failed!",
+        description:
+          err?.data?.message || "An error occurred while sending the email.",
+      });
+      console.error("Request failed:", err);
+    }
   };
 
   return (
