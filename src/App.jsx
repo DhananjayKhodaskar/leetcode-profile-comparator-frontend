@@ -20,7 +20,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import NotFound from "./components/NotFound";
 import ComingSoonPage from "./pages/app/UnderConstruction";
 
-function App() {
+function App() { 
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
