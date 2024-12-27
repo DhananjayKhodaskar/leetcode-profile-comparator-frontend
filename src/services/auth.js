@@ -76,6 +76,13 @@ export const authApi = createApi({
         body: values,
       }),
     }),
+    resendEmailVerification: builder.mutation({
+      query: (values) => ({
+        url: "/auth/resend-email-verification",
+        method: "POST",
+        body: values,
+      }),
+    }),
   }),
 });
 
@@ -88,4 +95,5 @@ export const {
   useLoginWithGoogleMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useResendEmailVerificationMutation
 } = authApi;

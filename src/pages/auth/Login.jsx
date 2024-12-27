@@ -12,12 +12,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginSchema } from "@/validation/loginSchema";
 import AuthHeader from "@/components/AuthHeader";
-import { useLoginMutation, useLoginWithGoogleMutation } from "@/services/auth";
+import {
+  useLoginMutation,
+  useLoginWithGoogleMutation,
+  useResendEmailVerificationMutation,
+} from "@/services/auth";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const form = useForm({
@@ -31,6 +34,10 @@ const Login = () => {
   const [login, { error: loginError, isLoading }] = useLoginMutation();
   const [loginWithGoogle, { error: loginWithGoogleError }] =
     useLoginWithGoogleMutation();
+  const [resendEmailVerification, { error: resendEmailVerificationError }] =
+    useResendEmailVerificationMutation();
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [timer, setTimer] = useState(30);
 
   const onSubmit = (data) => {
     login(data)
@@ -54,6 +61,32 @@ const Login = () => {
       });
   };
 
+  const handleResendEmail = () => {
+    const email = form.getValues("email");
+    if (!email) {
+      form.setError("email", {
+        type: "manual",
+        message: "Email is required to resend verification email.",
+      });
+      return;
+    }
+
+    setIsResendDisabled(true);
+    resendEmailVerification({ email: form.getValues("email") });
+
+    // Start the countdown timer
+    let countdown = 30;
+    setTimer(countdown);
+    const interval = setInterval(() => {
+      countdown -= 1;
+      setTimer(countdown);
+      if (countdown === 0) {
+        setIsResendDisabled(false);
+        clearInterval(interval);
+      }
+    }, 1000);
+  };
+
   useEffect(() => {
     if (loginError?.data?.message) {
       form.setError("form", {
@@ -71,6 +104,15 @@ const Login = () => {
       });
     }
   }, [loginWithGoogleError, form]);
+
+  useEffect(() => {
+    if (resendEmailVerificationError?.data?.message) {
+      form.setError("form", {
+        type: "manual",
+        message: resendEmailVerificationError?.data?.message,
+      });
+    }
+  }, [resendEmailVerificationError, form]);
 
   return (
     <div className="flex flex-col w-full justify-center items-center gap-6 mt-8">
@@ -127,9 +169,25 @@ const Login = () => {
                 Forgot Password
               </a>
             </span>
-            <span className="block mt-2 text-sm text-red-600">
-              {form.formState.errors.form && form.formState.errors.form.message}
-            </span>
+            {form.formState.errors.form?.message ===
+            "Please verify your email before logging in." ? (
+              <span className="block mt-2 text-sm text-red-600">
+                {form.formState.errors.form.message}
+                <button
+                  className="ml-2 underline text-blue-600"
+                  disabled={isResendDisabled}
+                  onClick={handleResendEmail}
+                >
+                  {isResendDisabled
+                    ? `Resend email in ${timer}s`
+                    : "Resend Email"}
+                </button>
+              </span>
+            ) : (
+              <span className="block mt-2 text-sm text-red-600">
+                {form?.formState?.errors?.form?.message}{" "}
+              </span>
+            )}
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? "Logging In" : "Login"}
