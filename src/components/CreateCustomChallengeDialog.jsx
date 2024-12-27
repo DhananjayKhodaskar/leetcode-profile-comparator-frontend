@@ -69,13 +69,17 @@ const dsaCategories = [
   "Flow Network",
 ];
 
-const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
+const CreateCustomChallengeDialog = ({
+  isOpen,
+  onOpenChange,
+  refetchChallenges,
+}) => {
   const form = useForm({
     resolver: zodResolver(createCustomChallengeSchema),
     defaultValues: {
       name: "",
       description: "",
-      isPublic: false,
+      isPublic: true,
     },
   });
 
@@ -288,6 +292,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
       setData([]);
       setInputFields([{ link: "", difficulty: "Medium", category: "Array" }]);
       onOpenChange(false);
+      refetchChallenges();
     } catch (error) {
       console.error("Failed to create custom challenge:", error);
     }
@@ -353,6 +358,7 @@ const CreateCustomChallengeDialog = ({ isOpen, onOpenChange }) => {
                       value={field.value ? "yes" : "no"}
                       onValueChange={(value) => field.onChange(value === "yes")}
                       className="w-full max-w-[500px]"
+                      disabled={true}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Yes or No" />

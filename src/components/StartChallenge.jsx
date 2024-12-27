@@ -40,6 +40,7 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
     data: response,
     isLoading,
     error,
+    refetch:refetchChallenges
   } = useGetChallengesQuery({
     page,
     pageSize,
@@ -219,6 +220,7 @@ const StartChallenge = ({ refetchActiveChallengeDetails }) => {
       <CreateCustomChallengeDialog
         isOpen={isCustomDialogOpen}
         onOpenChange={setIsCustomDialogOpen}
+        refetchChallenges={refetchChallenges}
       />
     </div>
   );
