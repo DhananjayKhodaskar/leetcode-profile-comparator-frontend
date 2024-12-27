@@ -174,7 +174,7 @@ const Login = () => {
               <span className="block mt-2 text-sm text-red-600">
                 {form.formState.errors.form.message}
                 <button
-                  className="ml-2 underline text-blue-600"
+                  className="ml-2 underline text-slate-950"
                   disabled={isResendDisabled}
                   onClick={handleResendEmail}
                 >
