@@ -8,7 +8,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; 
 import { Button } from "@/components/ui/button";
 import { useResetPasswordMutation } from "@/services/auth";
 import { Loader2 } from "lucide-react";
