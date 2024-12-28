@@ -100,9 +100,8 @@ const CreateCustomChallengeDialog = ({
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       let parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
       parsedData = parsedData.filter((array) => array.length > 0);
-      // Check for header structure
       const [header, ...rows] = parsedData;
-      console.log(parsedData, "parsedDAta");
+
       if (
         header.length !== 3 ||
         header[0] !== "Problem Link" ||
@@ -112,38 +111,41 @@ const CreateCustomChallengeDialog = ({
         alert(
           "Invalid file format! Column name and order must be Problem Link, Difficulty, Category"
         );
+        // Reset the file input so the user can upload a new file
+        event.target.value = null;
         return;
       }
 
       if (rows.length >= 500) {
         alert("Sheet exceeds the 500-problem limit. rows should be under 500");
+        event.target.value = null; // Reset the file input
         return;
       }
 
-      // Extracting and validating data
       const validDifficulties = ["Easy", "Medium", "Hard"];
       const formattedData = rows.map((row, index) => {
-        // Check if all columns exist and validate each row's data
         if (row.length < 3) {
           alert(
             `Missing columns at row ${index + 2}. Each row must have 3 columns.`
           );
+          event.target.value = null; // Reset the file input
           throw new Error("Validation Error");
         }
 
         const [link, difficulty, category] = row;
 
-        // Validate LeetCode link format (only care about the slug)
         if (
           !link ||
           !/^https:\/\/leetcode\.com\/problems\/[a-z0-9-]+\/?.*$/.test(link)
         ) {
           alert(`Invalid link format at row ${index + 2}: ${link}`);
+          event.target.value = null; // Reset the file input
           throw new Error("Validation Error");
         }
 
         if (!validDifficulties.includes(difficulty?.trim())) {
           alert(`Invalid difficulty at row ${index + 2}: ${difficulty}`);
+          event.target.value = null; // Reset the file input
           throw new Error("Validation Error");
         }
 
@@ -153,6 +155,7 @@ const CreateCustomChallengeDialog = ({
               index + 2
             }. Each problem must have a category.`
           );
+          event.target.value = null; // Reset the file input
           throw new Error("Validation Error");
         }
 
@@ -162,6 +165,7 @@ const CreateCustomChallengeDialog = ({
               index + 2
             }: ${category} (max 50 characters)`
           );
+          event.target.value = null; // Reset the file input
           throw new Error("Validation Error");
         }
 
@@ -169,7 +173,7 @@ const CreateCustomChallengeDialog = ({
           link: link.trim(),
           difficulty: difficulty.trim(),
           category: category.trim(),
-          rowIndex: index + 2, // Store the original row number for better error reporting
+          rowIndex: index + 2,
         };
       });
 
@@ -426,7 +430,8 @@ const CreateCustomChallengeDialog = ({
                       </ul>
                     </li>
                     <li>
-                      The &apos;Category&apos; field must be included for each problem.
+                      The &apos;Category&apos; field must be included for each
+                      problem.
                     </li>
                   </ul>
                   After following the format, upload the file to the app. If you
