@@ -182,9 +182,22 @@ const ChallengeDetailsDialog = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <DatePickerDemo date={date} setDate={setDate} />
+            <div>
+              <label
+                htmlFor="challenge-end-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Challenge End Date
+              </label>
+              <DatePickerDemo
+                id="challenge-end-date"
+                date={date}
+                setDate={setDate}
+              />
+            </div>
             {dateError && <p className="text-red-500 text-sm">{dateError}</p>}
           </div>
+
           <DialogFooter>
             <Button
               variant="primary"

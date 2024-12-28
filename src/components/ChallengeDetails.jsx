@@ -15,15 +15,14 @@ const ChallengeDetails = ({
   endDate,
   activeChallengeId,
   refetchActiveChallengeDetails,
-  challengeDescription
+  challengeDescription,
+  loggedInUserInJoinedUser
 }) => {
   const { user } = useSelector((state) => state.user.user);
   const { _id, name, isPublic, createdBy, createdAt, updatedAt } =
     challengeDetails;
   const endTime = new Date(endDate).getTime();
-  const loggedInUserInJoinedUser = joinedUsers.find(
-    (joinedUser) => joinedUser._id === user._id
-  );
+
   const [joinChallenge, { isLoading: joining, isSuccess, isError }] =
     useJoinActiveChallengeMutation();
 

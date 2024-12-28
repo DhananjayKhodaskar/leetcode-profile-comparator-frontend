@@ -31,43 +31,71 @@ export function CustomTabs({ activeChallenge, refetchActiveChallengeDetails }) {
     description,
     __v,
     status,
-    joinedUsers,
+    joinedUsers = [],
     challengeDetails,
     problemCount,
   } = activeChallenge || {};
 
+  const loggedInUserInJoinedUser = joinedUsers.find(
+    (joinedUser) => joinedUser._id === user._id
+  );
+
   return (
     <Tabs defaultValue="description" className="w-full">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="description">Overview</TabsTrigger>
-        <TabsTrigger value="problems">Problems</TabsTrigger>
-        <TabsTrigger value="recent-activity">Recent Activity</TabsTrigger>
-      </TabsList>
+      {loggedInUserInJoinedUser ? (
+        <>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="description">Overview</TabsTrigger>
+            <TabsTrigger value="problems">Problems</TabsTrigger>
+            <TabsTrigger value="recent-activity">Recent Activity</TabsTrigger>
+          </TabsList>
 
-      <TabsContent value="description">
-        <ChallengeDetails
-          activeChallengeId={_id}
-          challengeDetails={challengeDetails}
-          joinedUsers={joinedUsers}
-          problemCount={problemCount}
-          endDate={endDate}
-          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
-          challengeDescription={description}
-        />
-      </TabsContent>
+          <TabsContent value="description">
+            <ChallengeDetails
+              activeChallengeId={_id}
+              challengeDetails={challengeDetails}
+              joinedUsers={joinedUsers}
+              problemCount={problemCount}
+              endDate={endDate}
+              refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+              challengeDescription={description}
+              loggedInUserInJoinedUser={loggedInUserInJoinedUser}
+            />
+          </TabsContent>
 
-      <TabsContent value="problems">
-        <ChallengeProblemTable
-          joinedUsers={joinedUsers}
-          activeChallengeId={_id}
-          forHistory={false}
-          refetchActiveChallengeDetails={refetchActiveChallengeDetails}
-        />
-      </TabsContent>
+          <TabsContent value="problems">
+            <ChallengeProblemTable
+              joinedUsers={joinedUsers}
+              activeChallengeId={_id}
+              forHistory={false}
+              refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+            />
+          </TabsContent>
 
-      <TabsContent value="recent-activity">
-        <RecentActivityTable activeChallengeId={_id} />
-      </TabsContent>
+          <TabsContent value="recent-activity">
+            <RecentActivityTable activeChallengeId={_id} />
+          </TabsContent>
+        </>
+      ) : (
+        <>
+          <TabsList className="grid w-full grid-cols-1">
+            <TabsTrigger value="description">Overview</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="description">
+            <ChallengeDetails
+              activeChallengeId={_id}
+              challengeDetails={challengeDetails}
+              joinedUsers={joinedUsers}
+              problemCount={problemCount}
+              endDate={endDate}
+              refetchActiveChallengeDetails={refetchActiveChallengeDetails}
+              challengeDescription={description}
+              loggedInUserInJoinedUser={loggedInUserInJoinedUser}
+            />
+          </TabsContent>
+        </>
+      )}
     </Tabs>
   );
 }
