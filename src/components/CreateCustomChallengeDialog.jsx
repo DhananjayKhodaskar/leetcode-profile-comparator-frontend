@@ -271,20 +271,20 @@ const CreateCustomChallengeDialog = ({
         linkCount[field.link].push(index + 1);
       });
 
-      const duplicateLinks = Object.entries(linkCount).filter(
-        ([_, indices]) => indices.length > 1
-      );
+      // const duplicateLinks = Object.entries(linkCount).filter(
+      //   ([_, indices]) => indices.length > 1
+      // );
 
-      if (duplicateLinks.length > 0) {
-        const duplicateMessages = duplicateLinks
-          .map(
-            ([link, indices]) =>
-              `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
-          )
-          .join("\n");
-        alert(`Duplicate links detected:\n${duplicateMessages}`);
-        return;
-      }
+      // if (duplicateLinks.length > 0) {
+      //   const duplicateMessages = duplicateLinks
+      //     .map(
+      //       ([link, indices]) =>
+      //         `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
+      //     )
+      //     .join("\n");
+      //   alert(`Duplicate links detected:\n${duplicateMessages}`);
+      //   return;
+      // }
     }
 
     try {
