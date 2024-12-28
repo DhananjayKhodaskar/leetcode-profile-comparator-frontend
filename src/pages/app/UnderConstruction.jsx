@@ -25,7 +25,7 @@ export default function ComingSoonPage() {
               E-<span className="text-[#F49D03]">Leet</span>Squad
             </h1>
             <h2 className="text-2xl md:text-3xl font-semibold text-white/90">
-              Home Page Coming Soon...
+              Landing Page Coming Soon...
             </h2>
             <p className="text-lg text-gray-400">
               The landing page is currently under development, but here&apos;s a sneak peek:
