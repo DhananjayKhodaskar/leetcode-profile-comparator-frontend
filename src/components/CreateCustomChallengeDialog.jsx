@@ -405,8 +405,19 @@ const CreateCustomChallengeDialog = ({
                   >
                     example Excel template
                   </a>{" "}
-                  for your problem list.
+                  for your problem list. Make sure to click on this example
+                  sheet link, make a copy of it, and then edit it before
+                  uploading it to the app. We are continuously refining the app;
+                  if you face any issues, please mail us {" "}
+                  <a
+                    href="mailto:dhananjaykhodaskar27@gmail.com"
+                    className="text-blue-500 hover:underline"
+                  >
+                    here
+                  </a>
+                  .
                 </p>
+
                 <Input
                   id="problemExcel"
                   type="file"
