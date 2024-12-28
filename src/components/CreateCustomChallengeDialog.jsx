@@ -98,10 +98,11 @@ const CreateCustomChallengeDialog = ({
       const binaryStr = e.target.result;
       const workbook = XLSX.read(binaryStr, { type: "binary" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
+      let parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      parsedData = parsedData.filter((array) => array.length > 0);
       // Check for header structure
       const [header, ...rows] = parsedData;
+      console.log(parsedData, "parsedDAta");
       if (
         header.length !== 3 ||
         header[0] !== "Problem Link" ||
@@ -109,7 +110,7 @@ const CreateCustomChallengeDialog = ({
         header[2] !== "Category"
       ) {
         alert(
-          "Invalid file format! Column name  must be Problem Link, Difficulty, Category"
+          "Invalid file format! Column name and order must be Problem Link, Difficulty, Category"
         );
         return;
       }
@@ -179,20 +180,20 @@ const CreateCustomChallengeDialog = ({
         linkCount[item.link].push(item.rowIndex);
       });
 
-      const duplicateLinks = Object.entries(linkCount).filter(
-        ([_, indices]) => indices.length > 1
-      );
+      // const duplicateLinks = Object.entries(linkCount).filter(
+      //   ([_, indices]) => indices.length > 1
+      // );
 
-      if (duplicateLinks.length > 0) {
-        const duplicateMessages = duplicateLinks
-          .map(
-            ([link, indices]) =>
-              `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
-          )
-          .join("\n");
-        alert(`Duplicate links detected:\n${duplicateMessages}`);
-        return;
-      }
+      // if (duplicateLinks.length > 0) {
+      //   const duplicateMessages = duplicateLinks
+      //     .map(
+      //       ([link, indices]) =>
+      //         `Duplicate link "${link}" found at rows: ${indices.join(", ")}`
+      //     )
+      //     .join("\n");
+      //   alert(`Duplicate links detected:\n${duplicateMessages}`);
+      //   return;
+      // }
 
       setData(formattedData);
     };
@@ -405,10 +406,31 @@ const CreateCustomChallengeDialog = ({
                   >
                     example Excel template
                   </a>{" "}
-                  for your problem list. Make sure to click on this example
-                  sheet link, make a copy of it, and then edit it before
-                  uploading it to the app. We are continuously refining the app;
-                  if you face any issues, please mail us {" "}
+                  for your problem list. Please ensure that your file strictly
+                  follows the format below:
+                  <ul className="ml-4 list-disc">
+                    <li>
+                      First row must be a header with the following columns:
+                      <ul className="ml-6">
+                        <li>Problem Link</li>
+                        <li>Difficulty</li>
+                        <li>Category</li>
+                      </ul>
+                    </li>
+                    <li>
+                      The &apos;Problem Link&apos; should follow this format:
+                      <ul className="ml-6">
+                        <li>
+                          https://leetcode.com/problems/two-sum/description/
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      The &apos;Category&apos; field must be included for each problem.
+                    </li>
+                  </ul>
+                  After following the format, upload the file to the app. If you
+                  face any issues, feel free to contact us via email at{" "}
                   <a
                     href="mailto:dhananjaykhodaskar27@gmail.com"
                     className="text-blue-500 hover:underline"
