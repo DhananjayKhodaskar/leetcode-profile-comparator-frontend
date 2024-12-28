@@ -28,7 +28,7 @@ export default function ComingSoonPage() {
               Home Page Coming Soon...
             </h2>
             <p className="text-lg text-gray-400">
-              This Page is under developement. Stay tuned!
+              The Landing page is under developement. Stay tuned!
             </p>
             
             <div className="relative">
