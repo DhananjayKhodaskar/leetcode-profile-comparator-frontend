@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from 'lucide-react'
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ComingSoonPage() {
   return (
@@ -28,9 +28,12 @@ export default function ComingSoonPage() {
               Home Page Coming Soon...
             </h2>
             <p className="text-lg text-gray-400">
-              The Landing page is under developement. Stay tuned!
+              Get ready to revolutionize your DSA problem-solving journey! Solve
+              DSA sheets and problems collaboratively with friends, say goodbye
+              to tackling them alone. Chat with your friends and sync problems
+              directly from your LeetCode account. 🚀
             </p>
-            
+
             <div className="relative">
               <div className="h-1 w-full bg-gradient-to-r from-[#F49D03] to-blue-500 rounded-full overflow-hidden">
                 <div className="h-full w-1/2 bg-[#F49D03] animate-pulse" />
@@ -52,12 +55,13 @@ export default function ComingSoonPage() {
       {/* Background code effect */}
       <div className="fixed inset-0 -z-10 overflow-hidden opacity-5">
         <pre className="text-xs leading-6 text-white">
-          {Array(50).fill(
-            "function solve() { const dp = new Array(n).fill(0); for(let i = 0; i < n; i++) { dp[i] = Math.max(dp[i-1], nums[i]); } return dp[n-1]; }"
-          ).join("\n")}
+          {Array(50)
+            .fill(
+              "function solve() { const dp = new Array(n).fill(0); for(let i = 0; i < n; i++) { dp[i] = Math.max(dp[i-1], nums[i]); } return dp[n-1]; }"
+            )
+            .join("\n")}
         </pre>
       </div>
     </div>
-  )
+  );
 }
-
