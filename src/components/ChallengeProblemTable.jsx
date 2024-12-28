@@ -73,22 +73,24 @@ const ChallengeProblemTable = ({
 
   return (
     <>
-      <SelectCategoryDropdown
-        categories={categories}
-        paginationData={paginationData}
-        setPaginationData={setPaginationData}
-      />
-      <SelectStatusDropdown
-        paginationData={paginationData}
-        setPaginationData={setPaginationData}
-        statuses={["solved", "unsolved"]}
-      />
-      <SelectUserProblemTableDropdown
-        joinedUsers={joinedUsers}
-        setSelectedUserId={setSelectedUserId}
-        selectedUserId={selectedUserId}
-        user={user}
-      />
+      <div className="flex flex-row justify-between">
+        <SelectCategoryDropdown
+          categories={categories}
+          paginationData={paginationData}
+          setPaginationData={setPaginationData}
+        />
+        <SelectStatusDropdown
+          paginationData={paginationData}
+          setPaginationData={setPaginationData}
+          statuses={["solved", "unsolved"]}
+        />
+        <SelectUserProblemTableDropdown
+          joinedUsers={joinedUsers}
+          setSelectedUserId={setSelectedUserId}
+          selectedUserId={selectedUserId}
+          user={user}
+        />
+      </div>
       <DataTableDemo
         problems={problems || []}
         totalProblems={totalProblems}
