@@ -292,7 +292,7 @@ export function DataTableDemo({
                 (autoProblemUpdateLoading || problemsFetching) && "animate-spin"
               }`}
             />{" "}
-            Sync
+            Sync with LeetCode
           </Button>
         )}
         <DropdownMenu>
