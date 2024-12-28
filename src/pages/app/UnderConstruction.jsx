@@ -28,10 +28,13 @@ export default function ComingSoonPage() {
               Home Page Coming Soon...
             </h2>
             <p className="text-lg text-gray-400">
+              The landing page is currently under development, but here&apos;s a sneak peek:
               Get ready to revolutionize your DSA problem-solving journey! Solve
-              DSA sheets and problems collaboratively with friends, say goodbye
-              to tackling them alone. Chat with your friends and sync problems
-              directly from your LeetCode account. 🚀
+              DSA sheets like the NeetCode 150 and collaborate with friends— say
+              goodbye to tackling them alone. Create custom challenges by
+              uploading your own problem set in Excel, mark problems as solved
+              with a click, or sync problems directly from your LeetCode
+              account. 🚀
             </p>
 
             <div className="relative">
