@@ -41,8 +41,9 @@ const LeetCodeForm = ({ onSubmit }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  (example):
+                  [example]
                 </a>
+                :
               </FormLabel>
 
               <FormControl>
