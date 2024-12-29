@@ -33,7 +33,18 @@ const LeetCodeForm = ({ onSubmit }) => {
           name="leetcodeUsername"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Leetcode ID</FormLabel>
+              <FormLabel>
+                Leetcode ID{" "}
+                <a
+                  className="underline"
+                  href="https://raw.githubusercontent.com/DhananjayKhodaskar/assets/refs/heads/main/image.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  (example):
+                </a>
+              </FormLabel>
+
               <FormControl>
                 <Input placeholder="Enter your Leetcode ID" {...field} />
               </FormControl>
